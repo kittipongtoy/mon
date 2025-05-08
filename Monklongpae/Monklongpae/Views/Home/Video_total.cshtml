@@ -1,0 +1,182 @@
+﻿<section id="Sec_ToTalPage" style="background-image: linear-gradient(0deg,#000000e3,transparent), url(/img/back_video.jpg);">
+        <div class="container">
+            <div class="Head_Video">
+                <p> @Model.data.MessagePage2En </p>
+            </div>
+            <div class="Head_Video_Head">
+                <p> @Model.data.MessagePage2Th </p>
+            </div>
+        </div>
+    </section>
+
+
+
+   
+    <section id="Category_video">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-9 col-md-4 col-4">
+                    <div class="Head_TextTital">
+                        <p>
+                            หมวดหมู่
+                        </p>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-8 col-8">
+                    <div class="main">
+                        <div class="input-group">
+                            <label for="exampleInputEmail1" class="mt-2 me-4"> รุ่น : </label>
+                            <input type="text" class="form-control" placeholder="MO-122345" id="searchtext" onkeydown="searchall(event)">
+                            <div class="input-group-append">
+                                <button class="btn btn-secondary" type="button">
+                                    <i class="fa fa-search"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <p class="mt-4 text-center"><a
+                                href="https://www.gungorbudak.com/blog/2018/12/12/bootstrap-4-search-box-with-search-icon/"></a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </section>
+  <div id="allvideo">  
+    @if (Model.data1.Count > 0)
+    {
+    
+@foreach (var xca in Model.data1)
+    {
+    <section id="Category_videoTotal3">
+        <div class="container">
+            <div class="Head_TextTital2 mt-5">
+                <p>
+                    @xca.catory
+                </p>
+            </div>
+
+            <div class="slider mt-4">
+                <div class="swiper-container">
+                    <div class="swiper-wrapper">
+                        @foreach (var caa in xca.videos)
+                        {
+                            <div class="swiper-slide">
+                                <div class="image_videoback">
+                                    <a href="@Url.Action("Video_detail","Home")?idnamevideo=@caa.IdNameVideo">
+                                                @if(@caa.PathDisplay.IndexOf(".jpg") != -1 || @caa.PathDisplay.IndexOf(".png") != -1)
+                                         {
+                                            <img src="@caa.PathDisplay" alt="">
+                                             
+                                         }else{
+                                             <video  autoplay muted playsinline loop alt="" style="width: 100%;">
+                                                 <source src="@caa.PathDisplay" type="video/mp4"/>
+                                             </video>
+                                         }
+                                    </a>
+                                </div>
+                                <div class="row mt-4">
+                                    <div class="col-lg-6 col-md-12 col-12">
+                                        <div class="Text_VideoName">
+                                            <p>
+                                                <a href="#">
+                                                    @caa.Name
+                                                </a>
+                                            </p>
+                                        </div>
+                                        @*<div class="Text_VideoMin">
+                                            <p>
+                                                @caa.TimeVideo
+                                            </p>
+                                        </div>*@
+                                    </div>
+                                    <div class="col-lg-6 col-md-12 col-12">
+                                        <div class="icon_playvideo">
+                                            <a href="@Url.Action("Video_detail","Home")?idnamevideo=@caa.IdNameVideo">
+                                                <img
+                                                src="https://img.icons8.com/ios-glyphs/60/EA1021/play-button-circled--v1.png" />
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+
+
+                    <div class="swiper-pagination"></div>
+                    <div class="swiper-scrollbar"></div>
+                    <div class="swiper-button-prev" style="color: white;"></div>
+                    <div class="swiper-button-next" style="color: white;"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+}
+}else{
+        <h2 class="text-center">ไม่มีวีดีโอ</h2>
+    }
+</div>
+<script>
+function searchall(e) {
+    setTimeout(() => {
+        var text = $("#searchtext").val();
+        $.post("@Url.Action("searchcatory","Home")", { search: text }).then(x => {
+            var htmls = "";
+            x.map(function(data) {
+                var htmls1 = "";
+                console.log(data);
+
+
+                htmls += '<section id="Category_videoTotal3"><div class="container"><div class="Head_TextTital2 mt-5"><p>' + data.catory + '</p></div><div class="slider mt-4"><div class="swiper-container swiper-slider-1 swiper-container-initialized swiper-container-horizontal"><div class="swiper-wrapper" style="transform: translate3d(0px, 0px, 0px);">'
+                data.videos.map(function(data1) {
+                    console.log(data1);
+
+                    htmls += '<div class="swiper-slide swiper-slide-active" style="width: 309px; margin-right: 20px;">';
+                    htmls += '<div class="image_videoback">';
+                    if (data1.pathDisplay.indexOf("mp4") != -1) {
+                        htmls += '<video src="' + data1.pathDisplay + '" autoplay muted loop alt="" style="width: 100%;"></video>';
+                    } else {
+                        htmls += '<img src="' + data1.pathDisplay + '" alt="">';
+                    }
+                    
+                    htmls += '</div>';
+                    htmls += '<div class="row mt-4">';
+                    htmls += '<div class="col-lg-6 col-md-12 col-12">';
+                    htmls += '<div class="Text_VideoName">';
+                    htmls += '<p>';
+                    htmls += '<a href="#">';
+                    htmls += data1.name;
+                    htmls += '</a>';
+                    htmls += '</p>';
+                    htmls += '</div>';
+                    htmls += '<div class="Text_VideoMin">';
+                    htmls += '<p>';
+                    htmls += data1.timeVideo;
+                    htmls += '</p>';
+                    htmls += '</div>';
+                    htmls += '</div>';
+                    htmls += '<div class="col-lg-6 col-md-12 col-12">';
+                    htmls += '<div class="icon_playvideo">';
+                    htmls += '<a href="/Home/Video_detail?id=' + data1.idVideo + '">';
+                    htmls += '<img src="https://img.icons8.com/ios-glyphs/60/EA1021/play-button-circled--v1.png" />';
+                    htmls += '</a>';
+                    htmls += '</div>';
+                    htmls += '</div>';
+                    htmls += '</div>';
+                    htmls += '</div>';
+                });
+                htmls += '</div><div class="swiper-button-prev" style="color: white;"></div><div class="swiper-button-next" style="color: white;"></div></div></div></div></section>';
+            });
+
+            $("#allvideo").html(htmls);
+        }).catch(c => {
+
+
+
+
+        });
+    },100);
+}
+</script>

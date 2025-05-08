@@ -1,0 +1,71 @@
+﻿@using System.Management
+@using System.Net.NetworkInformation
+@{
+    string macAddresses = "";
+
+    foreach (NetworkInterface nic in NetworkInterface.GetAllNetworkInterfaces())
+    {
+        if (nic.OperationalStatus == OperationalStatus.Up)
+        {
+            macAddresses += nic.GetPhysicalAddress().ToString();
+            break;
+        }
+    }
+}
+
+<section id="Sec_Login" style="background-image: linear-gradient(0deg,#00000096,#00000052), url(/img/back_login.png);">
+    <div class="container">
+        <div class="center">
+            <div class="Box_input">
+                <div class="Head_LoginName">
+                    <p> MONKLONGPAE </p>
+                </div>
+                <div class="Head_Login">
+                    <p> เข้าสู่ระบบ </p>
+                </div>
+                <form method="post" enctype="multipart/form-data" asp-action="Login" aasp-controller="Login">
+
+                    <div class="form-group mt-5">
+                        <input type="text" name="Tel" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="เบอร์โทรศัพท์" required maxlength="10" minlength="10">
+                    </div>
+                    @*<div class="form-group mt-5">
+                    <input type="password" name="Password" class="form-control" id="exampleInputPassword1" placeholder="รหัสผ่าน" required minlength="8">
+                    </div>*@
+                    <input type="hidden" name="macAddress" value="@Model.mac" />
+                    <div class="Button_SizeBox">
+                        <button class="button">เข้าสู่ระบบ</button>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</section>
+<script>
+    $("input[name=Tel]").change(function (e) {
+        e.preventDefault();
+        $.post("@Url.Action("check_tel", "Login")", { data: $(this).val() }).then(x => {
+
+            if (x == "success") {
+                $("input[name=Password]").attr("placeholder", "ใส่รหัสผ่าน");
+            } else {
+                $("input[name=Password]").attr("placeholder", "ตั้งรหัสผ่าน");
+            }
+        });
+    })
+    $(document).ready(function () {
+        if (localStorage.getItem("UUIDMAC") != undefined && localStorage.getItem("UUIDMAC") != null) {
+            // alert(sessionStorage.getItem("UUIDMAC"))
+            $("input[name='macAddress']").val(localStorage.getItem("UUIDMAC"))
+        } else {
+            var mactoken = window.crypto.randomUUID();
+            localStorage.setItem("UUIDMAC", mactoken)
+            // alert(sessionStorage.getItem("UUIDMAC"))
+
+        }
+    })
+</script>
+@*<div class="alert alert-danger alert-dismissible fade show fixed-bottom" style="width: 20%;left: 80%;"  role="alert">
+      This is an error 1
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>*@

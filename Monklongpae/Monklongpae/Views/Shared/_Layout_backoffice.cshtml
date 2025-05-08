@@ -1,0 +1,227 @@
+﻿@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor Accessor
+@{
+	var tel = Accessor.HttpContext.Session.GetString("Tel");
+	var fri = Accessor.HttpContext.Session.GetString("Firstname");
+	var sur = Accessor.HttpContext.Session.GetString("Surnname");
+	var role = Accessor.HttpContext.Session.GetString("role");
+	var image = Accessor.HttpContext.Session.GetString("image");
+	var status = "";
+	if (role != null)
+	{
+		if (role.ToLower() == "user")
+		{
+			status = "ฟรี";
+		}
+		else if (role.ToLower() == "vip")
+		{
+			status = "30 วัน";
+		}
+		else
+		{
+			status = "แอดมิน";
+		}
+	}
+}
+@await Component.InvokeAsync("NToastNotify")
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<title>Monklongpae Manage</title>
+	<meta content="width=device-width, initial-scale=1.0" name="viewport">
+	<meta content="" name="keywords">
+	<meta content="" name="description">
+
+	<!-- Favicon -->
+	<link href="/img/favicon.ico" rel="icon">
+
+	<!-- Google Web Fonts -->
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Roboto:wght@500;700&display=swap" rel="stylesheet">
+
+	<!-- Icon Font Stylesheet -->
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs5/dt-1.13.1/datatables.min.css" />
+
+	<!-- Libraries Stylesheet -->
+	<link href="/backoffice/lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+	<link href="/backoffice/lib/tempusdominus/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet" />
+
+	<!-- Customized Bootstrap Stylesheet -->
+	<link href="/backoffice/css/bootstrap.min.css" rel="stylesheet">
+
+	<!-- Template Stylesheet -->
+	<link href="/backoffice/css/style.css" rel="stylesheet">
+	<link href="/backoffice/dist/jquery-msgpopup.css" rel="stylesheet">
+
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css">
+
+</head>
+<body>
+	<div class="container-fluid position-relative d-flex p-0">
+		<!-- Spinner Start -->
+		<div id="spinner" class="show bg-dark position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+			<div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+				<span class="sr-only">Loading...</span>
+			</div>
+		</div>
+
+		<!-- Sidebar Start -->
+		<div class="sidebar pe-4 pb-3">
+			<nav class="navbar bg-secondary navbar-dark">
+				<a href="@Url.Action("Index","Backoffice")" class="navbar-brand mx-4 mb-3">
+					<h3 class="text-primary"><i class="fa fa-user-edit me-2"></i>Monklongpae</h3>
+				</a>
+				<div class="d-flex align-items-center ms-4 mb-4">
+					<div class="position-relative">
+						<img class="rounded-circle" src="@image" alt="" style="width: 40px; height: 40px;">
+						<div class="bg-success rounded-circle border border-2 border-white position-absolute end-0 bottom-0 p-1"></div>
+					</div>
+					<div class="ms-3">
+						<h6 class="mb-0">@fri @sur</h6>
+						<span>@status</span>
+					</div>
+				</div>
+				<div class="navbar-nav w-100">
+					<a href="@Url.Action("Index","Backoffice")" class="nav-item nav-link active"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
+					<div class="nav-item dropdown">
+						<a href="javascirpt:void(0)" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="fa fa-laptop me-2"></i>จัดการหน้าเว็บ</a>
+						<div class="dropdown-menu bg-transparent border-0">
+							<a href="@Url.Action("Message","Backoffice")" class="dropdown-item"><i class="bi bi-messenger"></i> ข้อความ</a>
+							<a href="@Url.Action("Video_and_image","Backoffice")" class="dropdown-item"><i class="bi bi-camera-video"></i> วีดีโอหน้าหน้าแรก</a>
+							<a href="@Url.Action("AddCatoryAndVideo","Backoffice")" class="dropdown-item"><i class="bi bi-caret-right-square"></i> หมวดหมู่และวีดีโอ</a>
+							<a href="@Url.Action("ManageVideo","Backoffice")" class="dropdown-item"><i class="bi bi-caret-right-square"></i> จัดการวีดีโอ</a>
+							<a href="@Url.Action("Payments","Backoffice")" class="dropdown-item"><i class="bi bi-basket2-fill"></i> ราคาแพ็คเกจและการชำระเงิน</a>
+							<a href="@Url.Action("Contact","Backoffice")" class="dropdown-item"><i class="bi bi-telephone"></i> ติดต่อเรา</a>
+						</div>
+					</div>
+
+					<div class="nav-item dropdown">
+						<a href="javascirpt:void(0)" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="bi bi-file-earmark-person"></i>จัดการผู้ใช้งาน</a>
+						<div class="dropdown-menu bg-transparent border-0">
+							<a href="@Url.Action("User","Backoffice")" class="dropdown-item"><i class="bi bi-file-earmark-person"></i> ผู้ใช้งาน</a>
+							<a href="@Url.Action("Cert_market","Backoffice")" class="dropdown-item"><i class="bi bi-cart"></i> ยืนยันการสั่งซื้อ</a>
+						</div>
+					</div>
+				</div>
+			</nav>
+		</div>
+
+		<!-- Sidebar End -->
+		<div class="content">
+			<!-- Navbar Start -->
+			<nav class="navbar navbar-expand bg-secondary navbar-dark sticky-top px-4 py-0">
+				<a href="@Url.Action("Index","Backoffice")" class="navbar-brand d-flex d-lg-none me-4">
+					<h2 class="text-primary mb-0"><i class="fa fa-user-edit"></i></h2>
+				</a>
+				<a href="#" class="sidebar-toggler flex-shrink-0">
+					<i class="fa fa-bars"></i>
+				</a>
+
+				<div class="navbar-nav align-items-center ms-auto">
+
+					<div class="nav-item dropdown">
+						<a href="#" class="nav-link dropdown-toggle position-relative" data-bs-toggle="dropdown">
+							<i class="fa fa-bell me-lg-2 "></i>
+							<span style="transform:translate(-123%, 33%) !important" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" id="countpayment">
+								@*  99+ *@
+								0
+								<span class="visually-hidden">unread messages</span>
+							</span>
+						</a>
+						<div class="dropdown-menu dropdown-menu-end bg-secondary border-0 rounded-0 rounded-bottom m-0" id="messagepayment">
+							<a href="#" class="dropdown-item">
+								<h6 class="fw-normal mb-0">Profile updated</h6>
+								<small>15 minutes ago</small>
+							</a>
+							<hr class="dropdown-divider">
+							<a href="#" class="dropdown-item">
+								<h6 class="fw-normal mb-0">New user added</h6>
+								<small>15 minutes ago</small>
+							</a>
+							<hr class="dropdown-divider">
+							<a href="#" class="dropdown-item">
+								<h6 class="fw-normal mb-0">Password changed</h6>
+								<small>15 minutes ago</small>
+							</a>
+
+						</div>
+					</div>
+					<div class="nav-item dropdown">
+						<a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+							<img class="rounded-circle me-lg-2" src="@image" alt="" style="width: 40px; height: 40px;">
+							<span class="d-none d-lg-inline-flex">@fri @sur</span>
+						</a>
+						<div class="dropdown-menu dropdown-menu-end bg-secondary border-0 rounded-0 rounded-bottom m-0">
+							<a href="@Url.Action("Index","Home")" class="dropdown-item">กลับสู่หน้าเว็บไซต์</a>
+
+							<a href="@Url.Action("Logout","Login")" class="dropdown-item">ออกจากระบบ</a>
+						</div>
+					</div>
+				</div>
+			</nav>
+			<!-- Navbar End -->
+			@RenderBody()
+			<!-- Footer Start -->
+			<div class="container-fluid pt-4 px-4">
+				<div class="bg-secondary rounded-top p-4">
+					<div class="row">
+						<div class="col-12 col-sm-6 text-center text-sm-start">
+							&copy; <a href="#">Your Site Name</a>, All Right Reserved.
+						</div>
+
+					</div>
+				</div>
+			</div>
+			<!-- Footer End -->
+		</div>
+		<!-- Back to Top -->
+		<a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
+	</div>
+
+	<!-- JavaScript Libraries -->
+	<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+
+	<script type="text/javascript" src="https://cdn.datatables.net/v/bs5/dt-1.13.1/datatables.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+	<script src="/backoffice/dist/jquery-msgpopup.js"></script>
+	<script src="/backoffice/lib/chart/chart.min.js"></script>
+	<script src="/backoffice/lib/easing/easing.min.js"></script>
+	<script src="/backoffice/lib/waypoints/waypoints.min.js"></script>
+	<script src="/backoffice/lib/owlcarousel/owl.carousel.min.js"></script>
+	<script src="/backoffice/lib/tempusdominus/js/moment.min.js"></script>
+	<script src="/backoffice/lib/tempusdominus/js/moment-timezone.min.js"></script>
+	<script src="/backoffice/lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/6.0.1/signalr.js"></script>
+
+	<script src="/backoffice/controlrealtime/getmac.js"></script>
+	<script src="/backoffice/controlrealtime/payment.js"></script>
+	<!-- Template Javascript -->
+	<script src="/backoffice/js/main.js"></script>
+
+	<script>
+
+		$.get("@Url.Action("Update_online", "Home")").then(x => {
+			if(x == "login")
+			{
+				window.location.href = "/Home/Index";
+			}
+		});
+
+		setInterval(() => {
+			const count = parseInt($("#countpayment").text());
+			if (count > 0) {
+				const audio = new Audio("/sound/notification1.mp3");
+				audio.play();
+			}
+		}, 5000);
+
+	</script>
+
+	@RenderSection("Scripts", required: false)
+</body>
+</html>

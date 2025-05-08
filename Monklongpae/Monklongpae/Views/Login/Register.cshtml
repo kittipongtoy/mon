@@ -1,0 +1,41 @@
+﻿<section id="Sec_Login" style="background-image: linear-gradient(0deg,#00000096,#00000052), url(/img/back_login.png);">
+    <div class="container">
+        <div class="center">
+            <div class="Box_input">
+                <div class="Head_LoginName">
+                    <p> MONKLONGPAE </p>
+                </div>
+                <div class="Head_Login">
+                    <p> สมัครสมาชิก </p>
+                </div>
+                    <form method="post" enctype="multipart/form-data" asp-action="Register" asp-controller="Login">
+
+
+                <div class="box_scroll">
+                        @*<div class="form-group mt-5">
+                            <input type="text" class="form-control" name="FirstName" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="ชื่อ" required>
+                        </div>
+                        <div class="form-group mt-5">
+                            <input type="text" class="form-control" name="SurName" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="นามสกุล" required>
+                        </div>*@
+                        <div class="form-group mt-5">
+                            <input type="text" class="form-control" name="Tel" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="เบอร์โทรศัพท์" required>
+                        </div>
+                        <div class="form-group mt-5">
+                            <input type="password" class="form-control" name="Password" id="exampleInputPassword1" placeholder="รหัสผ่าน" required>
+                        </div>
+                        @*<div class="form-group mt-5">
+                            <textarea class="form-control" name="Address"  id="exampleFormControlTextarea1" rows="3" placeholder="ที่อยู่" required></textarea>
+                        </div>*@
+                </div>
+
+
+
+                <div class="Button_SizeBox2">
+                    <button type="submit" class="button">สมัครสมาชิก</button>
+                </div>
+                    </form>
+            </div>
+        </div>
+    </div>
+</section>

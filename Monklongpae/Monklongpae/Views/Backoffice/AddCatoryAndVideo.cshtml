@@ -1,0 +1,538 @@
+﻿@{
+    Layout = "_Layout_backoffice";
+}
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<div class="container-fluid pt-4 px-4">
+    <div class="row g-4">
+
+        <div class="col-sm-12 col-xl-12">
+            <div class="bg-secondary rounded h-100 p-4">
+                <h6 class="mb-4">เพิ่มหมวดหมู่</h6>
+                <form method="post" enctype="multipart/form-data" asp-action="AddCatoryAndVideo" asp-controller="Backoffice">
+                    <div class="mb-3">
+                        <label for="exampleInputEmail1" class="form-label">ชื่อหมวดหมู่</label>
+                        <input type="text" class="form-control" name="Name" placeholder="หมวดหมู่" id="exampleInputEmail1" value="">
+
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">ตกลง</button>
+                </form>
+
+            </div>
+
+        </div>
+        <div class="col-sm-12 col-xl-12">
+            <div class="bg-secondary rounded h-100 p-4">
+                <h6 class="mb-4">เลือกหมวดหมู่</h6>
+                <select class="form-select form-select-sm mb-3" aria-label=".form-select-sm example" id="selectcatory">
+                    <option selected="" value="">Select</option>
+                    @foreach (var xc in Model)
+                    {
+                        <option value="@xc.IdCatory">@xc.Name</option>
+                    }
+                </select>
+                <div class="bg-secondary rounded h-100 p-4">
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal1" id="add_video">เพิ่มเรื่อง</button>
+                    <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#exampleModal3" onclick="editorcate()" id="edit_video">แก้ไขชื่อหมวดหมู่</button>
+                    <button type="button" class="btn btn-light" id="del_video" onclick="DeleteCatetory()">ลบหมวดหมู่</button>
+                    <br />
+                    <br />
+                    <br />
+                    <h6 class="mb-4">วิดีโอทั้งหมด</h6>
+                    <div class="table-responsive">
+                        <table class="table" id="customerDatatable">
+                            <thead>
+                                <tr>
+                                    <th scope="col" class="text-center">หน้าปก</th>
+                                    <th scope="col" class="text-center">ชื่อวีดีโอ</th>
+                                    <th scope="col" class="text-center">วันที่อัพโหลด</th>
+                                    <th scope="col" class="text-center">จัดการ</th>
+                                </tr>
+                            </thead>
+
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content bg-secondary">
+            <div class="modal-header">
+                <h5 class="modal-title text-primary" id="exampleModalLabel">เพิ่มวีดีโอ</h5>
+                <button type="button" class="btn-close text-primary" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form method="post" enctype="multipart/form-data" asp-action="upload_file_media" asp-controller="Backoffice">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="formFile1" class="form-label">หน้าปกวีดีโอ</label>
+                        <input class="form-control bg-dark" type="file" name="file1" accept="image/*,video/*" id="formFile1" required>
+                    </div><div class="mb-3">
+                        <label for="formFile" class="form-label">อัพโหลดวีดีโอ</label>
+                        <input class="form-control bg-dark" type="file" name="file" accept="image/*,video/*" id="formFile" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="exampleInputEmail1" class="form-label">ชื่อ</label>
+                        <input type="text" class="form-control" name="name" id="exampleInputEmail1" value="" required>
+
+                    </div>
+                    <div class="mb-3">
+                        <label for="exampleInputEmail1" class="form-label">รายละเอียด</label>
+                        <input type="text" class="form-control" name="description" id="exampleInputEmail1" value="">
+
+                    </div>
+                    <div class="mb-3">
+                        <label for="exampleInputEmail1" class="form-label">กำหนดเวลาดูฟรี นาที</label>
+                        <input type="text" class="form-control" name="timefree" id="exampleInputEmail1" value="">
+
+                    </div>
+                    <input type="hidden" name="idnameVideo" id="idnameVideo" />
+                    <button type="submit" class="btn btn-primary">อัพโหลดวีดีโอ</button>
+                    <br />
+                    <br />
+                    <div class="table-responsive">
+                        <table class="table" id="customerDatatable1">
+                            <thead>
+                                <tr>
+                                    <th class="text-center">หน้าปก</th>
+                                    <th class="text-center">ชื่อวีดีโอ</th>
+                                    <th class="text-center">วันที่อัพโหลด</th>
+                                    <th class="text-center">จัดการ</th>
+                                </tr>
+                            </thead>
+
+                        </table>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ยกเลิก</button>
+
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="exampleModal1" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content bg-secondary">
+            <div class="modal-header">
+                <h5 class="modal-title text-primary" id="exampleModalLabel">เพิ่มวีดีโอ</h5>
+                <button type="button" class="btn-close text-primary" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form method="post" enctype="multipart/form-data" asp-action="upload_file_media1" asp-controller="Backoffice">
+                <div class="modal-body">
+                    <div class="text-center mb-3">
+                        <img id="blah1" src="#" alt="your image" class="img-fluid" style="width: 300px;" />
+
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="formFile1" class="form-label">หน้าปกวีดีโอ</label>
+                        <input class="form-control bg-dark" type="file" name="file1" id="formFile111" accept="image/*,video/*" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="exampleInputEmail1" class="form-label">ชื่อ</label>
+                        <input type="text" class="form-control" name="name" id="exampleInputEmail1" value="" required>
+
+                    </div>
+                    @* <div class="mb-3">
+                    <label for="exampleInputEmail1" class="form-label">รายละเอียด</label>
+                    <input type="text" class="form-control" name="description" id="exampleInputEmail1" value="">
+
+                    </div> *@
+
+                    <input type="hidden" name="idCatory" id="idCatory" />
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ยกเลิก</button>
+                    <button type="submit" id="uloads" onclick='$("#spinner").addClass("show");' class="btn btn-primary">อัพโหลดวีดีโอ</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="exampleModal2" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content bg-secondary">
+            <div class="modal-header">
+                <h5 class="modal-title text-primary" id="exampleModalLabel">แก้วีดีโอ</h5>
+                <button type="button" class="btn-close text-primary" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form method="post" enctype="multipart/form-data" asp-action="upload_file_media" asp-controller="Backoffice">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="formFile1" class="form-label">หน้าปกวีดีโอ</label>
+                        <input class="form-control bg-dark" type="file" name="file1" accept="image/*,video/*" id="formFile1">
+                    </div><div class="mb-3">
+                        <label for="formFile" class="form-label">อัพโหลดวีดีโอ</label>
+                        <input class="form-control bg-dark" type="file" name="file" accept="image/*,video/*" id="formFile">
+                    </div>
+                    <div class="mb-3">
+                        <label for="exampleInputEmail1" class="form-label">ชื่อ</label>
+                        <input type="text" class="form-control" name="name" id="exampleInputEmail1" value="" required>
+
+                    </div>
+                    <div class="mb-3">
+                        <label for="exampleInputEmail1" class="form-label">รายละเอียด</label>
+                        <input type="text" class="form-control" name="description" id="exampleInputEmail1" value="">
+
+                    </div>
+                    <div class="mb-3">
+                        <label for="exampleInputEmail1" class="form-label">กำหนดเวลาดูฟรี นาที</label>
+                        <input type="text" class="form-control" name="timefree" id="exampleInputEmail1" value="">
+
+                    </div>
+                    <input type="hidden" name="idvideo" id="idvideo" />
+                    <button type="submit" class="btn btn-primary" onclick='$("#spinner").addClass("show");'>อัพโหลดวีดีโอ</button>
+
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ยกเลิก</button>
+
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="exampleModal3" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content bg-secondary">
+            <div class="modal-header">
+                <h5 class="modal-title text-primary" id="exampleModalLabel">แก้ชื่อหมวดหมู่</h5>
+                <button type="button" class="btn-close text-primary" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form method="post" enctype="multipart/form-data" asp-action="update_cate" asp-controller="Backoffice">
+                <div class="modal-body">
+
+                    <div class="mb-3">
+                        <label for="exampleInputEmail1" class="form-label">ชื่อหมวดหมู่</label>
+                        <input type="text" class="form-control" name="namecate" id="exampleInputEmail1" value="" required>
+
+                    </div>
+                    <input type="hidden" name="cates" id="cates" />
+
+
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ยกเลิก</button>
+                    <button type="submit" class="btn btn-primary">อัพเดท</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="exampleModal4" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog ">
+        <div class="modal-content bg-secondary">
+            <div class="modal-header">
+                <h5 class="modal-title text-primary" id="exampleModalLabel">แก้ชื่อและหน้าปก</h5>
+                <button type="button" class="btn-close text-primary" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form method="post" enctype="multipart/form-data" asp-action="update_pok" asp-controller="Backoffice">
+                <div class="modal-body">
+                    <div class="text-center mb-3">
+                        <img id="blah2" src="#" alt="your image" class="img-fluid" style="width: 300px;" />
+
+                    </div>
+                    <div class="mb-3">
+                        <label for="formFile1" class="form-label">หน้าปกวีดีโอ</label>
+                        <input class="form-control bg-dark" type="file" name="file1" id="formFile222" accept="image/*,video/*" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="exampleInputEmail1" class="form-label">ชื่อ</label>
+                        <input type="text" class="form-control" name="name" id="exampleInputEmail1" value="" required>
+
+                    </div>
+                    @* <div class="mb-3">
+                    <label for="exampleInputEmail1" class="form-label">รายละเอียด</label>
+                    <input type="text" class="form-control" name="description" id="exampleInputEmail1" value="">
+
+                    </div> *@
+
+                    <input type="hidden" name="idVideoName" id="idVideoName" />
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ยกเลิก</button>
+                    <button type="submit" id="uloads" onclick='$("#spinner").addClass("show");' class="btn btn-primary">แก้ไข</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<link href="/css/loading.css" rel="stylesheet">
+<div class="ring" hidden>
+    Loading
+    <span id="loadings"></span>
+</div>
+<script>
+    formFile111.onchange = evt => {
+        const [file] = formFile111.files
+        if (file) {
+            blah1.src = URL.createObjectURL(file)
+        }
+    }
+    formFile222.onchange = evt => {
+        const [file] = formFile222.files
+        if (file) {
+            blah2.src = URL.createObjectURL(file)
+        }
+    }
+    function editorcate() {
+        $("input[name='cates']").val($("#selectcatory").val());
+        $("input[name='namecate']").val($("#selectcatory :selected").html());
+    }
+    $(document).ready(function () {
+        $("#add_video").fadeOut(100)
+        $("#del_video").fadeOut(100)
+        $("#edit_video").fadeOut(100)
+        $("#uloads").click(function (e) {
+            $(".ring").attr("hidden", false)
+        })
+        $("#customerDatatable").DataTable({
+            "processing": true,
+            "serverSide": true,
+            "filter": true,
+            scrollY: false,
+            scrollX: false,
+            "ordering": false,
+            "ajax": {
+                "url": '@Url.Action("table", "Backoffice")',
+                "type": "POST",
+                "datatype": "json",
+                data: function (e) {
+                    e.ids = $("#selectcatory").val();
+                }
+            },
+            lengthMenu: [
+                [5, 10, 20, -1],
+                [5, 10, 20, 'All'],
+            ],
+            "columns": [
+
+                {
+                    "data": "pathDisplay", "name": "pathDisplay", "autoWidth": true, render: function (data, type, row) {
+                        if (data.indexOf(".mp4") != -1) {
+                            return '<center><video class="rounded-circle text-center" autoplay playsinline  muted loop preload="metadata" src="' + data + '" alt="" style="width: 80px; height: 80px;"></video></center>';
+
+                        } else {
+                            return '<center><img class="rounded-circle text-center" src="' + data + '" alt="" style="width: 80px; height: 80px;"></center>';
+                        }
+                    }
+                },
+                { "data": "name", "name": "name", "class": "text-center align-middle", "autoWidth": true },
+                { "data": "createDate", "name": "createDate", "class": "text-center align-middle", "autoWidth": true },
+                {
+                    "data": "idNameVideo", "name": "idNameVideo", "class": "text-center align-middle", "autoWidth": true,
+                    "render": function (data, type, row) { return " <a href='javascript:void(0)' class='btn btn-info' data-bs-toggle='modal' data-bs-target='#exampleModal' onclick=ViewCustomer(" + data + "); >จัดการ</a> <a href='javascript:void(0)' class='btn btn-warning' data-bs-toggle='modal' data-bs-target='#exampleModal4' onclick=EditCustomer2(" + data + "); >แก้ไข</a> <a href='#' class='btn btn-danger' onclick=DeleteCustomer1(" + data + "); >Delete</a>"; }
+                },
+            ]
+        });
+
+        $("#customerDatatable1").DataTable({
+            "processing": true,
+            "serverSide": true,
+            "filter": true,
+            scrollY: false,
+            scrollX: false,
+            "ordering": false,
+            "ajax": {
+                "url": '@Url.Action("table4", "Backoffice")',
+                "type": "POST",
+                "datatype": "json",
+                data: function (e) {
+                    e.ids = $("#idnameVideo").val();
+                }
+            },
+            lengthMenu: [
+                [5, 10, 20, -1],
+                [5, 10, 20, 'All'],
+            ],
+            "columns": [
+
+                {
+                    "data": "pathDisplay", "name": "pathDisplay", "autoWidth": true, render: function (data, type, row) {
+                        if (data.indexOf(".mp4") != -1) {
+                            return '<center><video class="rounded-circle text-center" autoplay playsinline muted loop src="' + data + '" alt="" style="width: 80px; height: 80px;"></video></center>';
+
+                        } else {
+                            return '<center><img class="rounded-circle text-center" src="' + data + '" alt="" style="width: 80px; height: 80px;"></center>';
+                        }
+                    }
+                },
+                { "data": "name", "name": "name", "class": "text-center align-middle", "autoWidth": true },
+                { "data": "createDate", "name": "createDate", "class": "text-center align-middle", "autoWidth": true },
+                {
+                    "data": "idVideo", "name": "idVideo", "class": "text-center align-middle", "autoWidth": true,
+                    "render": function (data, type, row) { return "<a href='#' class='btn btn-warning' data-bs-toggle='modal' data-bs-target='#exampleModal2' onclick=EditCustomer1(" + data + "); >Edit</a> <a href='#' class='btn btn-danger' onclick=DeleteCustomer(" + data + "); >Delete</a>"; }
+                },
+            ]
+        });
+
+        $("#selectcatory").change(function (e) {
+            var t = $("#customerDatatable").DataTable();
+            t.ajax.reload();
+            $("#idCatory").val($(this).val())
+            if ($(this).val() == "") {
+                $("#add_video").fadeOut(1000)
+                $("#del_video").fadeOut(1000)
+                $("#edit_video").fadeOut(1000)
+            } else {
+
+                $("#add_video").fadeIn(1000);
+                $("#del_video").fadeIn(1000);
+                $("#edit_video").fadeIn(1000);
+
+            }
+        });
+    })
+
+    function ViewCustomer(id) {
+        $("#idnameVideo").val(id);
+        var t = $("#customerDatatable1").DataTable();
+        t.ajax.reload();
+    }
+
+    function DeleteCustomer(id) {
+
+        Swal.fire({
+            title: 'คุณแน่ใจ?',
+            text: "ที่จะลบหมวดหมู่นี้นี้",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#EA1021',
+            background: '#191C24',
+            color: '#fff',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'ใช่, ฉันจะลบมัน!',
+            cancelButtonText: 'ไม่ลบ'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.post("@Url.Action("Delete_video", "Backoffice")", { ids: id }).then(x => {
+
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'info',
+                        background: '#191C24',
+                        color: '#fff',
+                        title: x,
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                    var t = $("#customerDatatable").DataTable();
+                    t.ajax.reload();
+                });
+            }
+        })
+
+    }
+
+    function DeleteCatetory() {
+
+        Swal.fire({
+            title: 'คุณแน่ใจ?',
+            text: "ที่จะลบวีดีโอนี้",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#EA1021',
+            background: '#191C24',
+            color: '#fff',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'ใช่, ฉันจะลบมัน!',
+            cancelButtonText: 'ไม่ลบ'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                var id = $("#selectcatory").val();
+                $.post("@Url.Action("DeleteCate", "Backoffice")", { ids: id }).then(x => {
+
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'info',
+                        background: '#191C24',
+                        color: '#fff',
+                        title: x,
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                    window.location.reload();
+                });
+            }
+        })
+
+    }
+
+    function EditCustomer1(id) {
+
+        $.post("@Url.Action("getDatavideo", "Backoffice")", { ids: id }).then(x => {
+            console.log(x);
+            $("#exampleModal2 input[name=idvideo]").val(id);
+            $("#exampleModal2 input[name=name]").val(x.name);
+            $("#exampleModal2 input[name=description]").val(x.description);
+            $("#exampleModal2 input[name=timefree]").val(parseInt(x.limitVideoUser) / 60);
+            $("#exampleModal").modal("toggle");
+
+        });
+
+    }
+    function EditCustomer2(id) {
+
+        $.post("@Url.Action("get_pok", "Backoffice")", { ids: id }).then(x => {
+            console.log(x);
+            $("#exampleModal4 input[name=idVideoName]").val(id);
+            $("#exampleModal4 input[name=name]").val(x.name);
+            $("#blah2").attr("src", x.pathDisplay);
+            // $("#exampleModal4 input[name=description]").val(x.description);
+            // $("#exampleModal4 input[name=timefree]").val(parseInt(x.limitVideoUser) / 60);
+            // $("#exampleModal4").modal("toggle");
+
+        });
+
+    }
+
+    function DeleteCustomer1(id) {
+
+        Swal.fire({
+            title: 'คุณแน่ใจ?',
+            text: "ที่จะเรื่องนี้",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#EA1021',
+            background: '#191C24',
+            color: '#fff',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'ใช่, ฉันจะลบมัน!',
+            cancelButtonText: 'ไม่ลบ'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.post("@Url.Action("Delete_video4", "Backoffice")", { ids: id }).then(x => {
+
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'info',
+                        background: '#191C24',
+                        color: '#fff',
+                        title: x,
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                    var t = $("#customerDatatable").DataTable();
+                    t.ajax.reload();
+                });
+            }
+        })
+
+    }
+
+</script>

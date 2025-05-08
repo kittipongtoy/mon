@@ -1,0 +1,99 @@
+﻿
+
+
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<section id="Sec_Account">
+	<div class="container">
+		<div class="Head_moneyPage">
+			<p> บัญชีของฉัน </p>
+		</div>
+		<form method="post" enctype="multipart/form-data" asp-action="UpdateProfile" asp-controller="Login">
+			<div class="row">
+				<div class="col-lg-4 col-md-12 col-12">
+					<div class="Box_ImageUser">
+						<div class="media-container">
+							<span class="media-overlay">
+								<input type="file" id="media-input" name="Images" accept="image/*">
+								<i class="an an-write media-icon"></i>
+							</span>
+							<figure class="media-object">
+								<img class="img-object" src="@ViewBag.image">
+							</figure>
+						</div>
+						<div class="media-control">
+							<button class="btn edit-profile" type="button">
+								<i class="fa-solid fa-pen"></i> เลือกไฟล์
+							</button>
+							<button class="btn save-profile" type="button">
+								<i class="fa-solid fa-pen"></i> บันทึก
+							</button>
+						</div>
+					</div>
+					<div class="Box_ButtonCracelUser mt-4">
+						<button class="button_CracelUser" onclick="cancelUser(@ViewBag.ids)"> ยกเลิกการเป็นสมาชิก </button>
+					</div>
+				</div>
+				<div class="col-lg-8 col-md-12 col-12">
+					<div class="Box_TextUser">
+						<div class="Text_Edit">
+							<a href="#">
+								<p>
+									<i class="fa-solid fa-pen"></i> &nbsp; แก้ไขข้อมูลส่วนตัว
+								</p>
+							</a>
+						</div>
+
+						<div class="mb-4 mt-5 row">
+							<label for="staticEmail" class="col-sm-2 col-form-label"> ชื่อ : </label>
+							<div class="col-sm-10">
+								<input type="text" name="FirstName" class="form-control" id="exampleFormControlInput1" value="@ViewBag.fir">
+							</div>
+						</div>
+						<div class="mb-4 row">
+							<label for="staticEmail" class="col-sm-2 col-form-label"> นามกสุล : </label>
+							<div class="col-sm-10">
+								<input type="text" name="SurName" class="form-control" id="exampleFormControlInput1" value="@ViewBag.sur">
+							</div>
+						</div>
+						<div class="mb-4 row">
+							<label for="staticEmail" class="col-sm-2 col-form-label"> รหัสผ่าน : </label>
+							<div class="col-sm-10">
+								<input type="text" class="form-control" id="exampleFormControlInput1" >
+							</div>
+						</div>
+						<div class="mb-4 row">
+							<label for="staticEmail" class="col-sm-2 col-form-label"> เบอร์โทรศัพท์ : </label>
+							<div class="col-sm-10">
+								<input type="text" class="form-control" name="Tel" id="exampleFormControlInput1" value="@ViewBag.tel" readonly>
+							</div>
+						</div>
+						<div class="mb-4 row">
+							<label for="staticEmail" class="col-sm-2 col-form-label"> ที่อยู่ : </label>
+							<div class="col-sm-10">
+								<textarea class="form-control" name="Address" id="exampleFormControlTextarea1" rows="3">@(ViewBag.address == null ? "" : ViewBag.address)</textarea>
+							</div>
+						</div>
+						<div class="mb-4 row">
+							<label for="staticEmail" class="col-sm-2 col-form-label "> แพ็คเกจ : </label>
+							<div class="col-sm-10 text-primary">
+								<label for="staticEmail" class="col-sm-2 col-form-label "> <span style="color:#EA1021">@ViewBag.role</span></label>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="Box_ButtonSend">
+				<div class="vertical-center">
+					<a class="btn-cracelbank" href="@Url.Action("Index","Home")"> ยกเลิก </a>
+					<button type="submit" class="btn-comfrembank"> ยืนยัน </button>
+				</div>
+			</div>
+		</form>
+	</div>
+</section>
+<script>
+	function cancelUser(id) {
+		$.post("@Url.Action("cancelUser", "Login")", { ids: id }).then(x => { });
+	}
+</script>

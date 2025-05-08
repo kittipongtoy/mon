@@ -1,0 +1,509 @@
+﻿@using Microsoft.AspNetCore.Http
+@using System.Management
+@using System.Net.NetworkInformation
+@inject IHttpContextAccessor Accessor
+@{
+    string macAddresses = "";
+
+    foreach (NetworkInterface nic in NetworkInterface.GetAllNetworkInterfaces())
+    {
+        if (nic.OperationalStatus == OperationalStatus.Up)
+        {
+            macAddresses += nic.GetPhysicalAddress().ToString();
+            break;
+        }
+    }
+    var tel = Accessor.HttpContext.Session.GetString("Tel");
+    var fri = Accessor.HttpContext.Session.GetString("Firstname");
+    var sur = Accessor.HttpContext.Session.GetString("Surnname");
+    var role = Accessor.HttpContext.Session.GetString("role");
+    var image = Accessor.HttpContext.Session.GetString("image");
+    var status = "";
+    if (role != null)
+    {
+        if (role.ToLower() == "user")
+        {
+            status = "ฟรี";
+        }
+        else if (role.ToLower() == "vip")
+        {
+            status = "VIP";
+        }
+        else
+        {
+            status = "แอดมิน";
+        }
+    }
+}
+@await Component.InvokeAsync("NToastNotify")
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Monklongpae </title>
+    <meta name="keywords" content="" />
+    <meta name=" description" content="" />
+    <meta name="robot" content="index, follow" />
+    <meta name="generator" content="brackets">
+    <meta name='copyright' content='orange technology solution co.,ltd.'>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <link type="image/ico" rel="shortcut icon" href="/img/favicon.ico">
+    <!-- slide card -->
+    <!-- ---------------------JAVASCRIPT------------------------ -->
+    @* <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.5.1/js/swiper.min.js"></script> defer *@
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.5.1/js/swiper.min.js"></script>
+    <!-- --------------------------CSS------------------------------------- -->
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.5.1/css/swiper.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/tom-select@2.0.0-rc.4/dist/css/tom-select.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/bootstrap.css">
+    <!----- Css icon -------->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <!----- Css google front -------->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@100;200;300;400;500;600&display=swap" rel="stylesheet">
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+    <script src="/js/popper.min.js"></script>
+    <!----- JS icon -------->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/js/all.min.js"></script>
+
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <div class="bars"></div>
+            <img src="/img/logo_web.jpg" alt="logo" />
+        </div>
+
+        <nav>
+            <ul class="nav__links">
+                <li><a href="@Url.Action("Index","Home")"> หน้าแรก </a></li>
+                <li><a href="@Url.Action("Video_total","Home")"> วิดีโอทั้งหมด </a></li>
+                <li><a href="@Url.Action("Money_page","Home")"> สั่งซื้อและชำระเงิน </a></li>
+                <li><a href="@Url.Action("Contact","Home")"> ติดต่อเรา </a></li>
+            </ul>
+        </nav>
+        @if (tel == null || tel == "")
+        {
+            <section>
+                <div class="Button_logRegis">
+                    <a href="@Url.Action("Login","Login")">
+                        <button class="button_login"> เข้าสู่ระบบ </button>
+                    </a>
+                    <a href="@Url.Action("Register","Login")">
+                        <button hidden class="button_regis"> สมัครสมาชิก </button>
+                    </a>
+
+                </div>
+            </section>
+        }
+        else
+        {
+            <section>
+                <div class="head-time-right">
+                    <label class="dropdown">
+                        <div class="dd-button">
+                            <img src="@image" alt="logo" /> &nbsp; @fri @sur
+                        </div>
+                        <input type="checkbox" class="dd-input" id="test">
+                        <ul class="dd-menu">
+                            <li>
+                                <a href="@Url.Action("Account_me","Login")"> บัญชีของฉัน </a>
+                            </li>
+                            @if (status.ToLower() == "แอดมิน")
+                            {
+                                <li>
+                                    <a href="@Url.Action("Index","Backoffice")"> จัดการระบบ </a>
+                                </li>
+                            }
+                            <li> <span> แพ็คเกจ : @status </span> </li>
+                            <li>
+                                <a asp-action="Logout" asp-controller="Login"> ออกจากระบบ </a>
+                            </li>
+                            <li class="divider"></li>
+                        </ul>
+                    </label>
+                </div>
+            </section>
+        }
+    </header>
+
+
+
+    @RenderBody()
+
+
+    <footer class="border-top footer text-muted">
+        <section id="Footer">
+            <div class="container">
+                <div class="Head_Footer">
+                    <div class="icon_social">
+                        <a href="https://www.facebook.com/mon.klongpae">
+                            <i class="fa-brands fa-facebook-f mb-4 me-4 ms-4" style="color: white;font-size: 2rem;"></i>
+
+                        </a>
+                        <a href="#">
+                            <i class="fa-brands fa-youtube mb-4 me-4" style="color: white;font-size: 2rem;"></i>
+                        </a>
+                        <a href="#">
+                            <i class="fa-brands fa-line mb-4" style="color: white;font-size: 2rem;"></i>
+                        </a>
+
+                    </div>
+                    <div class="Menu_Buttom">
+                        <a href="money_page.php">
+                            สั่งซื้อและขำระเงิน
+                        </a>
+                        <a href="contact.php">
+                            ติดต่อเรา
+                        </a>
+                    </div>
+                    <hr>
+                    <div class="Detail_TextAddress mt-4">
+                        <p>
+                            ที่ตั้ง : หมู่ 3 9/2 ตำบล อบทม อำเภอ สามโก้ อ่างทอง 14160
+                        </p>
+                        <p>
+                            เบอร์โทร : 086-8114819
+                        </p>
+                        <p>
+                            Copyright © 2022 Monklongpae.com All right reserved.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </footer>
+    @*<script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>*@@*
+    @await RenderSectionAsync("Scripts", required: false)*@
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/6.0.1/signalr.js"></script>
+    @* <script src="/backoffice/controlrealtime/updatedata.js"></script> *@
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lazysizes/5.3.2/lazysizes.min.js" async></script>
+
+    @section Scripts {
+        @if (!ViewContext.HttpContext.Items.ContainsKey("UpdatedataJsLoaded"))
+        {
+            ViewContext.HttpContext.Items["UpdatedataJsLoaded"] = true;
+            <script src="~/backoffice/controlrealtime/updatedata.js"></script>
+        }
+    }
+
+    <script>
+            setInterval(() => {
+                document.addEventListener('contextmenu', event => event.preventDefault());
+
+            }, 500);
+            //console.log("tel");
+            var tel = (`@tel` ?? "")
+            if (tel != null || tel != "") {
+                sessionStorage.setItem("tels", tel);
+            }
+            const activeLinks = document.querySelectorAll('.nav__links li'),
+                menu = document.querySelector('.bars');
+            let menuState = false;
+            menu.addEventListener('click', showMenu);
+
+            function showMenu() {
+                if (!menuState) {
+                    menu.classList.add("is-active");
+                    document.querySelector('.nav__links').classList.add('open');
+                    menuState = true;
+                } else {
+                    menu.classList.remove("is-active");
+                    document.querySelector('.nav__links').classList.remove('open');
+                    menuState = false;
+                }
+            }
+            activeLinks.forEach((item) => {
+                item.addEventListener('click', activateLinks);
+            });
+
+            function activateLinks() {
+                activeLinks.forEach((item) => {
+                    item.classList.remove('active');
+                });
+                this.classList.add('active')
+            }
+
+
+            $(document).ready(function () {
+                setTimeout(() => {
+                    $('.alert').alert('close');
+                }, 2000);
+
+            });
+            // to top
+            $(window).scroll(function () {
+                if ($(this).scrollTop()) {
+                    $("#toTop").fadeIn();
+                } else {
+                    $("#toTop").fadeOut();
+                }
+            });
+            $("#toTop").click(function () {
+                $("html, body").animate({
+                    scrollTop: 0,
+                },
+                    1800
+                );
+            });
+
+        //<!----- Uploae image ----->
+
+            $('.upload-btn').on('click', function () {
+                $('#upload-file').click();
+            })
+            $('#upload-file').on('change', function () {
+                var files = $(this).get(0).files;
+                var result = document.createElement('p');
+                $('#result').html('your file size is: ' + files[0].size / 1000 + ' kbytes(' + files[0].size + ' bytes)');
+
+            })
+
+
+        //<!----- Uploae image User ----->
+            var btn_save = $(".save-profile"),
+                btn_edit = $(".edit-profile"),
+                img_object = $(".img-object"),
+                overlay = $(".media-overlay"),
+                media_input = $("#media-input");
+
+            btn_save.hide(0);
+            overlay.hide(0);
+
+            btn_edit.on("click", function () {
+                $(this).hide(0);
+                overlay.fadeIn(300);
+                btn_save.fadeIn(300);
+            });
+            btn_save.on("click", function () {
+                $(this).hide(0);
+                overlay.fadeOut(300);
+                btn_edit.fadeIn(300);
+            });
+
+            media_input.change(function () {
+                if (this.files && this.files[0]) {
+                    var reader = new FileReader();
+
+                    reader.onload = function (e) {
+                        img_object.attr("src", e.target.result);
+                    };
+
+                    reader.readAsDataURL(this.files[0]);
+                }
+            });
+
+            var slideIndex = 1;
+            showSlides(slideIndex);
+
+            function plusSlides(n) {
+                showSlides(slideIndex += n);
+            }
+
+            function currentSlide(n) {
+                showSlides(slideIndex = n);
+            }
+
+            function showSlides(n) {
+                var i;
+                //var slides = document.getElementsByClassName("slide");
+                //var dots = document.getElementsByClassName("dot");
+                //var videos = document.getElementsByClassName("videos");
+
+                // if (n > slides.length) {
+                //     slideIndex = 1;
+                //     console.log('final');
+                // }
+                // if (n < 1) {
+                //     slideIndex = slides.length;
+                // }
+
+                //for (i = 0; i < slides.length; i++) {
+                    //slides[i].style.display = "none";
+                    //slides[i].removeAttribute('id', 'isActive');
+                    //videos[i].pause();
+                    //videos[i].currentTime = 0;
+
+                    // slides[i].setAttribute('id', 'isActive');
+
+                //}
+                // for (i = 0; i < dots.length; i++) {
+                //     dots[i].className = dots[i].className.replace(" active", "");
+                // }
+
+                //slides[slideIndex - 1].style.display = "block";
+                //slides[slideIndex - 1].setAttribute('id', 'isActive');
+                //videos[slideIndex - 1].play();
+                //dots[slideIndex - 1].className += " active";
+
+                // videos[slideIndex - 1].onended = function (e) {
+                //     plusSlides(1);
+                // }
+            }
+
+        //<!---- Slide  Video ------>
+
+            let prevScrollPosition = 0;
+
+            function scrollHandler(e) {
+                // At a time out of 150 by default for better browser support,
+                // but do not set a time out if a snapping point has been reached.
+                let atSnappingPoint = e.target.scrollLeft % e.target.offsetWidth === 0,
+                    timeOut = atSnappingPoint ? 0 : 150,
+                    slider = e.target.closest(".js-slider");
+
+                clearTimeout(e.target.scrollTimeout);
+                e.target.scrollTimeout = setTimeout(function () {
+                    const currentScrollPosition = parseInt(e.target.scrollLeft, 10);
+
+                    slider.classList.remove("slider--last", "slider--first");
+
+                    if (
+                        currentScrollPosition > prevScrollPosition &&
+                        e.target.scrollWidth - currentScrollPosition ===
+                        e.target.offsetWidth
+                    ) {
+                        slider.classList.add("slider--last");
+                    } else if (
+                        currentScrollPosition <= prevScrollPosition &&
+                        currentScrollPosition <= 0
+                    ) {
+                        slider.classList.add("slider--first");
+                    }
+                    prevScrollPosition = currentScrollPosition;
+                }, timeOut);
+            }
+
+            function updateSlidePosition(e, direction) {
+                const firstSlideWidth = e.querySelector(".slider__slide").offsetWidth;
+
+                if (direction === "prev") {
+                    e.scrollLeft -= firstSlideWidth;
+                } else {
+                    e.scrollLeft += firstSlideWidth;
+                }
+            }
+
+            //document.querySelector(".js-slider-inner").addEventListener("scroll", scrollHandler);
+
+            // document
+            //     .querySelector(".js-slider-prev")
+            //     .addEventListener("click", function () {
+            //         updateSlidePosition(this.nextElementSibling, "prev");
+            //     });
+
+            // document
+            //     .querySelector(".js-slider-next")
+            //     .addEventListener("click", function () {
+            //         updateSlidePosition(this.previousElementSibling, "next");
+            //     });
+
+            var $swiperSelector = $('.swiper-container');
+
+            $swiperSelector.each(function (index) {
+                var $this = $(this);
+                $this.addClass('swiper-slider-' + index);
+
+                var dragSize = $this.data('drag-size') ? $this.data('drag-size') : 50;
+                var freeMode = $this.data('free-mode') ? $this.data('free-mode') : false;
+                var loop = $this.data('loop') ? $this.data('loop') : false;
+                var slidesDesktop = $this.data('slides-desktop') ? $this.data('slides-desktop') : 4;
+                var slidesTablet = $this.data('slides-tablet') ? $this.data('slides-tablet') : 3;
+                var slidesMobile = $this.data('slides-mobile') ? $this.data('slides-mobile') : 2.5;
+                var spaceBetween = $this.data('space-between') ? $this.data('space-between') : 20;
+
+                var swiper = new Swiper('.swiper-slider-' + index, {
+                    direction: 'horizontal',
+                    loop: loop,
+                    freeMode: freeMode,
+                    spaceBetween: spaceBetween,
+                    breakpoints: {
+                        1920: {
+                            slidesPerView: slidesDesktop
+                        },
+                        992: {
+                            slidesPerView: slidesTablet
+                        },
+                        320: {
+                            slidesPerView: slidesMobile
+                        }
+                    },
+                    navigation: {
+                        nextEl: '.swiper-button-next',
+                        prevEl: '.swiper-button-prev'
+                    },
+                    scrollbar: {
+                        el: '.swiper-scrollbar',
+                        draggable: true,
+                        dragSize: dragSize
+                    }
+                });
+            });
+
+            var $swiperSelector = $('.swiper-container');
+
+            $swiperSelector.each(function (index) {
+                var $this = $(this);
+                $this.addClass('swiper-slider-' + index);
+
+                var dragSize = $this.data('drag-size') ? $this.data('drag-size') : 50;
+                var freeMode = $this.data('free-mode') ? $this.data('free-mode') : false;
+                var loop = $this.data('loop') ? $this.data('loop') : false;
+                var slidesDesktop = $this.data('slides-desktop') ? $this.data('slides-desktop') : 4;
+                var slidesTablet = $this.data('slides-tablet') ? $this.data('slides-tablet') : 3;
+                var slidesMobile = $this.data('slides-mobile') ? $this.data('slides-mobile') : 2.5;
+                var spaceBetween = $this.data('space-between') ? $this.data('space-between') : 20;
+
+                var swiper = new Swiper('.swiper-slider-' + index, {
+                    direction: 'horizontal',
+                    loop: loop,
+                    freeMode: freeMode,
+                    spaceBetween: spaceBetween,
+                    breakpoints: {
+                        1920: {
+                            slidesPerView: slidesDesktop
+                        },
+                        992: {
+                            slidesPerView: slidesTablet
+                        },
+                        320: {
+                            slidesPerView: slidesMobile
+                        }
+                    },
+                    navigation: {
+                        nextEl: '.swiper-button-next',
+                        prevEl: '.swiper-button-prev'
+                    },
+                    scrollbar: {
+                        el: '.swiper-scrollbar',
+                        draggable: true,
+                        dragSize: dragSize
+                    }
+                });
+            });
+
+            setInterval(() => {
+                $.get("@Url.Action("Update_online", "Home")").then(x => {
+                    console.log(x)
+                    if (x == "login") {
+                        window.location.href = "/Home/Index";
+                    }
+                });
+            }, 5000);
+    </script>
+
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

@@ -1,0 +1,162 @@
+﻿@{
+    Layout = "_Layout_backoffice";
+}
+ 
+<div class="container-fluid pt-4 px-4">
+    <div class="row g-4">
+        <div class="col-sm-12 col-xl-12">
+            <div class="bg-secondary rounded h-100 p-4">          
+                <div class="bg-secondary rounded h-100 p-4">
+                    <h6 class="mb-4">คำสั่งซื้อ</h6>
+                    <div class="table-responsive">
+                        <table class="table" id="customerDatatable">
+                            <thead>
+                                <tr>
+                                    <th scope="col" class="text-center">ลำดับ</th>
+                                    <th scope="col" class="text-center">สถานะ</th>
+                                    <th scope="col" class="text-center">ชื่อ</th>
+                                    <th scope="col" class="text-center">เวลาสร้าง</th>
+                                    <th scope="col" class="text-center">อัพโหลดครั้งล่าสุด</th>
+                                    <th scope="col" class="text-center">สถานะแอดมิน</th>
+                                    <th scope="col" class="text-center">จัดการ</th>
+                                </tr>
+                            </thead>                                        
+                        </table>
+                    </div>
+                </div>
+            </div>                   
+        </div>                   
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content bg-secondary">
+      <div class="modal-header">
+        <h5 class="modal-title text-primary" id="exampleModalLabel">สลิป</h5>
+        <button type="button" class="btn-close text-primary" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      @* <form method="post" enctype="multipart/form-data" asp-action="Cert_market" asp-controller="Backoffice"> *@
+      <div class="modal-body">
+           <img src="" style="width: 100%;" id="imagec" class="rounded mx-auto d-block" alt="...">
+      </div>
+      <div class="modal-footer">
+        <input type="hidden" name="IdPayment" id="IdPayment" />
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ยกเลิก</button>
+        <button type="button" class="btn btn-primary" id="edit_payment" onclick="DeleteCustomer()">ลบ</button>
+        <button type="submit" class="btn btn-primary" id="appect_payment">อนุมัติ</button>
+      </div>
+      @* </form> *@
+    </div>
+  </div>
+</div>
+
+<!-- Modal 2-->
+<div class="modal fade" id="exampleModal2" tabindex="-1" aria-labelledby="exampleModalLabel2" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content bg-secondary">
+            <div class="modal-header">
+                <h5 class="modal-title text-primary" id="exampleModalLabel2">สลิป</h5>
+                <button type="button" class="btn-close text-primary" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <img src="" style="width: 100%;" id="imagec2" class="rounded mx-auto d-block" alt="...">
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+$(document).ready(function() {
+    $("#customerDatatable").DataTable({
+        "processing": true,
+        "serverSide": true,
+        "filter": true,
+        scrollY: false,
+        scrollX: false,
+        "ordering": false,
+        "ajax": {
+            "url": '@Url.Action("table3","Backoffice")',
+            "type": "POST",
+            "datatype": "json",
+            data: function(e) {
+                e.ids = $("#selectcatory").val();
+            }
+        },
+        lengthMenu: [
+            [5, 10, 20, -1],
+            [5, 10, 20, 'All'],
+        ],
+        "columns": [
+            { "data": "no", "name": "no","class":"text-center align-middle", "autoWidth": true },     
+            { "data": "status", "name": "status","class":"text-center align-middle", "autoWidth": true },
+            { "data": "name", "name": "name","class":"text-center align-middle", "autoWidth": true },
+            { "data": "createDate", "name": "createDate","class":"text-center align-middle", "autoWidth": true },
+            { "data": "updateDate", "name": "updateDate","class":"text-center align-middle", "autoWidth": true },
+            {
+                "data": "isactive", "name": "isactive", "class": "text-center align-middle", "autoWidth": true, render: function(data, type, row) {
+                    if(data == false)
+                    {
+                        return "รอการยืนยัน";
+                    }else{
+                        return "ยืนยันแล้ว";
+                    }
+                }
+            },
+            { "data":"idPayment","name":"idPayment","class":"text-center align-middle","autoWidth": true,
+                "render": function(data, type, row) {
+                    //console.log(row.filePayment)
+                    if (row.isactive == true) { 
+                        //return '<span class="badge bg-success">สำเร็จ</span>';
+                            return " <button type='button' class='btn btn-primary' data-bs-toggle='modal' data-bs-target='#exampleModal2' onclick=showedit(" + data + "); >สำเร็จ</button>";
+                    }
+                    else if(row.filePayment == null)
+                    {
+                            return '<span class="badge bg-warning">รอสลิป</span>';
+                    }
+                    else {
+                        return " <button type='button' class='btn btn-primary' data-bs-toggle='modal' data-bs-target='#exampleModal' onclick=showedit(" + data + "); ><i class='bi bi-eye-fill'></i></button>";
+                    }
+                }
+            },
+        ]
+    });
+
+    
+})
+
+function DeleteCustomer() {
+        
+    var id = $("#IdPayment").val()
+    $.post("@Url.Action("Delete_video3","Backoffice")", { ids: id }).then(x => { 
+              
+        Swal.fire({
+            position: 'center',
+            icon: 'info',
+            background:'#191C24',
+            color:'#fff',
+            title: x,
+            showConfirmButton: false,
+            timer: 1500
+        });
+    var t = $("#customerDatatable").DataTable();
+    t.ajax.reload();
+    window.location.reload();
+    });
+
+    
+}
+function showedit(id) {
+    $.post("@Url.Action("Cert_market_select","Backoffice")", { ids: id }).then(x => { 
+        if(x.filePayment != null)
+        {
+           $("#imagec").attr("src", x.filePayment);
+           $("#imagec2").attr("src", x.filePayment);
+        }
+        $("#IdPayment").val(x.idPayment);
+    });
+}
+</script>

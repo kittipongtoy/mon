@@ -1,0 +1,161 @@
+﻿@{
+    Layout = "_Layout_backoffice";
+    var selectedOption = Model.account.AccountStatus;
+}
+    <link rel="stylesheet" href="/css/style.css">
+
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
+<div class="container-fluid pt-4 px-4">
+    <div class="row g-4">
+                    
+        <div class="col-sm-12 col-xl-12">
+            <div class="bg-secondary rounded h-100 p-4">
+                <h6 class="mb-4">บัญชี</h6>
+                    <form method="post" enctype="multipart/form-data" asp-action="Payments" asp-controller="Backoffice">
+                        <div class="mb-3">
+                            <label for="exampleInputEmail1" class="form-label">ชื่อบัญชี</label>
+                            <input type="text" class="form-control" name="NameAccout" placeholder="URL Video" id="exampleInputEmail1" value="@Model.account.NameAccout" required>
+                                        
+                        </div>
+                        <div class="mb-3">
+                            <label for="exampleInputEmail2" class="form-label">เลขบัญชี</label>
+                            <input type="text" class="form-control" name="Account1" placeholder="URL Video" id="exampleInputEmail2" value="@Model.account.Account1" required>
+                                        
+                        </div>
+                        <div class="mb-3">
+                            <label for="exampleInputEmail2" class="form-label">ธนาคาร</label>
+                            <select name="AccountStatus" class="form-select form-select-sm mb-3" aria-label=".form-select-sm example">
+                                <!option value="1" @(selectedOption == 1 ? "selected" : "")>ธนาคารกรุงไทย</!option>
+                                <!option value="2" @(selectedOption == 2 ? "selected" : "")>ธนาคารไทยพาณิชย์</!option>
+                                <!option value="3" @(selectedOption == 3 ? "selected" : "")>ธนาคารกสิกร</!option>
+                                <!option value="4" @(selectedOption == 4 ? "selected" : "")>ธนาคารกรุงเทพ</!option>
+                                <!option value="5" @(selectedOption == 5 ? "selected" : "")>ธนาคารกรุงศรี</!option>
+                                <!option value="6" @(selectedOption == 6 ? "selected" : "")>ธนาคารทหารไทย</!option>
+                            </select>
+                        </div>
+
+                        <input type="hidden" name="IdAccount" value="@Model.account.IdAccount" />
+                        <button type="submit" class="btn btn-primary">ตกลง</button>
+                    </form>
+                                
+            </div>
+                        
+        </div>
+        <br />
+        <br />
+        <h2 class="text-center">จัดการแพ็คเกจ</h2>
+        <div class="row" style="padding-top:1rem" id="Sec_MoneyCheck">
+            <div class="col-sm-12 col-xl-6">
+                <div class="bg-secondary rounded h-100 p-4">
+                    <div class="col-lg-12 col-md-12 col-12">
+                        <div class="Box_InSize">
+                            <form method="post" enctype="multipart/form-data" asp-action="Edit_payment" asp-controller="Backoffice">
+                            <table class="table table-goldprice">
+                                <tbody>
+                                    <tr>
+                                        <td class="bg" colspan="2"> <input type="text" class="form-control" name="Name" placeholder="URL Video" id="exampleInputEmail2" value="@Model.data[0].Name">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2">
+                                            <div class="Text_Day mt-4">
+                                                <p> <input type="text" class="form-control" name="Day" placeholder="URL Video" id="exampleInputEmail2" value="@(Model.data[0].Day)"> </p>
+                                            </div>
+                                            <div class="Number_TextDay">
+                                                <p>
+                                                    <input type="text" class="form-control" name="Price" placeholder="URL Video" id="exampleInputEmail2" value="@Convert.ToInt32(Model.data[0].Price).ToString()">
+                                                </p>
+                                            </div>
+                                        </td>
+                                        <hr>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2">
+                                            <div class="Text_Day mt-2">
+                                                <p> <input type="text" class="form-control" name="Description" placeholder="URL Video" id="exampleInputEmail2" value="@Model.data[0].Description"> </p>
+                                                <hr>
+                                            </div>
+                                            <div class="Text_Day ">
+                                                <p> <input type="text" class="form-control" name="Status" placeholder="URL Video" id="exampleInputEmail2" value="@Model.data[0].Status"> </p>
+                                            </div>
+                                        </td>
+                                        <hr>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2">
+                                            <div class="Button_Packget">                                             
+                                                 <button type="submit" class="button_Packgetcheck_two"> บันทึก </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>                  
+                            </table>
+                            <input type="hidden" value="@Model.data[0].IdPacket" name="IdPacket" />
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                        
+            </div>
+            <div class="col-sm-12 col-xl-6">
+                <div class="bg-secondary rounded h-100 p-4">
+                    <div class="col-lg-12 col-md-12 col-12">
+                        <div class="Box_InSize">
+                            <form method="post" enctype="multipart/form-data" asp-action="Edit_payment" asp-controller="Backoffice">
+                            <table class="table table-goldprice">
+                                <tbody>
+                                    <tr>
+                                        <td class="bg" colspan="2"> <input type="text" class="form-control" name="Name" placeholder="URL Video" id="exampleInputEmail2" value="@Model.data[1].Name">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2">
+                                            <div class="Text_Day mt-4">
+                                                <p> <input type="text" class="form-control" name="Day" placeholder="URL Video" id="exampleInputEmail2" value="@(Model.data[1].Day)"> </p>
+                                            </div>
+                                            <div class="Number_TextDay">
+                                                <p>
+                                                    <input type="text" class="form-control" name="Price" placeholder="URL Video" id="exampleInputEmail2" value="@Convert.ToInt32(Model.data[1].Price).ToString()">
+                                                </p>
+                                            </div>
+                                        </td>
+                                        <hr>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2">
+                                            <div class="Text_Day mt-2">
+                                                <p> <input type="text" class="form-control" name="Description" placeholder="URL Video" id="exampleInputEmail2" value="@Model.data[1].Description"> </p>
+                                                <hr>
+                                            </div>
+                                            <div class="Text_Day ">
+                                                <p> <input type="text" class="form-control" name="Status" placeholder="URL Video" id="exampleInputEmail2" value="@Model.data[1].Status"> </p>
+                                            </div>
+                                        </td>
+                                        <hr>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2">
+                                            <div class="Button_Packget">
+                                                    <button type="submit" class="button_Packgetcheck_two"> บันทึก </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <input type="hidden" value="@Model.data[1].IdPacket" name="IdPacket" />
+                            </form>
+                        </div>
+                    </div>
+                </div>                     
+            </div>         
+        </div>                  
+    </div>
+</div>
+
+<script>
+
+
+    
+</script>

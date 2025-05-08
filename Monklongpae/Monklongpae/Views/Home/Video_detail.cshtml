@@ -1,0 +1,586 @@
+﻿@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor Accessor
+
+@{
+    var packages = Accessor.HttpContext.Session.GetInt32("package");
+}
+
+@* <!-- ✅ โหลด jQuery ก่อน -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- ✅ ตามด้วย messageBox plugin -->
+<link href="https://cdn.jsdelivr.net/npm/gasparesganga-jquery-message-box@3.2.2/dist/messagebox.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/gasparesganga-jquery-message-box@3.2.2/dist/messagebox.min.js"></script> *@
+
+
+<style>
+    .box_scrollBig {
+        padding: 2rem;
+        border: 2px solid white;
+        border-radius: 25px;
+    }
+
+    .Block_imgVideo img {
+        width: 100%;
+        height: 150px;
+        object-fit: cover;
+        border-radius: 0%;
+    }
+    /* start PopUp Next Video */
+
+    #Sec_PopUp {
+        padding: 0rem 10rem 5rem 10rem;
+    }
+
+    /* The Modal (background) */
+    .modal {
+        display: none; /* Hidden by default */
+        position: fixed; /* Stay in place */
+        z-index: 1; /* Sit on top */
+        padding-top: 2%; /* Location of the box */
+        left: 0;
+        top: 0;
+        width: 100%; /* Full width */
+        height: 100%; /* Full height */
+        overflow: auto; /* Enable scroll if needed */
+        background-color: rgb(0,0,0); /* Fallback color */
+        background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    }
+
+    /* Modal Content */
+    .modal-content {
+        background-color: #282828 !important;
+        margin: auto;
+        padding: 36px;
+        border: 1px solid #888;
+        width: 80% !important;
+        color: white;
+        height: auto;
+    }
+
+        .modal-content .head_Name {
+            font-size: 22px;
+        }
+
+    /* The Close Button */
+    .close {
+        color: white;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+    }
+
+        .close:hover,
+        .close:focus {
+            color: rgb(181, 181, 181);
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+    .Box_scrollInpopUp a {
+        font-size: 20px;
+        color: white;
+        text-decoration: none;
+    }
+
+    .Box_scrollInpopUp .Text_NameID {
+        font-size: 18px;
+    }
+
+    .Box_scrollInpopUp .Block_imgVideo img {
+        margin: 0 0.7vw;
+        height: 11rem;
+        width: 11rem;
+        object-fit: cover;
+        border-radius: 0%;
+    }
+
+    .Box_scrollSmall {
+        padding: 1rem !important;
+    }
+
+    .Box_scrollInpopUp .Box_scrollSmall {
+        overflow-y: scroll;
+        height: 500px;
+    }
+
+    /* width */
+    #Sec_PopUp .Box_scrollSmall::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    /* Track */
+    #Sec_PopUp .Box_scrollSmall::-webkit-scrollbar-track {
+        background-color: #ffffff;
+        border-radius: 100px;
+    }
+
+    /* Handle */
+    #Sec_PopUp .Box_scrollSmall::-webkit-scrollbar-thumb {
+        background-color: #ffffff;
+        border-radius: 100px;
+    }
+
+    /* Handle on hover */
+    #Sec_PopUp .Box_scrollSmall::-webkit-scrollbar-thumb {
+        background-color: #EA1021;
+        border-radius: 100px;
+    }
+
+    .videos {
+        z-index: 1;
+    }
+
+    #overlay {
+        position: absolute;
+        top: 0%;
+        color: #FFF;
+        text-align: center;
+        font-size: 20px;
+        background-color: rgb(0 0 0 / 46%);
+        width: 100%;
+        height: 100%;
+        padding: 10px 0;
+        z-index: 1;
+    }
+
+        #overlay p {
+            margin: auto;
+        }
+
+    #marketing-shop {
+        position: absolute;
+        top: 67%;
+        color: #FFF;
+        text-align: center;
+        font-size: 14px;
+        background-color: rgb(0 0 0 / 46%);
+        width: 29%;
+        height: 13%;
+        padding: 10px 0;
+        z-index: 1;
+    }
+
+        #marketing-shop p {
+            margin: auto;
+        }
+
+            #marketing-shop p img {
+                border: 1px white solid;
+            }
+
+    :fullscreen #marketing-shop:-webkit-full-screen #marketing-shop {
+        display: block; /* แสดง overlay ตอน fullscreen */
+    }
+    /* End PopUp Next Video */
+
+    #skipButton {
+        position: absolute;
+        bottom: 10px;
+        right: 10px;
+        background-color: rgba(0, 0, 0, 0.7);
+        color: white;
+        border: none;
+        padding: 10px;
+        font-size: 16px;
+        cursor: pointer;
+    }
+
+    #ad-container {
+        width: 100%;
+        height: 300px;
+        background-color: #f2f2f2;
+        text-align: center;
+        padding: 50px;
+        display: none; /* ซ่อนโฆษณาจนกว่าจะเริ่ม */
+    }
+
+    #countdown {
+        position: absolute;
+        bottom: 10px;
+        right: 10px;
+        font-size: 24px;
+        font-weight: bold;
+    }
+
+    .messageBox .messageBoxBox {
+        background-color: #dc3545 !important;
+        color: white;
+    }
+
+    .hidden-by-css {
+        display: none;
+    }
+</style>
+
+<section id="Sec_pagevideoshow">
+    <div class="container">
+        <div class="Box_insiteVideo" style="position:relative">
+            <div>
+                <video id="videos" style="width: 100%;" controls controlsList="nodownload">
+                    Your browser does not support HTML video.
+                </video>
+                @*  <video id="advideo" src="~/video/%e0%b8%ad%e0%b8%b0%e0%b9%84%e0%b8%a3%20%e0%b8%84%e0%b8%b7%e0%b8%ad%e0%b8%aa%e0%b8%b4%e0%b9%88%e0%b8%87%e0%b8%97%e0%b8%b5%e0%b9%88%e0%b8%a1%e0%b8%99%e0%b8%b8%e0%b8%a9%e0%b8%a2%e0%b9%8c%e0%b8%95%e0%b9%89%e0%b8%ad%e0%b8%87%e0%b8%81%e0%b8%b2%e0%b8%a3%20%e0%b9%82%e0%b8%86%e0%b8%a9%e0%b8%93%e0%b8%b2%201%e0%b8%99%e0%b8%b2%e0%b8%97%e0%b8%b5%20%20what%20does%20every%20human%20being%20want_%20(eng%20sub)%20(1).mp4" type="video/mp4" style="width:100%;display:none"></video>
+                <p id="countdown" style="display:none">5</p>
+                <button id="skipButton" onclick="skipAd()" style="display:none">ข้ามโฆษณา</button> *@
+            </div>
+
+            <div id="overlay" hidden>
+                <p>ถ้าต้องการดูวีดีโอต่อกรุณาซื้อ Package <a class="text-danger" style="color:#fff200 !important" href="@Url.Action("Money_page","Home")">คลิกที่นี้</a></p>
+            </div>
+
+            <div id="marketing-shop" class="hidden-by-css">
+                <a href="#"><p class="text-danger">สามารถสั่งซื่อได้ที่ @* <img src="~/img/270106.jpg" /> *@</p></a>
+            </div>
+        </div>
+
+        <div class="Head_timevideo mt-5">
+            <p> ชื่อวีดีโอ : <span> @Model.data.Name </span></p>
+        </div>
+
+        <div class="Head_timevideo mt-5">
+            <p> ตวามยาววิดีโอ : <span> @Model.data.TimeVideo </span></p>
+        </div>
+
+        <div class="Head_Detailvideo mt-4">
+            <p> รายละเอียด : <span>@Model.data.Description </span></p>
+        </div>
+    </div>
+</section>
+<section id="Video_SecVideo">
+    <div class="container">
+
+        <div class="row">
+            <div class="col-2">
+            </div>
+
+            <div class="box_scrollBig col-8">
+                <div class="text_Movie">
+                    <p> ตอน </p>
+                </div>
+                <div class="box_scroll">
+                    @foreach (var sxc in Model.datas)
+                    {
+                        <div class="row @sxc.status">
+                            <div class="col-lg-3 col-md-12 col-12">
+                                <div class="Block_imgVideo">
+                                    <a href="@Url.Action("Video_detail","Home")?id=@sxc.idvideo&idnamevideo=@sxc.idnamevideo">
+                                        <img src="@sxc.imgs" alt="" width="100%">
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="col-lg-9 col-md-12 col-12">
+                                <a href="@Url.Action("Video_detail","Home")?id=@sxc.idvideo&idnamevideo=@sxc.idnamevideo">
+                                    <div class="Text_NameID text-light">
+                                        <p> @sxc.name</p>
+                                    </div>
+                                </a>
+                                <div class="Text_NumberID text-light">
+                                    <p> @sxc.time</p>
+                                </div>
+                                <div class="Text_DetailDe text-light">
+                                    <p> @sxc.detail</p>
+                                </div>
+                            </div>
+                        </div>
+                        <br>
+                    }
+
+                </div>
+            </div>
+            <div class="col-2">
+            </div>
+        </div>
+    </div>
+</section>
+
+<!---- PopUp ตอน ------>
+<section id="Sec_PopUp">
+    <div class="container">
+        <button id="myBtn" hidden> Pop Up </button>
+        <!-- The Modal -->
+        <div id="myModal" class="modal">
+            <!-- Modal content -->
+            <div class="modal-content">
+                <span class="close" style="text-align: right;">×</span>
+                <div class="head_Name">
+                    <p> ตอนต่อไป </p>
+                </div>
+
+                <!-- เลือกตอน -->
+                @if (@Model.data2 != null)
+                {
+                    <div class="Box_scrollInpopUp">
+                        <div class="row">
+                            <div class="col-lg-3 col-md-12 col-12">
+                                <div class="Block_imgVideo">
+                                    <a href="@Url.Action("Video_detail","Home")?id=@Model.data2.idvideo&idnamevideo=@Model.data2.idnamevideo">
+                                        <img src="@Model.data2.imgs" alt="" width="100%">
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="col-lg-9 col-md-12 col-12">
+                                <a href="@Url.Action("Video_detail","Home")?id=@Model.data2.idvideo&idnamevideo=@Model.data2.idnamevideo">
+                                    <div class="Text_NameID">
+                                        <p> @Model.data2.name</p>
+                                    </div>
+                                </a>
+                                <div class="Text_NumberID">
+                                    <p> @Model.data2.time </p>
+                                </div>
+                                <div class="Text_DetailDe">
+                                    <p> @Model.data2.detail </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div class="Box_scrollInpopUp">
+                        <div class="row">
+                            <div class="col-lg-3 col-md-12 col-12">
+                            </div>
+                            <div class="col-lg-9 col-md-12 col-12">
+                                <a href="javascript:void(0)">
+                                    <div class="Text_NameID">
+                                        <p> ตอนต่อไปยังไม่มา</p>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</section>
+
+<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+<script>
+        const video = document.getElementById('videos');
+        const videoSrc = '@Model.data.PathVideo'; // ใส่ URL ของไฟล์ HLS ที่นี่
+
+        if (Hls.isSupported()) {
+            const hls = new Hls();
+            hls.loadSource(videoSrc);
+            hls.attachMedia(video);
+        } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+            video.src = videoSrc;
+        } else {
+            console.error('HLS ไม่สามารถใช้งานได้บนเบราว์เซอร์นี้');
+        }
+
+        // let adPlayed = false;
+        // video.ontimeupdate = function() {
+        //     // เมื่อถึงเวลา 10 วินาทีและโฆษณายังไม่เคยเล่นมาก่อน
+        //     if (video.currentTime >= 10 &&  !adPlayed) { //!adVideo.paused &&
+        //         console.log("Displaying ad at 10 seconds.");
+        //         // ซ่อนวิดีโอหลัก
+        //         video.style.display = "none";
+        //         video.pause();  // หยุดวิดีโอหลัก
+        //         adVideo.style.display = "block";  // แสดงโฆษณา
+        //         //skipButton.style.display = "block";  // แสดงปุ่มข้าม
+        //         skipButton.style.display = "none"
+        //         adVideo.play();  // เล่นโฆษณา
+        //         adPlayed = true;  // กำหนดว่าโฆษณาเล่นแล้ว
+        //         startCountdown();
+        //         countdownElement.style.display = "block";
+        //     }
+        // };
+
+        // const adVideo = document.getElementById('advideo');  // ID ของโฆษณาคือ advideo
+        // const skipButton = document.getElementById('skipButton');
+        // const countdownElement = document.getElementById("countdown");
+        // adVideo.onended = function() {
+        //     console.log("Ad video ended.");
+        //     adVideo.style.display = "none";  // ซ่อนโฆษณา
+        //     skipButton.style.display = "none";  // ซ่อนปุ่มข้าม
+        //     video.style.display = "block";  // แสดงวิดีโอหลัก
+        //     video.play();  // เล่นวิดีโอหลักต่อ
+        // };
+
+        // // ฟังก์ชั่นสำหรับข้ามโฆษณา
+        // function skipAd() {
+        //     adVideo.pause();  // หยุดโฆษณา
+        //     adVideo.style.display = "none";  // ซ่อนโฆษณา
+        //     skipButton.style.display = "none";  // ซ่อนปุ่มข้าม
+        //     video.style.display = "block";
+        //     video.play();  // เล่นวิดีโอหลัก
+        // }
+
+        function currentMarket(id, min) {
+            $.post("/Home/showmarket", { ids: @Model.idVideo, min: min }).then((x) => {
+                if (x != undefined) {
+                    $("#marketing-shop").attr("hidden", false);
+                    $("#marketing-shop").html('<a href="' + x.url + '"><p class="text-danger">สามารถสั่งซื่อได้ที่ <img src="' + x.partImage + '" /></p></a>');
+                } else {
+                    $("#marketing-shop").attr("hidden", true);
+                }
+            });
+        }
+
+        let countdownTime = 5;
+        //// ฟังก์ชันเริ่มนับถอยหลัง
+        function startCountdown() {
+          const countdownInterval = setInterval(function() {
+            countdownElement.textContent = countdownTime; // อัปเดตตัวจับเวลา
+            countdownTime--;
+
+            // เมื่อเวลาถึง 0 แสดงปุ่ม "ข้ามโฆษณา"
+            if (countdownTime < 0) {
+              clearInterval(countdownInterval); // หยุดการนับถอยหลัง
+              skipButton.style.display = "inline-block"; // แสดงปุ่มข้าม
+              countdownElement.style="display:none";
+            }
+          }, 1000); // ทุก 1 วินาที
+        }
+
+        // Get the modal
+        // var modal = document.getElementById('myModal');
+
+        // // Get the button that opens the modal
+        // var btn = document.getElementById("myBtn");
+
+        // // Get the <span> element that closes the modal
+        // var span = document.getElementsByClassName("close")[0];
+
+        // // When the user clicks the button, open the modal
+        // btn.onclick = function () {
+        //     modal.style.display = "block";
+        // }
+
+        // // When the user clicks on <span> (x), close the modal
+        // span.onclick = function () {
+        //     modal.style.display = "none";
+        // }
+
+        // // When the user clicks anywhere outside of the modal, close it
+        // window.onclick = function (event) {
+        //     if (event.target == modal) {
+        //         modal.style.display = "none";
+        //     }
+        // }
+
+        // var msgshow = false;
+        // var msgpopup = false;
+        // var msg = $("body").messageBox({
+        //     modal: true,
+        //     autoClose: 2000,
+        //     locale: {
+        //         NO: 'No',
+        //         YES: 'Yes',
+        //         CANCEL: 'Cancel',
+        //         OK: 'ตกลง',
+        //         textAutoClose: 'Auto close in %d seconds'
+        //     }
+        // });
+
+        //     if (packages != null && packages <= 0) {
+
+        //     setInterval(() => {
+        //         const video = document.getElementById('videos');
+        //         currentMarket(1072, video.currentTime);
+        //         if (video.currentTime >= Model.data.LimitVideoUser) {
+
+        //             $("#videos").get(0).pause();
+        //             video.currentTime = Model.data.LimitVideoUser;
+        //             if (msgshow == false) {
+        //                 msgshow = true;
+        //                 if (video.exitFullscreen) {
+        //                     video.exitFullscreen();
+        //                 } else if (video.mozCancelFullScreen) {
+        //                     video.mozCancelFullScreen();
+        //                 } else if (video.webkitExitFullscreen) {
+        //                     video.webkitExitFullscreen();
+        //                 }
+        //                 $("#overlay").attr("hidden", false);
+        //                 s
+        //             }
+        //         }
+
+        //         if (video.currentTime == video.duration) {
+        //             if (msgpopup == false) {
+        //                 $("#myBtn").click(function (e) {
+        //                     e.preventDefault();
+        //                 })
+        //                 msgpopup = true;
+        //             }
+        //         }
+        //     }, 500);
+        // } else {
+        //     setInterval(() => {
+        //         const video = document.getElementById('videos');
+        //         currentMarket(1072, video.currentTime);
+        //         //console.log(video.currentTime);
+        //         //console.log(video.duration);
+        //         if (video.currentTime == video.duration) {
+
+        //             if (msgpopup == false) {
+        //                 $("#myBtn").click();
+        //                 msgpopup = true;
+        //             }
+        //         }
+
+        //     }, 500);
+        // }
+
+    var msgshow = false;
+    var msgpopup = false;
+
+    $(() => {
+        // ตรวจสอบว่ามี packages และ packages <= 0
+        if (@packages != null && @packages <= 0) {
+
+            setInterval(() => {
+                const video = document.getElementById('videos');
+                currentMarket(1072, video.currentTime);
+
+                if (video.currentTime >= @Model.data.LimitVideoUser)
+                {
+                    $("#videos").get(0).pause();
+                    video.currentTime = @Model.data.LimitVideoUser;
+
+                    if (!msgshow) {
+                        msgshow = true;
+
+                        // ออกจาก fullscreen ถ้ามี
+                        if (document.fullscreenElement) {
+                            document.exitFullscreen();
+                        } else if (document.webkitFullscreenElement) {
+                            document.webkitExitFullscreen();
+                        }
+
+                        $("#overlay").attr("hidden", false);
+
+                        // ✅ แสดง popup เตือน
+                        Swal.fire({
+                             title: "จำกัดการเข้าถึง",
+                              text: "คุณถึงขีดจำกัดการดูวีดีโอ กรุณาอัปเกรดแพ็กเกจของคุณ",
+                              icon: "warning"
+                        });
+                    }
+                }
+
+                if (video.currentTime === video.duration && !msgpopup) {
+                    $("#myBtn").click(function (e) {
+                        e.preventDefault();
+                    });
+                    msgpopup = true;
+                }
+
+            }, 500);
+        } else {
+            // ถ้า packages มากกว่า 0
+            setInterval(() => {
+                const video = document.getElementById('videos');
+                currentMarket(1072, video.currentTime);
+
+                if (video.currentTime === video.duration && !msgpopup) {
+                    $("#myBtn").click();  // คลิกปุ่มเมื่อวีดีโอจบ
+                    msgpopup = true;
+                }
+            }, 5000);
+        }
+    });
+</script>

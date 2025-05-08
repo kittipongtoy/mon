@@ -1,0 +1,85 @@
+﻿@{
+    Layout = "_Layout_backoffice";
+}
+<!-- Content Start -->
+        
+            
+
+
+            <!-- Sale & Revenue Start -->
+            <div class="container-fluid pt-4 px-4">
+                <div class="row g-4">
+                    
+                    <div class="col-sm-6 col-xl-4">
+                        <div class="bg-secondary rounded d-flex align-items-center justify-content-between p-4">
+                            <i class="fa fa-chart-bar fa-3x text-primary"></i>
+                            <div class="ms-3">
+                                <p class="mb-2">จำนวนผู้ใช้งาน</p>
+                                <h6 class="mb-0" style="text-align: right;">@Model.count1</h6>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-xl-4">
+                        <div class="bg-secondary rounded d-flex align-items-center justify-content-between p-4">
+                            <i class="fa fa-chart-area fa-3x text-primary"></i>
+                            <div class="ms-3">
+                                <p class="mb-2">จำนวนผู้ใช้งานฟรี</p>
+                                <h6 class="mb-0" style="text-align: right;">@Model.count2</h6>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-xl-4">
+                        <div class="bg-secondary rounded d-flex align-items-center justify-content-between p-4">
+                            <i class="fa fa-chart-pie fa-3x text-primary"></i>
+                            <div class="ms-3">
+                                <p class="mb-2">จำนวนผู้สมัครสมาชิก</p>
+                                <h6 class="mb-0" style="text-align: right;">@Model.count3</h6>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Sale & Revenue End -->
+
+
+            
+
+
+            <!-- Recent Sales Start -->
+            <div class="container-fluid pt-4 px-4">
+                <div class="bg-secondary text-center rounded p-4">
+                    <div>
+                    <h4 class="label text-primary" style="text-align: left;">รายละเอียดข้อมูลล่าสุด</h4>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table text-start align-middle table-bordered table-hover mb-0" >
+                            <thead>
+                                <tr class="text-white">
+                                    <th scope="col">วันและเวลา</th>
+                                    <th scope="col">หมวดหมู่</th>
+                                    <th scope="col">ชื่อ</th>
+                                    <th scope="col">เวลาคลิปวีดีโอ</th>
+                                    <th scope="col">จำนวนรับชม</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach(var xc in Model.table){
+                                    <tr>
+                                        <td>@xc.datetime</td>
+                                        <td>@xc.catory</td>
+                                        <td>@xc.name</td>
+                                        <td>@xc.timeclip</td>
+                                        <td>@xc.views</td>
+                                    
+                                    </tr>
+                                }
+                                
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <!-- Recent Sales End -->
+
+
+            

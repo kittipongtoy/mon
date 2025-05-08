@@ -1,0 +1,213 @@
+﻿
+<style>
+	#Sec_MoneyFile .upload-btn1 {
+		background: #EA1021;
+		border-radius: 5px;
+		color: white;
+		padding: 10px 32px;
+		text-align: center;
+		text-decoration: none;
+		display: inline-block;
+		font-size: 16px;
+		margin: 36px 2px 4px 5px;
+		cursor: pointer;
+	}
+</style>
+
+<section id="Sec_MoneyPage" style="background-image: linear-gradient(0deg,#000000e3,transparent), url(assets/img/back_video.jpg);">
+	<div class="container">
+		<div class="Head_Video">
+			<p> MONKLONGPAE </p>
+		</div>
+		<div class="Head_Video_Head">
+			<p> สั่งซื้อและชำระเงิน </p>
+		</div>
+	</div>
+</section>
+
+<section id="Sec_MoneyBank">
+	<div class="container">
+		<div class="Head_moneyPage">
+			<p> ช่องทางการชำระเงิน </p>
+		</div>
+		<div class="Detail_Packget">
+			<p> โอเนเงินตามบัญชีที่แจ้งไว้ด้านล่างได้เลย </p>
+		</div>
+		<div class="row mt-5">
+			<div class="col-lg-6 col-md-12 col-12">
+				<div class="Box_Bank">
+					<div class="logo_bank">
+						<div class="center">
+							@if (@Model.data1.AccountStatus == 1)
+							{
+								<img src="/img/logo_bank.png" alt="logo" width="100px" height="100px" />
+							}
+							else if (@Model.data1.AccountStatus == 2)
+							{
+								<img src="/img/logo_bank1.png" alt="logo" width="100px" height="100px" />
+							}
+							else if (@Model.data1.AccountStatus == 3)
+							{
+								<img src="/img/logo_bank2.png" alt="logo" width="100px" height="100px" />
+							}
+							else if (@Model.data1.AccountStatus == 4)
+							{
+								<img src="/img/logo_bank3.png" alt="logo" width="100px" height="100px" />
+							}
+							else if (@Model.data1.AccountStatus == 5)
+							{
+								<img src="/img/logo_bank4.png" alt="logo" width="100px" height="100px" />
+							}
+						</div>
+					</div>
+					<div class="Detail_Bank mt-4">
+						<p>
+							@if (@Model.data1.AccountStatus == 1)
+							{
+								<label>ธนาคารกรุงไทย</label>
+							}
+							else if (@Model.data1.AccountStatus == 2)
+							{
+								<label>ธนาคารไทยพาณิชย์</label>
+							}
+							else if (@Model.data1.AccountStatus == 3)
+							{
+								<label>ธนาคารกสิกร</label>
+							}
+							else if (@Model.data1.AccountStatus == 4)
+							{
+								<label>ธนาคารกรุงเทพ</label>
+							}
+							else if (@Model.data1.AccountStatus == 5)
+							{
+								<label>ธนาคารกรุงศรี</label>
+							}
+						</p>
+						<p>
+							<span> เลขบัญชี : </span> @Model.data1.Account1
+						</p>
+						<p>
+							@Model.data1.NameAccout
+						</p>
+					</div>
+				</div>
+			</div>
+			<div class="col-lg-6 col-md-12 col-12">
+				<div class="Box_BankPackget">
+					<p>
+						แพ็คเกจที่เลือก
+					</p>
+					<hr>
+					<div class="Texะ_DayBank mt-4">
+						<p> @Model.data.Day วัน</p>
+					</div>
+
+					<div class="Text_Price mt-5">
+						<p>
+							ราคา
+						</p>
+					</div>
+					<div class="Text_BigPrcie">
+						<p>
+							฿ @Convert.ToInt32(Model.data.Price).ToString("#,##0")
+						</p>
+					</div>
+				</div>
+			</div>
+			<div class="col-lg-12 col-md-12 col-12">
+				<form id="uploadfile" method="post" enctype="multipart/form-data" asp-action="Money_file_s" asp-controller="Home">
+					<input type="hidden" name="idpack" />
+					<section id="Sec_MoneyFile">
+						<div class="container">
+							<div class="Head_moneyPage">
+								<p> หลักฐานการชำระเงิน </p>
+							</div>
+							<div class="Detail_Packget">
+								<p> แนบสลิป / ใบเสร็จชำระเงิน </p>
+							</div>
+							<div class="Box_MoneyFile">
+								<div class="Head_TextMoneyFile">
+									<p>
+										แนบหลักฐานการโอนเงิน
+									</p>
+								</div>
+
+								<div id='container'>
+									<div class='panel panel-primary'>
+										<div class='panel-body'>
+											<div class="center">
+												<img src="https://img.icons8.com/pastel-glyph/75/FFFFFF/upload--v1.png" id="imagesc" style="border-radius: 10%;width: 200px !important;max-width: 100% !important; height: auto !important;" />
+												<p class="mt-4"> ไฟล์รูปของคุณ </p>
+												<label for="formFile" class="form-label text-light">เลือกไฟล์</label>
+												<input type='file' name='file' (change)="getFile($event)" name='file' id='formFile' onchange="readURL(this)" class="form-control">
+											</div>
+										</div>
+									</div>
+								</div>
+
+							</div>
+
+
+							<div class="Box_ButtonSend">
+								<div class="vertical-center">
+
+									<button type="button" class="btn upload-btn1" data-bs-toggle="modal" data-bs-target="#myModal">
+										ยืนยัน
+									</button>
+								</div>
+
+								<!-- The Modal -->
+								<div class="modal fade" id="myModal">
+									<div class="modal-dialog">
+										<div class="modal-content">
+											<!-- Modal body -->
+											<div class="modal-body">
+												<div class="center">
+													<div class="logo_checklist mt-5">
+														<img src="https://img.icons8.com/color/70/null/ok--v1.png" />
+														<p class="mt-4">
+															ยืนยันการสมัคร
+														</p>
+													</div>
+												</div>
+											</div>
+											<!-- Modal footer -->
+											<div class="modal-footer mt-5">
+												<div class="center mt-5">
+													<button type="button" class="btn btn-cracel" data-bs-dismiss="modal">
+														ยกเลิก
+													</button>
+													<button type="submit" class="btn btn-primary" data-bs-dismiss="modal" id="successfile">
+														ยืนยัน
+													</button>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</section>
+				</form>
+			</div>
+		</div>
+	</div>
+</section>
+<script>
+	$(document).ready(function() {
+		let searchParams = new URLSearchParams(window.location.search)
+		let param = searchParams.get('id')
+		$("input[name=idpack]").val(param)
+	});
+			function readURL(input) {
+	  if (input.files && input.files[0]) {
+		var reader = new FileReader();
+
+		reader.onload = function (e) {
+		  $('#imagesc').attr('src', e.target.result);
+		};
+
+		reader.readAsDataURL(input.files[0]);
+	  }
+	}
+</script>

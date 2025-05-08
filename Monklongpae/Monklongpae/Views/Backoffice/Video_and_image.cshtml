@@ -1,0 +1,155 @@
+﻿@{
+    Layout = "_Layout_backoffice";
+}
+    
+
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
+<div class="container-fluid pt-4 px-4">
+    <div class="row g-4">
+                    
+        <div class="col-sm-12 col-xl-12">
+            <div class="bg-secondary rounded h-100 p-4">
+                <h6 class="mb-4">เพิ่มวีดีโอหน้าแรก</h6>
+                    <form method="post" enctype="multipart/form-data" asp-action="Video_and_image" asp-controller="Backoffice">
+                        <div class="mb-3">
+                            <label for="exampleInputEmail1" class="form-label">URL Video</label>
+                            <input type="text" class="form-control" name="Path" placeholder="URL Video" id="exampleInputEmail1" value="" >
+                                        
+                        </div>
+                                    
+                        <button type="submit" class="btn btn-primary">ตกลง</button>
+                    </form>
+                    <br />
+                    <form method="post" enctype="multipart/form-data" asp-action="upload_Video" asp-controller="Backoffice">
+                        <div class="mb-3">
+                            <label for="exampleInputEmail1" class="form-label">file Video</label>
+                            <input type="file" class="form-control" name="file" placeholder="URL Video" id="exampleInputEmail1" value="" >
+                                        
+                        </div>
+                                    
+                        <button type="submit" class="btn btn-primary">ตกลง</button>
+                    </form>    
+            </div>
+                        
+        </div>
+        <div class="col-sm-12 col-xl-12">
+            <div class="bg-secondary rounded h-100 p-4">
+                <h6 class="mb-4">วีดีโอหน้าแรก</h6>
+                
+                <div class="bg-secondary rounded h-100 p-4">
+                    <h6 class="mb-4">วิดีโอทั้งหมด</h6>
+                    <div class="table-responsive">
+                        <table class="table" id="customerDatatable">
+                            <thead>
+                                <tr>
+                                    <th scope="col" class="text-center">No.</th>
+                                    <th scope="col" class="text-center">Link URL</th>
+                                    <th scope="col" class="text-center">จัดการ</th>
+                                </tr>
+                            </thead>
+                                           
+                        </table>
+                    </div>
+                </div>
+            </div>
+                        
+        </div>
+                    
+    </div>
+</div>
+            <!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content bg-secondary">
+      <div class="modal-header">
+        <h5 class="modal-title text-primary" id="exampleModalLabel">เพิ่มวีดีโอ</h5>
+        <button type="button" class="btn-close text-primary" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form method="post" enctype="multipart/form-data" asp-action="upload_file_media" asp-controller="Backoffice">
+      <div class="modal-body">
+            <div class="mb-3">
+                <label for="formFile1" class="form-label">Link Video</label>
+                <input class="form-control bg-dark" type="file" name="file1" id="formFile1" required>
+            </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ยกเลิก</button>
+        <button type="submit" class="btn btn-primary">อัพโหลด</button>
+      </div>
+      </form>
+    </div>
+  </div>
+</div>
+<script>
+$(document).ready(function() {
+
+    $("#customerDatatable").DataTable({
+        "processing": true,
+        "serverSide": true,
+        "filter": true,
+        scrollY: false,
+        scrollX: false,
+        "ordering": false,
+        "ajax": {
+            "url": '@Url.Action("table1","Backoffice")',
+            "type": "POST",
+            "datatype": "json",
+            data: function(e) {
+                e.ids = $("#selectcatory").val();
+            }
+        },
+        lengthMenu: [
+            [5, 10, 20, -1],
+            [5, 10, 20, 'All'],
+        ],
+        "columns": [
+            
+            
+            { "data": "no", "name": "no","class":"text-center align-middle", "autoWidth": true },
+            { "data": "url", "name": "url","class":"text-center align-middle", "autoWidth": true },
+            { "data":"id_videopage","name":"id_videopage","class":"text-center align-middle","autoWidth": true,
+                "render": function (data,type,row) { return "<a href='#' class='btn btn-danger' onclick=DeleteCustomer(" + data+ "); >Delete</a>";   }
+            },
+        ]
+    });
+
+    
+})
+
+function DeleteCustomer(id) {
+    
+        Swal.fire({
+          title: 'คุณแน่ใจ?',
+          text: "ที่จะลบวีดีโอนี้",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#EA1021',
+          background:'#191C24',
+          color:'#fff',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'ใช่, ฉันจะลบมัน!',
+          cancelButtonText : 'ไม่ลบ'
+        }).then((result) => {
+          if (result.isConfirmed) {
+              $.post("@Url.Action("Delete_video1","Backoffice")", { ids: id }).then(x => { 
+              
+                  Swal.fire({
+                      position: 'center',
+                      icon: 'info',
+                      background:'#191C24',
+                      color:'#fff',
+                      title: x,
+                      showConfirmButton: false,
+                      timer: 1500
+                  });
+                var t = $("#customerDatatable").DataTable();
+                t.ajax.reload();
+              });
+          }
+        })
+    
+}
+    
+</script>

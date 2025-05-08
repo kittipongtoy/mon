@@ -1,0 +1,41 @@
+﻿@{
+    Layout = "_Layout_backoffice";
+}
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
+<div class="container-fluid pt-4 px-4">
+    <div class="row g-4">
+                    
+        <div class="col-sm-12 col-xl-12">
+            <div class="bg-secondary rounded h-100 p-4">
+                <h6 class="mb-4">บัญชี</h6>
+                    <form method="post" enctype="multipart/form-data" asp-action="Contact" asp-controller="Backoffice">
+                        <div class="mb-3">
+                            <label for="exampleInputEmail1" class="form-label">เบอร์โทรศัพท์</label>
+                            <input type="text" class="form-control" name="Tel" placeholder="URL Video" id="exampleInputEmail1" value="@Model.Tel" required>
+                                        
+                        </div>
+                        <div class="form-floating mb-3">
+                            <textarea class="form-control" name="Address" placeholder="Leave a comment here" id="floatingTextarea" style="height: 150px;">@Model.Address</textarea>
+                            <label for="floatingTextarea">ที่อยู่</label>
+                        </div>
+                        <div class="mb-3">
+                            <label for="exampleInputEmail2" class="form-label">แผนที่</label>
+                            <input type="text" class="form-control" name="Map" placeholder="URL Video" id="exampleInputEmail2" value="@Model.Map" required>
+                                        
+                        </div>
+                        <input type="hidden" name="IdAccount" value="@Model.IdContact" />
+                        <button type="submit" class="btn btn-primary">ตกลง</button>
+                    </form>
+                                
+            </div>
+                        
+        </div>
+                    
+    </div>
+</div>
+
+<script>
+
+</script>

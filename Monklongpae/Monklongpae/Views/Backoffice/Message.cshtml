@@ -1,0 +1,95 @@
+﻿@{
+    Layout = "_Layout_backoffice";
+}
+<div class="container-fluid pt-4 px-4">
+                <div class="row g-4">
+                    
+                    <div class="col-sm-12 col-xl-6">
+                        <div class="bg-secondary rounded h-100 p-4">
+                            <h6 class="mb-4">หน้าแรก</h6>
+                            <div class="owl-carousel testimonial-carousel owl-loaded owl-drag">
+                                <form method="post" enctype="multipart/form-data" asp-action="Message" asp-controller="Backoffice">
+                                    <div class="mb-3">
+                                        <label for="exampleInputEmail1" class="form-label">ภาษาไทย</label>
+                                        <input type="text" class="form-control" name="MessagePage1Th" id="exampleInputEmail1" value="@Model.MessagePage1Th" >
+                                        
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="exampleInputPassword1" class="form-label">ภาษาอังกฤษ</label>
+                                        <input type="text" class="form-control" name="MessagePage1En" id="exampleInputPassword1" value="@Model.MessagePage1En">
+                                    </div>
+                                    
+                                    <button type="submit" class="btn btn-primary">ตกลง</button>
+                                </form>
+                                
+                            </div>
+                        </div>
+                        
+                    </div>
+                    <div class="col-sm-12 col-xl-6">
+                        <div class="bg-secondary rounded h-100 p-4">
+                            <h6 class="mb-4">วิดีโอทั้งหมด</h6>
+                            <div class="owl-carousel testimonial-carousel owl-loaded owl-drag">
+                                <form method="post" enctype="multipart/form-data" asp-action="Message" asp-controller="Backoffice">
+                                    <div class="mb-3">
+                                        <label for="exampleInputEmail1" class="form-label">ภาษาไทย</label>
+                                        <input type="text" class="form-control" name="MessagePage2Th" id="exampleInputEmail1" value="@Model.MessagePage2Th" >
+                                        
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="exampleInputPassword1" class="form-label">ภาษาอังกฤษ</label>
+                                        <input type="text" class="form-control" name="MessagePage2En" id="exampleInputPassword1" value="@Model.MessagePage2En">
+                                    </div>
+                                    
+                                    <button type="submit" class="btn btn-primary">ตกลง</button>
+                                </form>
+                                
+                            </div>
+                        </div>
+                        
+                    </div>
+                    <div class="col-sm-12 col-xl-6">
+                        <div class="bg-secondary rounded h-100 p-4">
+                            <h6 class="mb-4">สั่งซื้อและชำระเงิน</h6>
+                            <div class="owl-carousel testimonial-carousel owl-loaded owl-drag">
+                                <form method="post" enctype="multipart/form-data" asp-action="Message" asp-controller="Backoffice">
+                                    <div class="mb-3">
+                                        <label for="exampleInputEmail1" class="form-label">ภาษาไทย</label>
+                                        <input type="text" class="form-control" name="MessagePage3Th" id="exampleInputEmail1" value="@Model.MessagePage3Th" >
+                                        
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="exampleInputPassword1" class="form-label">ภาษาอังกฤษ</label>
+                                        <input type="text" class="form-control" name="MessagePage3En" id="exampleInputPassword1" value="@Model.MessagePage3En">
+                                    </div>
+                                    
+                                    <button type="submit" class="btn btn-primary">ตกลง</button>
+                                </form>
+                            </div>
+                        </div>
+                        
+                    </div>
+                    <div class="col-sm-12 col-xl-6">
+                        <div class="bg-secondary rounded h-100 p-4">
+                            <h6 class="mb-4">ติดต่อเรา</h6>
+                            <div class="owl-carousel testimonial-carousel owl-loaded owl-drag">
+                                <form method="post" enctype="multipart/form-data" asp-action="Message" asp-controller="Backoffice">
+                                    <div class="mb-3">
+                                        <label for="exampleInputEmail1" class="form-label">ภาษาไทย</label>
+                                        <input type="text" class="form-control" name="MessagePage4Th" id="exampleInputEmail1" value="@Model.MessagePage4Th" >
+                                        
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="exampleInputPassword1" class="form-label">ภาษาอังกฤษ</label>
+                                        <input type="text" class="form-control" name="MessagePage4En" id="exampleInputPassword1" value="@Model.MessagePage4En">
+                                    </div>
+                                    
+                                    <button type="submit" class="btn btn-primary">ตกลง</button>
+                                </form>
+                                
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>

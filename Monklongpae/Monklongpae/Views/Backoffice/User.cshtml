@@ -1,0 +1,251 @@
+﻿@{
+    Layout = "_Layout_backoffice";
+}
+
+
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<div class="container-fluid pt-4 px-4">
+    <div class="row g-4">
+        <div class="col-sm-12 col-xl-12">
+            <div class="bg-secondary rounded h-100 p-4">
+
+                <div class="bg-secondary rounded h-100 p-4">
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" id="add_video">เพิ่มผู้ใช้งาน</button>
+                    <br />
+                    <br />
+                    <br />
+                    <h6 class="mb-4">วิดีโอทั้งหมด</h6>
+                    <div class="table-responsive">
+                        <table class="table" id="customerDatatable">
+                            <thead>
+                                <tr>
+                                    <th scope="col" class="text-center">ลำดับ</th>
+                                    <th scope="col" class="text-center">รูปโปรไฟล์</th>
+                                    <th scope="col" class="text-center">ชื่อ</th>
+                                    <th scope="col" class="text-center">นามสกุล</th>
+                                    <th scope="col" class="text-center">เบอร์โทรศัพท์</th>
+                                    <th scope="col" class="text-center">รหัสผ่าน</th>
+                                    <th scope="col" class="text-center">MAC Address</th>
+                                    <th scope="col" class="text-center">วันหมดอายุ</th>
+                                    <th scope="col" class="text-center">สถานะ</th>
+                                    <th scope="col" class="text-center">สถานะใช้งาน</th>
+                                    <th scope="col" class="text-center">จัดการ</th>
+                                </tr>
+                            </thead>
+
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content bg-secondary">
+            <div class="modal-header">
+                <h5 class="modal-title text-primary" id="exampleModalLabel">เพิ่มวีดีโอ</h5>
+                <button type="button" class="btn-close text-primary" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form method="post" enctype="multipart/form-data" asp-action="User" asp-controller="Backoffice">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="formFile1" class="form-label">ชื่อ</label>
+                        <input class="form-control bg-dark" type="text" name="FirstName" id="formFile1" required>
+                    </div><div class="mb-3">
+                        <label for="formFile" class="form-label">นามสกุล</label>
+                        <input class="form-control bg-dark" type="text" name="SurName" id="formFile" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="exampleInputEmail1" class="form-label">เบอร์</label>
+                        <input type="text" class="form-control" name="Tel" id="exampleInputEmail1" value="" required>
+
+                    </div>
+                    <div class="mb-3">
+                        <label for="exampleInputEmail1" class="form-label">รหัสผ่าน</label>
+                        <input type="text" class="form-control" name="Password" id="exampleInputEmail1" value="" required>
+
+                    </div>
+                    <select class="form-select form-select-sm mb-3" aria-label=".form-select-sm example" name="IdRole" id="IdRole">
+                        <option selected="" value="">Select</option>
+                        <option value="1">ผู้ใช้ทั่วไป</option>
+                        <option value="2">Vip</option>
+                        <option value="3">แอดมิน</option>
+                    </select>
+                    <div class="mb-3">
+                        <textarea class="form-control" name="Address" placeholder="Leave a comment here" id="floatingTextarea" style="height: 150px;"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ยกเลิก</button>
+                    <button type="submit" class="btn btn-primary">เพิ่มผู้ใช้งาน</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="exampleModal1" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content bg-secondary">
+            <div class="modal-header">
+                <h5 class="modal-title text-primary" id="exampleModalLabel">เพิ่มวีดีโอ</h5>
+                <button type="button" class="btn-close text-primary" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form method="post" enctype="multipart/form-data" asp-action="User" asp-controller="Backoffice">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="formFile1" class="form-label">ชื่อ</label>
+                        <input class="form-control bg-dark" type="text" name="FirstName" id="formFile1" required>
+                    </div><div class="mb-3">
+                        <label for="formFile" class="form-label">นามสกุล</label>
+                        <input class="form-control bg-dark" type="text" name="SurName" id="formFile" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="exampleInputEmail1" class="form-label">เบอร์</label>
+                        <input type="text" class="form-control" name="Tel" id="exampleInputEmail1" value="" required>
+
+                    </div>
+                    <div class="mb-3">
+                        <label for="exampleInputEmail1" class="form-label">รหัสผ่าน</label>
+                        <input type="text" class="form-control" name="Password" id="exampleInputEmail1" value="" required>
+
+                    </div>
+                    <select class="form-select form-select-sm mb-3" aria-label=".form-select-sm example" name="IdRole" id="IdRole">
+                        <option selected="" value="">Select</option>
+                        <option value="1">ผู้ใช้ทั่วไป</option>
+                        <option value="2">Vip</option>
+                        <option value="3">แอดมิน</option>
+                    </select>
+                    <div class="mb-3">
+                        <textarea class="form-control" name="Address" placeholder="Leave a comment here" id="floatingTextarea" style="height: 150px;"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ยกเลิก</button>
+                    <button type="submit" class="btn btn-primary">เพิ่มผู้ใช้งาน</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        $("#customerDatatable").DataTable({
+            "processing": true,
+            "serverSide": true,
+            "filter": true,
+            scrollY: false,
+            scrollX: false,
+            "ordering": false,
+            "ajax": {
+                "url": '@Url.Action("table2", "Backoffice")',
+                "type": "POST",
+                "datatype": "json",
+                data: function (e) {
+                    e.ids = $("#selectcatory").val();
+                }
+            },
+            lengthMenu: [
+                [5, 10, 20, -1],
+                [5, 10, 20, 'All'],
+            ],
+            "columns": [
+                { "data": "no", "name": "no", "class": "text-center align-middle", "autoWidth": true },
+
+                {
+                    "data": "imagepath", "name": "imagepath", "autoWidth": true, render: function (data, type, row) {
+                        return '<center><img class="rounded-circle text-center" src="' + data + '" alt="" style="width: 80px; height: 80px;"></center>';
+                    }
+                },
+                { "data": "firstname", "name": "firstname", "class": "text-center align-middle", "autoWidth": true },
+                { "data": "surname", "name": "surname", "class": "text-center align-middle", "autoWidth": true },
+                { "data": "tel", "name": "tel", "class": "text-center align-middle", "autoWidth": true },
+                { "data": "password", "name": "password", "class": "text-center align-middle", "autoWidth": true },
+                { "data": "macaddress", "name": "macaddress", "class": "text-center align-middle", "autoWidth": true },
+                { "data": "packetdatelimit", "name": "packetdatelimit", "class": "text-center align-middle", "autoWidth": true },
+                { "data": "idrole", "name": "idrole", "class": "text-center align-middle", "autoWidth": true },
+
+                {
+                    "data": "iduser", "name": "iduser", "class": "text-center align-middle", "autoWidth": true,
+                    "render": function (data, type, row) { return "<a href='#' class='btn btn-warning' onclick=edit_online(" + data + "); >รีเซ็ตเครื่อง</a>"; }
+                },
+                {
+                    "data": "iduser", "name": "iduser", "class": "text-center align-middle", "autoWidth": true,
+                    "render": function (data, type, row) { return "<a href='#' class='btn btn-danger' onclick=DeleteCustomer(" + data + "); >ลบ</a>"; }
+                },
+            ]
+        });
+    })
+
+    function DeleteCustomer(id) {
+
+        Swal.fire({
+            title: 'คุณแน่ใจ?',
+            text: "ที่จะลบวีดีโอนี้",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#EA1021',
+            background: '#191C24',
+            color: '#fff',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'ใช่, ฉันจะลบมัน!',
+            cancelButtonText: 'ไม่ลบ'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.post("@Url.Action("Delete_video2", "Backoffice")", { ids: id }).then(x => {
+
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'info',
+                        background: '#191C24',
+                        color: '#fff',
+                        title: x,
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                    var t = $("#customerDatatable").DataTable();
+                    t.ajax.reload();
+                });
+            }
+        })
+
+    }
+
+    function edit_online(id) {
+        Swal.fire({
+            title: 'คุณแน่ใจ?',
+            text: "ที่จะแก้ไขสถานะ",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#EA1021',
+            background: '#191C24',
+            color: '#fff',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'ใช่, ฉันจะรีเซ็ตมัน!',
+            cancelButtonText: 'ยกเลิก'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.post("@Url.Action("edit_online", "Backoffice")", { ids: id }).then(x => {
+
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'info',
+                        background: '#191C24',
+                        color: '#fff',
+                        title: x,
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                    var t = $("#customerDatatable").DataTable();
+                    t.ajax.reload();
+                });
+            }
+        })
+    }
+</script>

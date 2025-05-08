@@ -1,0 +1,149 @@
+﻿@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor Accessor
+@{
+    var tel = Accessor.HttpContext.Session.GetString("Tel");
+    var fri = Accessor.HttpContext.Session.GetString("Firstname");
+    var sur = Accessor.HttpContext.Session.GetString("Surnname");
+    var role = Accessor.HttpContext.Session.GetString("role");
+    var image = Accessor.HttpContext.Session.GetString("image");
+    var status = "";
+    if(role != null)
+    {
+        if(role.ToLower() == "user")
+        {
+            status = "ฟรี";
+        }else if(role.ToLower() == "vip")
+        {
+            status = "VIP";
+        }
+        else
+        {
+            status = "แอดมิน";
+        }
+    }
+}
+
+<section id="Sec_MoneyPage"
+        style="background-image: linear-gradient(0deg,#000000e3,transparent), url(/img/back_video.jpg);">
+        <div class="container">
+            <div class="Head_Video">
+                <p> @Model.data1.MessagePage3En </p>
+            </div>
+            <div class="Head_Video_Head">
+                <p> @Model.data1.MessagePage3Th </p>
+            </div>
+        </div>
+    </section>
+
+    <section id="Sec_MoneyCheck">
+        <div class="container">
+            <div class="Head_moneyPage">
+                <p> แพ็คเกจของเรา </p>
+            </div>
+            <div class="Detail_Packget">
+                <p>เลือกแพ็คเกจ</p>
+            </div>
+
+            <div class="Box_PackgetCheck">
+                <div class="row">
+                    
+                    <div class="col-lg-6 col-md-12 col-12">
+                        <div class="Box_InSize">
+                            <table class="table table-goldprice">
+                                <tbody>
+                                    <tr>
+                                        <td class="bg" colspan="2"> @Model.data[0].Name
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2">
+                                            <div class="Text_Day mt-4">
+                                            <p> @(Model.data[0].Day == "0" ? "ทุกวัน" : Model.data[0].Day) วัน</p>
+                                            </div>
+                                            <div class="Number_TextDay">
+                                                <p>
+                                                    ฿ @Convert.ToInt32(Model.data[0].Price).ToString("#,##0")
+                                                </p>
+                                            </div>
+                                        </td>
+                                        <hr>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2">
+                                            <div class="Text_Day mt-2">
+                                                <p> @Model.data[0].Description </p>
+                                                <hr>
+                                            </div>
+                                            <div class="Text_Day ">
+                                                <p> @Model.data[0].Status </p>
+                                            </div>
+                                        </td>
+                                        <hr>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2">
+                                            <div class="Button_Packget">
+                                                <a href="@Url.Action("Money_bank","Home")?id=1">
+                                                    <!-- 
+                                                    <button (status == "VIP" ? "disabled" : "") (role == "admin" ? "disabled" : status == "") class="button_Packgetcheck"> เลือกแพ็คเกจนี้ </button>
+                                                    -->
+                                                    <button class="button_Packgetcheck"> เลือกแพ็คเกจนี้ </button>
+                                                </a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-md-12 col-12">
+                        <div class="Box_InSize">
+                            <table class="table table-goldprice">
+                                <tbody>
+                                    <tr>
+                                        <td class="bg" colspan="2"> @Model.data[1].Name
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2">
+                                            <div class="Text_Day2 mt-4">
+                                                <p> @(Model.data[1].Day == "0" ? "ทุกวัน" : Model.data[1].Day) วัน </p>
+                                            </div>
+                                            <div class="Number_TextDay">
+                                                <p>
+                                                    ฿ @Convert.ToInt32(Model.data[1].Price).ToString("#,##0")
+                                                </p>
+                                            </div>
+                                        </td>
+                                        <hr>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2">
+                                            <div class="Text_Day mt-2">
+                                                <p> @Model.data[1].Description </p>
+                                                <hr>
+                                            </div>
+                                            <div class="Text_Day2">
+                                                <p> @Model.data[1].Status </p>
+                                            </div>
+                                        </td>
+                                        <hr>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2">
+                                            <div class="Button_Packget">
+                                                <a href="@Url.Action("Money_bank","Home")?id=2">
+                                                    @* <button @(status == "VIP" ? "disabled" : status == "") @(role == "admin" ? "disabled" : status == "") class="button_Packgetcheck_two"> เลือกแพ็คเกจนี้ </button> *@
+                                                <button class="button_Packgetcheck_two"> เลือกแพ็คเกจนี้ </button>
+                                                </a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>

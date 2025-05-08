@@ -1,0 +1,2897 @@
+
+
+:root {
+    --whites: #fff;
+    --blacks: #000;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Prompt', sans-serif !important;
+    background: #000000 !important;
+}
+
+
+
+
+/*---- Menu Header ----*/
+
+.logo {
+    height: 50px;
+    width: 100px;
+}
+
+    .logo img {
+        margin-left: 2rem;
+    }
+
+.nav__links li::marker {
+    unicode-bidi: isolate;
+    font-variant-numeric: tabular-nums;
+    text-transform: none;
+    text-indent: 0px !important;
+    text-align: start !important;
+    text-align-last: start !important;
+    color: #ffffff00;
+}
+
+header {
+    position: relative;
+    height: 6rem;
+    width: 100%;
+    padding: 0.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #11111100;
+    z-index: 2;
+}
+
+    header .logo {
+        display: flex;
+        align-items: center;
+        padding: 1vh 1vw;
+    }
+
+    header .bars {
+        margin-right: 10px;
+        position: relative;
+        height: 3px;
+        width: 20px;
+        border-radius: 2px;
+        background: #888888;
+        display: none;
+    }
+
+        header .bars::after,
+        header .bars::before {
+            position: absolute;
+            content: '';
+            left: 0;
+            height: 3px;
+            width: 20px;
+            border-radius: 2px;
+            background: #888888;
+        }
+
+        header .bars::after {
+            bottom: 7px;
+        }
+
+        header .bars::before {
+            top: 7px;
+        }
+
+    header h2 {
+        font-size: 1.2rem;
+        color: #D6D6D6;
+    }
+
+.nav__links {
+    display: flex;
+}
+
+    .nav__links li {
+        position: relative;
+        padding: 2.7vw;
+        border-radius: 5px;
+        margin: 0 0.7vw;
+    }
+
+        .nav__links li a {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #ffffff;
+            text-decoration: none;
+        }
+
+            .nav__links li a span {
+                font-size: 0.9rem;
+                letter-spacing: 1px;
+            }
+
+        .nav__links li.active {
+            background: linear-gradient(to right, #ffffff00, #00000000);
+            border: none;
+        }
+
+            .nav__links li.active a {
+                color: #ffffff;
+            }
+
+                .nav__links li.active a i {
+                    text-shadow: 0 0 3px black;
+                }
+
+section {
+    display: flex;
+    align-items: center;
+}
+
+    section span {
+        color: #888888;
+    }
+
+        section span i {
+            margin: 0 1.2vw;
+            font-size: 1.2rem;
+        }
+
+    section img {
+        margin: 0 0.7vw;
+        height: 2rem;
+        width: 2rem;
+        object-fit: cover;
+        border-radius: 50%;
+    }
+
+@media only screen and (max-width : 1044px) {
+
+    header .logo {
+        margin-right: 50px;
+    }
+
+
+    .logo {
+        height: 50px;
+        width: 70px;
+    }
+
+    header .bars {
+        display: block;
+        transition: 0.5s;
+    }
+
+        header .bars.is-active {
+            transform: rotate(90deg);
+        }
+
+            header .bars.is-active .bars::after {
+                transition: none;
+            }
+
+        header .bars .bars::after {
+            transition-delay: 0.3s;
+        }
+
+        header .bars.is-active .bars::after {
+            opacity: 0;
+        }
+
+        header .bars.is-active,
+        header .bars.is-active .bars::before {
+            width: 35px;
+            transform-origin: right;
+        }
+
+        header .bars.is-active {
+            transform: translateY(15px) rotate(45deg);
+        }
+
+            header .bars.is-active .bars::before {
+                transform: translateY(-15px) rotate(-45deg);
+            }
+
+    nav {
+        position: fixed;
+        z-index: 3;
+    }
+
+    .nav__links {
+        background: #111111c4;
+        position: fixed;
+        top: 6rem;
+        left: 0;
+        height: 100vh;
+        width: 100%;
+        flex-direction: column;
+        pointer-events: none;
+        opacity: 0;
+        transition: 0.5s;
+    }
+
+        .nav__links li {
+            margin: 0.7vw 0;
+        }
+
+        .nav__links.open {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .nav__links li.active {
+            animation: slide-in-right 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+        }
+
+    @keyframes slide-in-right {
+        0% {
+            transform: translateX(1000px);
+            opacity: 0;
+        }
+
+        100% {
+            transform: translateX(0);
+            opacity: 1;
+        }
+    }
+}
+
+
+
+
+
+
+
+
+/* Start Dropdown */
+
+.dropdown {
+    display: inline-block;
+    position: relative;
+}
+
+.dd-button {
+    display: inline-block;
+    border: 1px solid #ffffff;
+    color: white;
+    border-radius: 25px;
+    padding: 8px 31px 8px 15px;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+    .dd-button:after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        right: 15px;
+        transform: translateY(-50%);
+        width: 0;
+        height: 0;
+        border-left: 5px solid transparent;
+        border-right: 5px solid transparent;
+        border-top: 5px solid #ffffff;
+    }
+
+    .dd-button:hover {
+        border: 1px solid #ffffff;
+        color: white;
+    }
+
+    .dd-button img {
+        width: 33px;
+        height: 32px;
+        object-fit: cover;
+    }
+
+.dd-input {
+    display: none;
+}
+
+.dd-menu {
+    position: absolute;
+    top: 100%;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 0;
+    margin: 2px 0 0 0;
+    box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.1);
+    background-color: #ffffff;
+    list-style-type: none;
+}
+
+.dd-input + .dd-menu {
+    display: none;
+}
+
+.dd-input:checked + .dd-menu {
+    display: block;
+    z-index: 99;
+}
+
+.dd-menu li {
+    padding: 10px 20px;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+    .dd-menu li:hover {
+        background-color: #f6f6f6;
+    }
+
+.dd-menu span {
+    color: #EA1021;
+    font-weight: 500;
+}
+
+.dd-menu li a {
+    display: block;
+    margin: -10px -20px;
+    padding: 10px 20px;
+    color: #000000;
+    text-decoration: none;
+}
+
+.dd-menu li.divider {
+    padding: 0;
+    border-bottom: 1px solid #cccccc;
+}
+
+.divider {
+    color: white;
+}
+
+
+
+/* End Dropdown */
+
+.Button_logRegis a {
+    color: #0d6efd00 !important;
+    text-decoration: underline;
+}
+
+.Button_logRegis .button_login {
+    background: #EA1021;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 25px;
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+}
+
+    .Button_logRegis .button_login:hover {
+        background: #383131;
+        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+        border-radius: 25px;
+        border: none;
+        color: white;
+        padding: 15px 32px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 4px 2px;
+        cursor: pointer;
+    }
+
+.Button_logRegis .button_regis {
+    background: #383131;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 25px;
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+}
+
+    .Button_logRegis .button_regis:hover {
+        background: #EA1021;
+        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+        border-radius: 25px;
+        border: none;
+        color: white;
+        padding: 15px 32px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 4px 2px;
+        cursor: pointer;
+    }
+
+@media(max-width:768px) {
+    .responsive-bar {
+        display: block;
+        width: 100%;
+        height: 60px;
+        background: #262626;
+        position: fixed;
+        top: 0;
+        left: 0;
+        padding: 5px 20px;
+        box-sizing: border-box;
+        z-index: 1;
+    }
+
+        .responsive-bar .logo img {
+            float: left;
+            height: 50px;
+        }
+
+        .responsive-bar .menu h4 {
+            float: right;
+            color: #fff;
+            margin: 0;
+            padding: 0;
+            line-height: 50px;
+            cursor: pointer;
+            text-transform: uppercase;
+        }
+
+    nav {
+        padding: 0;
+    }
+
+        nav,
+        nav.black {
+            background: #262626;
+            height: 60px;
+            padding: 0;
+        }
+
+            nav .logo {
+                display: none;
+            }
+
+            nav ul {
+                position: absolute;
+                width: 100%;
+                top: 60px;
+                left: 0;
+                background: #262626;
+                float: none;
+                display: none;
+            }
+
+                nav ul.active {
+                    display: block;
+                }
+
+                nav ul li {
+                    width: 100%;
+                }
+
+                    nav ul li a {
+                        display: block;
+                        padding: 0;
+                        width: 100%;
+                        text-align: center;
+                        line-height: 30px !important;
+                        color: #fff;
+                    }
+
+            nav > ul {
+                width: 100%;
+                display: none;
+            }
+
+                nav > ul > li {
+                    display: block;
+                    text-align: center;
+                }
+
+    .active {
+        display: block;
+    }
+}
+
+/*---- End Menu Header ----*/
+
+
+
+
+
+/*----  Footer ----*/
+#Footer {
+    padding: 5rem 0rem 3rem 0rem;
+    text-align: center;
+}
+
+    #Footer .Menu_Buttom a {
+        color: #FFFFFF;
+        text-decoration: none;
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+
+        #Footer .Menu_Buttom a:hover {
+            color: #FFFFFF;
+            text-decoration: none;
+            padding-left: 1rem;
+            padding-right: 1rem;
+        }
+
+    #Footer hr {
+        width: 100%;
+        color: #FFFFFF;
+        height: 1px !important;
+        opacity: 1 !important;
+        margin-top: 1.5rem;
+    }
+
+.Detail_TextAddress p {
+    color: #FFFFFF;
+    font-size: 16px;
+}
+
+#Footer .icon_social a {
+    text-decoration: none;
+}
+
+    #Footer .icon_social a:hover {
+        text-decoration: none;
+    }
+
+
+/*---- End Footer ----*/
+
+
+
+
+
+
+/*----  Login ----*/
+
+#Sec_Login {
+    height: 830px;
+    padding: 4rem;
+    margin-top: -6rem;
+}
+
+    #Sec_Login .center {
+        text-align: center;
+        background: rgba(18, 15, 15, 0.86);
+        border-radius: 15px;
+        width: 60%;
+        height: 640px;
+        margin-top: 3rem;
+        margin-left: 260px;
+    }
+
+
+.Box_input {
+    padding: 4rem;
+}
+
+.Head_LoginName p {
+    font-size: 16px;
+    color: white;
+    text-align: left;
+}
+
+.Head_Login p {
+    font-size: 32px;
+    color: white;
+    text-align: left;
+}
+
+#Sec_Login .form-control {
+    display: block;
+    padding: 0.375rem 0.75rem;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #ffffff !important;
+    background-clip: padding-box;
+    background: #5B5858 !important;
+    border: 3px solid #5B5858 !important;
+    border-radius: 5px !important;
+    appearance: none;
+    border-radius: 0.25rem;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+#Sec_Login ::placeholder {
+    color: white;
+    opacity: 1; /* Firefox */
+}
+
+#Sec_Login :-ms-input-placeholder { /* Internet Explorer 10-11 */
+    color: white;
+}
+
+#Sec_Login ::-ms-input-placeholder { /* Microsoft Edge */
+    color: white;
+}
+
+#Sec_Login .Button_SizeBox .button {
+    background: #EA1021;
+    border-radius: 5px;
+    border: none;
+    color: white;
+    padding: 14px 32px;
+    margin-top: 10rem;
+    width: 100%;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+    #Sec_Login .Button_SizeBox .button:hover {
+        background: #383131;
+        border-radius: 5px;
+        border: none;
+        color: white;
+        padding: 14px 32px;
+        margin-top: 10rem;
+        width: 100%;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        cursor: pointer;
+    }
+
+/*---- End Login ----*/
+
+
+
+
+/*----  Register ----*/
+.box_scroll {
+    overflow-y: scroll;
+    height: 300px;
+    padding: 1rem;
+}
+
+    /* width */
+    .box_scroll::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    /* Track */
+    .box_scroll::-webkit-scrollbar-track {
+        background-color: #ffffff;
+        border-radius: 100px;
+    }
+
+    /* Handle */
+    .box_scroll::-webkit-scrollbar-thumb {
+        background-color: #ffffff;
+        border-radius: 100px;
+    }
+
+    /* Handle on hover */
+    .box_scroll::-webkit-scrollbar-thumb {
+        background-color: #EA1021;
+        border-radius: 100px;
+    }
+
+
+#Sec_Login .Button_SizeBox2 .button {
+    background: #EA1021;
+    border-radius: 5px;
+    border: none;
+    color: white;
+    padding: 14px 32px;
+    margin-top: 4rem;
+    width: 100%;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+    #Sec_Login .Button_SizeBox2 .button:hover {
+        background: #383131;
+        border-radius: 5px;
+        border: none;
+        color: white;
+        padding: 14px 32px;
+        margin-top: 4rem;
+        width: 100%;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        cursor: pointer;
+    }
+
+/*---- End Register ----*/
+
+
+
+
+
+/*----  Video Total Page ----*/
+
+#Sec_ToTalPage {
+    height: 450px;
+    object-fit: cover;
+}
+
+.Head_Video p {
+    font-size: 18px;
+    color: white;
+    text-align: center;
+    padding-top: 2rem
+}
+
+.Head_Video_Head p {
+    font-size: 36px;
+    color: white;
+    text-align: center;
+}
+
+#Category_videoTotal {
+    padding: 6rem;
+}
+
+    #Category_videoTotal .btn-secondary {
+        color: #fff !important;
+        background-color: #6c757d00 !important;
+        border-color: #6c757d00 !important;
+        margin-right: 0rem;
+        top: 10%;
+    }
+
+/*---- End Video Total Page ----*/
+
+
+
+
+
+
+/*----  Money Page ----*/
+
+#Sec_MoneyPage {
+    height: 450px;
+    object-fit: cover;
+}
+
+#Sec_MoneyCheck {
+    padding: 6rem;
+}
+
+.logo_bank img {
+    margin: 0 0.7vw;
+    height: 80px;
+    width: 80px;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+.logo_checklist img {
+    height: 80px;
+    width: 80px;
+}
+
+.panel-body img {
+    height: 80px;
+    width: 80px;
+}
+
+.Head_moneyPage p {
+    font-size: 26px;
+    color: white;
+}
+
+.Detail_Packget p {
+    font-size: 20px;
+    color: #949494;
+}
+
+.Box_InSize table.table.table-goldprice td, table.table.table-goldprice th {
+    padding: 0.75rem;
+    vertical-align: top;
+    background: #120F0F;
+    border: 3px solid #EA1021;
+    box-shadow: 0px 4px 4px rgba(255, 255, 255, 0.25);
+}
+
+.Box_PackgetCheck table.table.table-goldprice {
+    border-top-right-radius: 0.5rem;
+    border-top-left-radius: 0.5rem;
+    border-bottom-left-radius: 0.5rem;
+    border-bottom-right-radius: 0.5rem;
+    overflow: hidden;
+}
+
+    .Box_PackgetCheck table.table.table-goldprice td.bg {
+        background-color: #EA1021;
+        color: white;
+        text-align: center;
+    }
+
+
+.Text_Day {
+    color: #949494;
+    text-align: center;
+    font-size: 16px;
+}
+
+.Text_Day2 {
+    color: #EA1021;
+    text-align: center;
+    font-size: 16px;
+}
+
+.Number_TextDay {
+    color: white;
+    text-align: center;
+    font-size: 30px;
+}
+
+.Box_PackgetCheck .Text_Day hr {
+    width: 100%;
+    color: #EA1021;
+    height: 1px !important;
+    opacity: 1 !important;
+    margin-top: 1.5rem;
+}
+
+#Sec_MoneyCheck .button_Packgetcheck {
+    background: #EA1021;
+    border-radius: 5px;
+    border: 2px solid #EA1021;
+    color: white;
+    width: 100%;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+}
+
+    #Sec_MoneyCheck .button_Packgetcheck:hover {
+        background: #383737;
+        border-radius: 5px;
+        color: white;
+        border: 2px solid #383737;
+        width: 100%;
+        padding: 15px 32px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 4px 2px;
+        cursor: pointer;
+    }
+
+#Sec_MoneyCheck .button_Packgetcheck_two {
+    background: #EA1021;
+    border: 2px solid #EA1021;
+    border-radius: 5px;
+    color: white;
+    width: 100%;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+}
+
+    #Sec_MoneyCheck .button_Packgetcheck_two:hover {
+        background: #383737;
+        border: 2px solid #383737;
+        border-radius: 5px;
+        color: white;
+        width: 100%;
+        padding: 15px 32px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 4px 2px;
+        cursor: pointer;
+    }
+
+/*---- End Money Page ----*/
+
+
+
+
+
+
+
+/*----   Money Bank ----*/
+
+#Sec_MoneyBank {
+    padding: 4rem;
+}
+
+.Box_Bank {
+    padding: 4rem;
+    background: #120F0F;
+    border-radius: 15px;
+    height: 460px;
+}
+
+.Box_BankPackget {
+    padding-top: 4rem;
+    padding-bottom: 1.5rem;
+    background: #120F0F;
+    border-radius: 15px;
+    height: 460px;
+}
+
+.Detail_Bank p {
+    color: white;
+    font-size: 16px;
+    text-align: center;
+}
+
+.Detail_Bank span {
+    color: #949494;
+    font-size: 14px;
+    text-align: center;
+}
+
+.logo_bank .center {
+    text-align: center;
+}
+
+.Box_BankPackget p {
+    color: white;
+    font-size: 16px;
+    padding-left: 2rem;
+}
+
+
+
+.Box_BankPackget hr {
+    width: 100%;
+    color: #525151;
+    height: 1px !important;
+    opacity: 1 !important;
+    margin-top: 1.5rem;
+}
+
+
+.Box_BankPackget .Texะ_DayBank p {
+    color: #EA1021;
+    text-align: center;
+    font-size: 26px;
+}
+
+.Text_Price p {
+    font-size: 16px;
+    color: white;
+}
+
+.Text_BigPrcie p {
+    font-size: 26px;
+    color: white;
+}
+
+.Button_Packget {
+    padding: 1.5rem;
+}
+
+#Sec_MoneyBank .button_Packgetcheck_two {
+    background: #EA1021;
+    border: 2px solid #EA1021;
+    border-radius: 5px;
+    color: white;
+    width: 100%;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px 4px 5px;
+    cursor: pointer;
+}
+
+    #Sec_MoneyBank .button_Packgetcheck_two:hover {
+        background: #383737;
+        border: 2px solid #383737;
+        border-radius: 5px;
+        color: white;
+        width: 100%;
+        padding: 15px 32px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 4px 2px 4px 5px;
+        cursor: pointer;
+    }
+
+.Box_ImageIcon img {
+    height: 60px;
+    width: 60px;
+    border-radius: 0px;
+}
+
+.icon_playvideo img {
+    height: 50px;
+    width: 50px;
+}
+
+.Text_VideoName {
+    padding-left: 0.9rem;
+}
+
+.modal-body p {
+    text-align: center;
+    font-weight: 500;
+    color: #000000;
+    padding-left: 0rem;
+}
+
+.logo_checklist img {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#Sec_MoneyBank .btn {
+    display: inline-block;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #212529;
+    text-align: center;
+    text-decoration: none;
+    vertical-align: middle;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+    background-color: transparent;
+    border: 1px solid transparent;
+    padding: 0.375rem 2.2rem;
+    font-size: 1rem;
+    border-radius: 0.25rem;
+    transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+#Sec_MoneyBank .btn-cracel {
+    color: #fff;
+    background-color: #949494;
+    border-color: #949494;
+}
+
+#Sec_MoneyBank .btn-confrem {
+    color: #fff;
+    background-color: #206CC5;
+    border-color: #206CC5;
+}
+
+#myModal .modal-footer .center {
+    margin: 0;
+    left: 50%;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+}
+
+
+/*----  End Money Bank ----*/
+
+
+
+
+
+
+
+/*----   Money File ----*/
+
+#Sec_MoneyFile {
+    padding: 4rem;
+}
+
+.Box_MoneyFile {
+    width: 100%;
+    height: auto;
+    padding: 4rem 4rem 8rem 4rem;
+    background: #120F0F;
+    border-radius: 15px;
+}
+
+.Head_TextMoneyFile p {
+    font-size: 16px;
+    color: white;
+    text-align: center;
+}
+
+
+/*---  upload image ----*/
+
+#upload-file {
+    /*display:none;*/
+}
+
+.glyphicon {
+    font-size: 4em
+}
+
+#container {
+    margin: 4em;
+}
+
+    #container p {
+        font-size: 16px;
+        color: white;
+        text-align: center;
+    }
+
+    #container img {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+#Sec_MoneyFile .upload-btn {
+    background: #EA1021;
+    border-radius: 5px;
+    color: white;
+    padding: 10px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 36px 2px 4px 5px;
+    cursor: pointer;
+}
+
+    #Sec_MoneyFile .upload-btn:hover {
+        background: #383737;
+        border-radius: 5px;
+        color: white;
+        padding: 10px 32px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 36px 2px 4px 5px;
+        cursor: pointer;
+    }
+
+.vertical-center {
+    margin: 0;
+    position: absolute;
+    left: 50%;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+}
+
+/*---  end upload image ----*/
+
+
+.Box_ButtonSend {
+    padding: 4rem;
+}
+
+
+    .Box_ButtonSend .btn-cracelbank {
+        background: #5d5c5c;
+        border-radius: 5px;
+        color: white;
+        padding: 10px 55px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 60px 2px 4px 5px;
+        cursor: pointer;
+    }
+
+        .Box_ButtonSend .btn-cracelbank:hover {
+            background: #383737;
+            border-radius: 5px;
+            color: white;
+            padding: 10px 55px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 60px 2px 4px 5px;
+            cursor: pointer;
+        }
+
+    .Box_ButtonSend .btn-comfrembank {
+        background: #EA1021;
+        border-radius: 5px;
+        color: white;
+        padding: 10px 55px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 60px 2px 4px 5px;
+        cursor: pointer;
+    }
+
+        .Box_ButtonSend .btn-comfrembank:hover {
+            background: #383737;
+            border-radius: 5px;
+            color: white;
+            padding: 10px 55px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 60px 2px 4px 5px;
+            cursor: pointer;
+        }
+
+#container span {
+    color: white;
+}
+
+
+#Sec_MoneyFile .modal-footer .btn {
+    display: inline-block;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #212529;
+    text-align: center;
+    text-decoration: none;
+    vertical-align: middle;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+    background-color: transparent;
+    border: 1px solid transparent;
+    padding: 0.375rem 2.2rem;
+    font-size: 1rem;
+    border-radius: 0.25rem;
+    transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+#Sec_MoneyFile .modal-footer .btn-cracel {
+    color: #fff;
+    background-color: #949494;
+    border-color: #949494;
+}
+
+#Sec_MoneyFile .modal-footer .btn-confrem {
+    color: #fff;
+    background-color: #206CC5;
+    border-color: #206CC5;
+}
+
+
+
+/*----  End Money File ----*/
+
+
+
+
+
+/*----   Account Me Page ----*/
+
+#Sec_Account {
+    padding: 5rem 4rem 0rem 4rem;
+}
+
+.Box_ImageUser {
+    padding: 4rem;
+    background: #120F0F;
+    border-radius: 15px;
+}
+
+.Box_ButtonCracelUser {
+    padding: 4rem;
+    background: #120F0F;
+    border-radius: 15px;
+}
+
+.Box_TextUser {
+    padding: 2rem 2rem 8rem 2rem;
+    background: #120F0F;
+    border-radius: 15px;
+}
+
+.Text_Edit a {
+    font-size: 16px;
+    color: white;
+    float: right;
+    text-decoration: none;
+}
+
+    .Text_Edit a:hover {
+        font-size: 16px;
+        color: white;
+        float: right;
+        text-decoration: none;
+    }
+
+#Sec_Account label {
+    color: white;
+}
+
+#Sec_Account .form-control {
+    display: block;
+    padding: 0.375rem 0.75rem;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #ffffff !important;
+    background-color: #5B5858 !important;
+    background-clip: padding-box;
+    border: 0px solid #5B5858 !important;
+    border-radius: 5px !important;
+    appearance: none;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+#Sec_Account ::placeholder {
+    color: white;
+    opacity: 1; /* Firefox */
+}
+
+#Sec_Account :-ms-input-placeholder { /* Internet Explorer 10-11 */
+    color: white;
+}
+
+#Sec_Account ::-ms-input-placeholder { /* Microsoft Edge */
+    color: white;
+}
+
+#Sec_Account form {
+    padding: 2rem;
+}
+
+
+
+.media-container {
+    position: relative;
+    display: inline-block;
+    margin: auto;
+    border-radius: 50%;
+    overflow: hidden;
+    width: 200px;
+    height: 200px;
+    vertical-align: middle
+}
+
+.media-overlay {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(180, 180, 180, 0.6);
+}
+
+#media-input {
+    display: block;
+    width: 200px;
+    height: 200px;
+    line-height: 200px;
+    opacity: 0;
+    position: relative;
+    z-index: 9;
+}
+
+.media-icon {
+    display: block;
+    color: #ffffff;
+    font-size: 2em;
+    height: 200px;
+    line-height: 200px;
+    position: absolute;
+    z-index: 0;
+    width: 100%;
+    text-align: center;
+    top: 0;
+}
+
+.img-object {
+    border-radius: 50%;
+    width: 200px;
+    height: 200px;
+    display: block;
+}
+
+.media-control {
+    margin-top: 30px;
+}
+
+.edit-profile {
+}
+
+.save-profile {
+}
+/* button */
+#Sec_Account .btn {
+    margin: 10px 3px;
+    display: inline-block;
+    height: 38px;
+    padding: 0 30px;
+    color: rgb(255, 255, 255);
+    text-align: center;
+    font-size: 11px;
+    font-weight: 600;
+    line-height: 38px;
+    letter-spacing: 0.1rem;
+    text-transform: uppercase;
+    text-decoration: none;
+    white-space: nowrap;
+    background-color: transparent;
+    border-radius: 4px;
+    border: 1px solid #bbb;
+    cursor: pointer;
+    box-sizing: border-box;
+}
+
+    #Sec_Account .btn > i {
+        color: rgb(255, 255, 255);
+        font-size: 12px !important;
+        margin-right: 10px;
+    }
+
+.button_CracelUser {
+    background: #EA1021;
+    border-radius: 5px;
+    width: 100%;
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+}
+
+    .button_CracelUser:hover {
+        background: #5d5c5c;
+        border-radius: 5px;
+        width: 100%;
+        border: none;
+        color: white;
+        padding: 15px 32px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 4px 2px;
+        cursor: pointer;
+    }
+
+
+#Sec_Account .btn-cracelbank {
+    background: #5d5c5c;
+    border-radius: 5px;
+    border: 2px solid #5d5c5c;
+    color: white;
+    padding: 10px 55px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 60px 2px 4px 5px;
+    cursor: pointer;
+}
+
+    #Sec_Account .btn-cracelbank:hover {
+        background: #383737;
+        border-radius: 5px;
+        border: 2px solid #383737;
+        color: white;
+        padding: 10px 55px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 60px 2px 4px 5px;
+        cursor: pointer;
+    }
+
+#Sec_Account .btn-comfrembank {
+    background: #EA1021;
+    border-radius: 5px;
+    border: 2px solid #EA1021;
+    color: white;
+    padding: 10px 55px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 60px 2px 4px 5px;
+    cursor: pointer;
+}
+
+    #Sec_Account .btn-comfrembank:hover {
+        background: #383737;
+        border: 2px solid #383737;
+        border-radius: 5px;
+        color: white;
+        padding: 10px 55px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 60px 2px 4px 5px;
+        cursor: pointer;
+    }
+
+
+/*----  End Account Me Page ----*/
+
+
+
+
+
+/*----   Contact Page ----*/
+
+#Sec_ContactBox {
+    padding: 4rem;
+}
+
+.Text_IconText p {
+    font-size: 16px;
+    color: white;
+    text-align: center;
+}
+
+#Sec_ContactBox .center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+
+
+/*----  End Contact Page ----*/
+
+
+
+
+
+
+
+/*----  Video Detail Page ----*/
+
+#Sec_pagevideoshow {
+    padding: 10rem;
+}
+
+    #Sec_pagevideoshow .Box_insiteVideo iframe {
+        width: 100%;
+        height: 596px;
+    }
+
+.Head_timevideo {
+    color: white;
+    font-size: 16px;
+}
+
+    .Head_timevideo span {
+        color: #949494;
+        font-size: 14px;
+    }
+
+.Head_Detailvideo {
+    color: white;
+    font-size: 16px;
+}
+
+#Video_SecVideo {
+    padding: 0rem 10rem 1rem 10rem;
+}
+
+    #Video_SecVideo .text_Movie p {
+        font-size: 16px;
+        color: white;
+    }
+
+.Box_VideoMovie {
+    width: 100%;
+    border: 1px solid #FFFFFF;
+    border-radius: 20px;
+}
+
+.box_scrollBig {
+    border: 1px solid #FFFFFF;
+    border-radius: 20px;
+    padding: 1rem;
+}
+
+#Video_SecVideo .box_scroll {
+    overflow-y: scroll;
+    height: 500px;
+    padding: 2rem;
+}
+
+
+    /* width */
+    #Video_SecVideo .box_scroll::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    /* Track */
+    #Video_SecVideo .box_scroll::-webkit-scrollbar-track {
+        background-color: #ffffff;
+        border-radius: 100px;
+    }
+
+    /* Handle */
+    #Video_SecVideo .box_scroll::-webkit-scrollbar-thumb {
+        background-color: #ffffff;
+        border-radius: 100px;
+    }
+
+    /* Handle on hover */
+    #Video_SecVideo .box_scroll::-webkit-scrollbar-thumb {
+        background-color: #EA1021;
+        border-radius: 100px;
+    }
+
+.Text_NameID {
+    color: white;
+    font-size: 16px;
+}
+
+    .Text_NameID:hover {
+        color: white;
+        font-size: 16px;
+    }
+
+#Video_SecVideo a {
+    text-decoration: none;
+}
+
+#Video_SecVideo img {
+    margin: 0 0.7vw;
+    height: 8rem;
+    width: 98%;
+    object-fit: cover;
+    border-radius: 0%;
+    object-fit: cover;
+}
+
+.Text_NumberID {
+    color: rgb(189, 189, 189);
+    font-size: 14px;
+}
+
+.Text_DetailDe {
+    color: white;
+    font-size: 16px;
+}
+
+
+
+
+
+/*---- End Video Detail Page ----*/
+
+
+
+
+
+
+
+/*---- Sec_bannervide Index -------*/
+
+main {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+}
+
+article {
+    display: block;
+}
+
+#content {
+    position: relative;
+    height: 100vh;
+    overflow: hidden;
+    margin-top: -6rem;
+}
+
+.slider {
+    position: relative;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+}
+
+.slide {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+    .slide video {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        -o-object-fit: cover;
+        object-fit: cover;
+    }
+
+.dot {
+    position: relative;
+    width: 4px;
+    height: 4px;
+    cursor: pointer;
+    margin-left: 1rem;
+    background-color: hsla(0,0%,100%,.5);
+    border: 2px solid hsla(0,0,0,0);
+    border-radius: 50%;
+    display: inline-block;
+    transition: background-color 0.6s ease;
+    margin-top: 2px;
+    margin-bottom: 2px;
+}
+
+    .active, .dot:hover {
+        /*background-color: #717171;*/
+        border: 2px solid #fff;
+        margin-top: 0px;
+        margin-bottom: 0px;
+        background-color: rgba(0,0,0,0);
+    }
+
+.prev, .next {
+    cursor: pointer;
+    position: absolute;
+    top: 50%;
+    width: auto;
+    margin-top: -22px;
+    padding: 16px;
+    color: white;
+    font-weight: bold;
+    font-size: 18px;
+    transition: 0.6s ease;
+    border-radius: 0 3px 3px 0;
+    user-select: none;
+    text-decoration: none;
+}
+
+/* Position the "next button" to the right */
+.next {
+    right: 0;
+    border-radius: 3px 0 0 3px;
+}
+
+    /* On hover, add a black background color with a little bit see-through */
+    .prev:hover, .next:hover {
+        background-color: rgba(0,0,0,0.8);
+    }
+
+.Box_TextHomeSlide {
+    margin-top: -26rem;
+    position: absolute;
+    margin-left: 7rem;
+}
+
+.Text_HeadVideo p {
+    font-size: 26px;
+    color: white;
+}
+
+.Text_DetailVideo p {
+    font-size: 45px;
+    color: white;
+}
+
+#Video_Updates {
+    padding: 4rem;
+}
+
+.Head_TextTital {
+    font-size: 26px;
+    color: white;
+}
+
+
+
+
+
+/*------ slider Video_Updates ------*/
+
+#Video_Updates {
+    padding: 4rem;
+}
+
+.Head_TextTital {
+    font-size: 26px;
+    color: white;
+}
+
+.swiper-slide .image_videoback img {
+    border-radius: 25px;
+    height: 350px;
+    width: 100%;
+    object-fit: cover;
+}
+
+.swiper-slide .image_videoback video {
+    border-radius: 25px;
+    height: 350px;
+    width: 100%;
+    object-fit: cover;
+}
+
+.Text_VideoName p a {
+    color: white;
+    font-size: 16px;
+    text-decoration: none;
+}
+
+    .Text_VideoName p a:hover {
+        color: white;
+        font-size: 16px;
+        text-decoration: none;
+    }
+
+.Text_VideoName p a {
+    color: white;
+    font-size: 16px;
+}
+
+.Text_VideoMin p {
+    font-size: 14px;
+    color: #949494;
+    padding-left: 0.9rem;
+}
+
+.icon_playvideo {
+    float: right;
+    width: 50px;
+    height: 50px;
+}
+
+.Head_TextTital2 {
+    color: white;
+    font-size: 20px;
+}
+
+
+#Category_video {
+    padding: 2rem;
+}
+
+    #Category_video .slider {
+        margin: 0 auto;
+        width: 100%;
+    }
+
+    #Category_video .swiper-container {
+        padding-bottom: 20px;
+    }
+
+    #Category_video .swiper-scrollbar {
+        background: #d6d6d6;
+    }
+
+    #Category_video .swiper-container-horizontal > .swiper-scrollbar {
+        border-radius: 2px;
+        height: 5px;
+        width: 200px;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+    #Category_video .swiper-wrapper img {
+        width: 100%;
+    }
+
+
+
+#Category_video2 .slider {
+    margin: 0 auto;
+    max-width: 1200px;
+}
+
+#Category_video2 .swiper-container {
+    padding-bottom: 20px;
+}
+
+#Category_video2 .swiper-scrollbar {
+    background: #d6d6d6;
+}
+
+#Category_video2 .swiper-container-horizontal > .swiper-scrollbar {
+    border-radius: 2px;
+    height: 5px;
+    width: 200px;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+#Category_video2 .swiper-wrapper img {
+    width: 100%;
+}
+
+.form-control {
+    display: block;
+    padding: 0.375rem 0.75rem;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #ffffff !important;
+    background-color: #fff0 !important;
+    background-clip: padding-box;
+    border: 2px solid #ffffff !important;
+    border-radius: 25px !important;
+    appearance: none;
+    border-radius: 0.25rem;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+#Category_video .btn-secondary {
+    color: #fff !important;
+    background-color: #6c757d00 !important;
+    border-color: #6c757d00 !important;
+    margin-right: 0rem;
+    top: 10%;
+}
+
+.input-group {
+    font-size: 16px;
+    color: white;
+}
+
+#Video_LastView {
+    padding-top: 2rem;
+}
+
+
+
+
+
+
+/*--- upload image ---*/
+
+.profile-pic {
+    width: 200px;
+    max-height: 200px;
+    display: inline-block;
+}
+
+.file-upload {
+    display: none;
+}
+
+.circle {
+    border-radius: 100% !important;
+    overflow: hidden;
+    width: 128px;
+    height: 128px;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    position: absolute;
+    top: 72px;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+.p-image {
+    position: absolute;
+    top: 167px;
+    right: 30px;
+    color: #666666;
+    transition: all .3s cubic-bezier(.175, .885, .32, 1.275);
+}
+
+    .p-image:hover {
+        transition: all .3s cubic-bezier(.175, .885, .32, 1.275);
+    }
+
+.upload-button {
+    font-size: 1.2em;
+}
+
+    .upload-button:hover {
+        transition: all .3s cubic-bezier(.175, .885, .32, 1.275);
+        color: #999;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*-----------------------------------------
+    RESPONSIVE
+-------------------------------------------*/
+
+@media screen and (max-width: 590px) {
+
+    .Button_logRegis .button_login {
+        background: #EA1021;
+        box-shadow: 0px 4px 4px rgb(0 0 0 / 25%);
+        border-radius: 25px;
+        border: none;
+        color: white;
+        padding: 8px 18px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 12px;
+        margin: 4px 2px;
+        cursor: pointer;
+    }
+
+        .Button_logRegis .button_login:hover {
+            background: #383131;
+            box-shadow: 0px 4px 4px rgb(0 0 0 / 25%);
+            border-radius: 25px;
+            border: none;
+            color: white;
+            padding: 8px 18px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 12px;
+            margin: 4px 2px;
+            cursor: pointer;
+        }
+
+    .Button_logRegis .button_regis {
+        background: #383131;
+        box-shadow: 0px 4px 4px rgb(0 0 0 / 25%);
+        border-radius: 25px;
+        border: none;
+        color: white;
+        padding: 8px 18px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 12px;
+        margin: 4px 2px;
+        cursor: pointer;
+    }
+
+        .Button_logRegis .button_regis:hover {
+            background: #EA1021;
+            box-shadow: 0px 4px 4px rgb(0 0 0 / 25%);
+            border-radius: 25px;
+            border: none;
+            color: white;
+            padding: 8px 18px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 12px;
+            margin: 4px 2px;
+            cursor: pointer;
+        }
+
+
+    #Footer .Menu_Buttom a {
+        color: #FFFFFF;
+        text-decoration: none;
+        padding-left: 1rem;
+        padding-right: 1rem;
+        font-size: 13px;
+    }
+
+    .Detail_TextAddress p {
+        color: #FFFFFF;
+        font-size: 13px;
+    }
+
+
+    #Sec_Login {
+        height: 650px;
+        padding: 2rem;
+    }
+
+        #Sec_Login .center {
+            text-align: center;
+            background: rgba(18, 15, 15, 0.86);
+            border-radius: 15px;
+            width: 100%;
+            height: 540px;
+            margin-top: 3rem;
+            margin-left: 0px;
+        }
+
+    .Box_input {
+        padding: 1rem;
+    }
+
+    #content {
+        position: relative;
+        height: 60vh;
+        overflow: hidden;
+    }
+
+    .Box_TextHomeSlide {
+        margin-top: -15rem;
+        position: absolute;
+        margin-left: 4rem;
+    }
+
+    .Text_HeadVideo p {
+        font-size: 20px;
+        color: white;
+    }
+
+    .Text_DetailVideo p {
+        font-size: 36px;
+        color: white;
+    }
+
+    #Video_Updates {
+        padding: 1rem;
+    }
+
+    .Head_TextTital {
+        font-size: 16px;
+        color: white;
+    }
+
+    .swiper-slide .image_videoback img {
+        border-radius: 6px;
+        height: 127px;
+        width: 100%;
+        object-fit: cover;
+    }
+
+    .swiper-slide .image_videoback video {
+        border-radius: 6px;
+        height: 127px;
+        width: 100%;
+        object-fit: cover;
+    }
+
+    .Text_VideoName p a {
+        color: white;
+        font-size: 12px;
+    }
+
+    .Text_VideoMin p {
+        font-size: 12px;
+        color: #949494;
+    }
+
+    .icon_playvideo {
+        float: right;
+        width: 30%;
+        margin-top: -2.5rem;
+    }
+
+    .input-group {
+        font-size: 14px;
+        color: white;
+    }
+
+    .main {
+        margin-top: -0.4rem;
+    }
+
+    #Category_video {
+        padding: 1rem;
+    }
+
+    .Head_TextTital2 {
+        color: white;
+        font-size: 16px;
+    }
+
+    #Video_LastView {
+        padding-top: 2rem;
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+
+    #Sec_pagevideoshow {
+        padding: 1rem;
+    }
+
+        #Sec_pagevideoshow .Box_insiteVideo iframe {
+            width: 100%;
+            height: 380px;
+            margin-top: 5rem;
+        }
+
+    .Head_timevideo {
+        color: white;
+        font-size: 16px;
+    }
+
+    .Head_Detailvideo {
+        color: white;
+        font-size: 14px;
+    }
+
+    #Sec_ToTalPage {
+        height: 350px;
+        object-fit: cover;
+    }
+
+    .Head_Video p {
+        font-size: 14px;
+        color: white;
+        text-align: center;
+        padding-top: 11rem;
+    }
+
+    .Head_Video_Head p {
+        font-size: 26px;
+        color: white;
+        text-align: center;
+    }
+
+    #Category_videoTotal {
+        padding: 1rem;
+    }
+
+    #Category_videoTotal2 {
+        padding: 1rem;
+    }
+
+    #Sec_MoneyPage {
+        height: 350px;
+        object-fit: cover;
+    }
+
+    #Sec_MoneyCheck {
+        padding: 1rem;
+    }
+
+    #Sec_MoneyBank {
+        padding: 1rem;
+    }
+
+    .Head_moneyPage p {
+        font-size: 18px;
+        color: white;
+    }
+
+    .Detail_Packget p {
+        font-size: 14px;
+        color: #949494;
+    }
+
+    .Box_Bank {
+        padding: 2rem;
+        background: #120F0F;
+        border-radius: 15px;
+        height: 302px;
+    }
+
+    .Detail_Bank p {
+        color: white;
+        font-size: 14px;
+        text-align: center;
+    }
+
+    .Box_BankPackget {
+        padding-top: 2rem;
+        padding-bottom: 1.5rem;
+        background: #120F0F;
+        border-radius: 15px;
+        height: 460px;
+        margin-top: 2rem;
+    }
+
+        .Box_BankPackget p {
+            color: white;
+            font-size: 14px;
+            padding-left: 2rem;
+        }
+
+        .Box_BankPackget .Texะ_DayBank p {
+            color: #EA1021;
+            text-align: center;
+            font-size: 20px;
+        }
+
+    .Text_BigPrcie p {
+        font-size: 20px;
+        color: white;
+    }
+
+    #Sec_MoneyBank .button_Packgetcheck_two {
+        background: #EA1021;
+        border: 2px solid #EA1021;
+        border-radius: 5px;
+        color: white;
+        width: 100%;
+        padding: 10px 21px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 14px;
+        margin: 4px 2px 4px 5px;
+        cursor: pointer;
+    }
+
+        #Sec_MoneyBank .button_Packgetcheck_two:hover {
+            background: #383131;
+            border: 2px solid #383131;
+            border-radius: 5px;
+            color: white;
+            width: 100%;
+            padding: 10px 21px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 14px;
+            margin: 4px 2px 4px 5px;
+            cursor: pointer;
+        }
+
+    #myModal .Text_con p {
+        color: black;
+        font-size: 14px;
+        padding-left: 0rem;
+    }
+
+    #Sec_MoneyBank .btn-cracel {
+        color: #fff;
+        background-color: #949494;
+        border-color: #949494;
+        margin-left: -9rem;
+    }
+
+    #Sec_MoneyFile {
+        padding: 1rem;
+    }
+
+    .Box_MoneyFile {
+        width: 100%;
+        height: auto;
+        padding: 2rem 2rem 5rem 2rem;
+        background: #120F0F;
+        border-radius: 15px;
+    }
+
+    .Box_ButtonSend .btn-cracelbank {
+        background: #5d5c5c;
+        border-radius: 5px;
+        color: white;
+        width: 100%;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 120px 2px 4px 5px;
+        cursor: pointer;
+    }
+
+        .Box_ButtonSend .btn-cracelbank:hover {
+            background: #5d5c5c;
+            border-radius: 5px;
+            color: white;
+            width: 100%;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 120px 2px 4px 5px;
+            cursor: pointer;
+        }
+
+    .Box_ButtonSend .btn-comfrembank {
+        background: #EA1021;
+        border-radius: 5px;
+        color: white;
+        width: 100%;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 10px 2px 4px 5px;
+        cursor: pointer;
+    }
+
+        .Box_ButtonSend .btn-comfrembank:hover {
+            background: #EA1021;
+            border-radius: 5px;
+            color: white;
+            width: 100%;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 10px 2px 4px 5px;
+            cursor: pointer;
+        }
+
+    .Box_ButtonSend {
+        padding: 2rem 0rem 4rem 0rem;
+    }
+
+    #Sec_MoneyFile .modal-footer .btn-cracel {
+        color: #fff;
+        background-color: #949494;
+        border-color: #949494;
+        margin-left: -11.2rem;
+    }
+
+    #Sec_ContactBox {
+        padding: 1rem;
+    }
+
+    .Box_ImageIcon {
+        margin-top: 2rem;
+    }
+
+    #Sec_Account {
+        padding: 7rem 2rem 0rem 2rem;
+    }
+
+    .Box_ImageUser {
+        padding: 2rem;
+        background: #120F0F;
+        border-radius: 15px;
+    }
+
+    .Box_ButtonCracelUser {
+        padding: 2rem;
+        background: #120F0F;
+        border-radius: 15px;
+    }
+
+    .Box_TextUser {
+        padding: 2rem 1rem 1rem 1rem;
+        background: #120F0F;
+        border-radius: 15px;
+        margin-top: 1.5rem;
+    }
+
+    #Sec_Account form {
+        padding: 0.5rem;
+    }
+
+    #Sec_Account .btn-cracelbank {
+        background: #5d5c5c;
+        border: 2px solid #5d5c5c;
+        border-radius: 5px;
+        color: white;
+        padding: 10px 55px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 135px 2px 4px 5px;
+        cursor: pointer;
+    }
+
+        #Sec_Account .btn-cracelbank:hover {
+            background: #5d5c5c;
+            border: 2px solid #5d5c5c;
+            border-radius: 5px;
+            color: white;
+            padding: 10px 55px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 135px 2px 4px 5px;
+            cursor: pointer;
+        }
+
+    #Sec_Account .btn-comfrembank {
+        background: #EA1021;
+        border: 2px solid #EA1021;
+        border-radius: 5px;
+        color: white;
+        padding: 10px 55px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 20px 2px 30px 5px;
+        cursor: pointer;
+    }
+
+        #Sec_Account .btn-comfrembank:hover {
+            background: #5d5c5c;
+            border: 2px solid #5d5c5c;
+            border-radius: 5px;
+            color: white;
+            padding: 10px 55px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 20px 2px 30px 5px;
+            cursor: pointer;
+        }
+
+    .dd-button {
+        display: inline-block;
+        border: 1px solid #ffffff;
+        color: white;
+        border-radius: 25px;
+        padding: 8px 32px 6px 10px;
+        cursor: pointer;
+        white-space: nowrap;
+        font-size: 12px;
+    }
+
+    .Button_logRegis {
+        margin-left: -13rem;
+    }
+
+    .icon_playvideo img {
+        height: 20px;
+        width: 30px;
+    }
+
+    #Category_videoTotal3 {
+        padding: 1rem;
+    }
+
+    #Category_videoTotal4 {
+        padding: 1rem;
+    }
+
+    #Video_SecVideo {
+        padding: 0rem 1rem 1rem 1rem;
+    }
+
+    .box_scrollBig {
+        border: 1px solid #FFFFFF;
+        border-radius: 20px;
+        padding: 1rem;
+    }
+
+    #Video_SecVideo .box_scroll {
+        overflow-y: scroll;
+        height: 500px;
+        padding: 0.5rem;
+    }
+
+    .Text_NameID {
+        color: white;
+        font-size: 14px;
+        padding-top: 1rem;
+    }
+
+    .Text_DetailDe {
+        color: white;
+        font-size: 14px;
+    }
+
+    .Text_NumberID {
+        color: rgb(189, 189, 189);
+        font-size: 12px;
+    }
+}
+
+
+@media screen and (min-width:590px) and (max-width:767px) {
+
+    #Category_videoTotal {
+        padding: 2rem !important;
+    }
+
+    .swiper-slide .image_videoback img {
+        border-radius: 25px;
+        height: 250px !important;
+        width: 100%;
+        object-fit: cover;
+    }
+
+    .icon_playvideo img {
+        height: 40px;
+        width: 40px;
+        margin-top: -9rem;
+    }
+
+    #Sec_pagevideoshow {
+        padding: 2rem !important;
+    }
+
+    .Head_Detailvideo {
+        color: white;
+        font-size: 14px !important;
+    }
+
+    #Sec_MoneyCheck {
+        padding: 2rem !important;
+    }
+
+    #Sec_MoneyBank {
+        padding: 2rem;
+    }
+
+    .Box_Bank {
+        padding: 3rem 3rem 5rem 3rem;
+        background: #120F0F;
+        border-radius: 15px;
+        height: 300px;
+    }
+
+    .Box_BankPackget {
+        padding-top: 2rem;
+        padding-bottom: 1.5rem;
+        background: #120F0F;
+        border-radius: 15px;
+        height: 460px;
+        margin-top: 2rem;
+    }
+
+    .Box_TextUser {
+        padding: 2rem 2rem 8rem 2rem;
+        background: #120F0F;
+        border-radius: 15px;
+        margin-top: 1.5rem;
+    }
+
+    .dd-button {
+        display: inline-block;
+        border: 1px solid #ffffff;
+        color: white;
+        border-radius: 25px;
+        padding: 8px 32px 6px 10px;
+        cursor: pointer;
+        white-space: nowrap;
+        font-size: 12px;
+    }
+
+    #Sec_Login .center {
+        text-align: center;
+        background: rgba(18, 15, 15, 0.86);
+        border-radius: 15px;
+        width: 100%;
+        height: 640px;
+        margin-top: -2rem;
+        margin-left: 0px;
+    }
+
+    .Box_input {
+        padding: 2rem;
+    }
+
+    Footer .Menu_Buttom a {
+        color: #FFFFFF;
+        text-decoration: none;
+        padding-left: 1rem;
+        padding-right: 1rem;
+        font-size: 14px;
+    }
+
+    .Detail_TextAddress p {
+        color: #FFFFFF;
+        font-size: 14px;
+    }
+
+    #Video_SecVideo {
+        padding: 0rem 1rem 1rem 1rem;
+    }
+
+    .box_scrollBig {
+        border: 1px solid #FFFFFF;
+        border-radius: 20px;
+        padding: 1rem;
+    }
+
+    #Video_SecVideo .box_scroll {
+        overflow-y: scroll;
+        height: 500px;
+        padding: 0.5rem;
+    }
+
+    .Text_NameID {
+        color: white;
+        font-size: 14px;
+        padding-top: 1rem;
+    }
+
+    .Text_DetailDe {
+        color: white;
+        font-size: 14px;
+    }
+
+    .Text_NumberID {
+        color: rgb(189, 189, 189);
+        font-size: 12px;
+    }
+}
+
+
+
+@media screen and (min-width:768px) and (max-width:1023px) {
+
+
+    #Video_SecVideo {
+        padding: 0rem 1rem 1rem 1rem;
+    }
+
+    .box_scrollBig {
+        border: 1px solid #FFFFFF;
+        border-radius: 20px;
+        padding: 1rem;
+    }
+
+    #Video_SecVideo .box_scroll {
+        overflow-y: scroll;
+        height: 500px;
+        padding: 0.5rem;
+    }
+
+    .Text_NameID {
+        color: white;
+        font-size: 14px;
+        padding-top: 1rem;
+    }
+
+    .Text_DetailDe {
+        color: white;
+        font-size: 14px;
+    }
+
+    .Text_NumberID {
+        color: rgb(189, 189, 189);
+        font-size: 12px;
+    }
+
+
+    #Category_videoTotal {
+        padding: 2rem !important;
+    }
+
+    .swiper-slide .image_videoback img {
+        border-radius: 25px;
+        height: 250px !important;
+        width: 100%;
+        object-fit: cover;
+    }
+
+    .icon_playvideo img {
+        height: 40px;
+        width: 40px;
+        margin-top: -9rem;
+    }
+
+    #Sec_pagevideoshow {
+        padding: 2rem !important;
+    }
+
+    .Head_Detailvideo {
+        color: white;
+        font-size: 14px !important;
+    }
+
+    #Sec_MoneyCheck {
+        padding: 2rem !important;
+    }
+
+    #Sec_MoneyBank {
+        padding: 2rem;
+    }
+
+    .Box_Bank {
+        padding: 3rem 3rem 5rem 3rem;
+        background: #120F0F;
+        border-radius: 15px;
+        height: 300px;
+    }
+
+    .Box_BankPackget {
+        padding-top: 2rem;
+        padding-bottom: 1.5rem;
+        background: #120F0F;
+        border-radius: 15px;
+        height: 460px;
+        margin-top: 2rem;
+    }
+
+    .Box_TextUser {
+        padding: 2rem 2rem 8rem 2rem;
+        background: #120F0F;
+        border-radius: 15px;
+        margin-top: 1.5rem;
+    }
+
+    .dd-button {
+        display: inline-block;
+        border: 1px solid #ffffff;
+        color: white;
+        border-radius: 25px;
+        padding: 8px 32px 6px 10px;
+        cursor: pointer;
+        white-space: nowrap;
+        font-size: 12px;
+    }
+
+    #Sec_Login .center {
+        text-align: center;
+        background: rgba(18, 15, 15, 0.86);
+        border-radius: 15px;
+        width: 100%;
+        height: 640px;
+        margin-top: 3rem;
+        margin-left: 0px;
+    }
+
+    .Box_input {
+        padding: 2rem;
+    }
+
+    Footer .Menu_Buttom a {
+        color: #FFFFFF;
+        text-decoration: none;
+        padding-left: 1rem;
+        padding-right: 1rem;
+        font-size: 14px;
+    }
+
+    .Detail_TextAddress p {
+        color: #FFFFFF;
+        font-size: 14px;
+    }
+}
+
+@media screen and (min-width:330px) and (max-width:767px) {
+
+    #container img {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        width: 100% !important;
+        height: 100% !important;
+    }
+
+    #container {
+        margin: 0em;
+    }
+}
