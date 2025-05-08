@@ -9,117 +9,117 @@ build_property.EnforceExtendedAnalyzerRules =
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = Monklongpae
 build_property.RootNamespace = Monklongpae
-build_property.ProjectDir = D:\งานOrange\โปรเจค จาก Git\Monklongpae\Monklongpae\
+build_property.ProjectDir = D:\งานOrange\โปรเจค จาก Git\mon\Monklongpae\Monklongpae\
 build_property.EnableComHosting = 
 build_property.EnableGeneratedComInterfaceComImportInterop = 
 build_property.RazorLangVersion = 6.0
 build_property.SupportLocalizedComponentNames = 
 build_property.GenerateRazorMetadataSourceChecksumAttributes = true
-build_property.MSBuildProjectDirectory = D:\งานOrange\โปรเจค จาก Git\Monklongpae\Monklongpae
+build_property.MSBuildProjectDirectory = D:\งานOrange\โปรเจค จาก Git\mon\Monklongpae\Monklongpae
 build_property._RazorSourceGeneratorDebug = 
 build_property.EffectiveAnalysisLevelStyle = 6.0
 build_property.EnableCodeStyleSeverity = 
 
-[D:/งานOrange/โปรเจค จาก Git/Monklongpae/Monklongpae/Views/Backoffice/AddCatoryAndVideo.cshtml]
+[D:/งานOrange/โปรเจค จาก Git/mon/Monklongpae/Monklongpae/Views/Backoffice/AddCatoryAndVideo.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQmFja29mZmljZVxBZGRDYXRvcnlBbmRWaWRlby5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/งานOrange/โปรเจค จาก Git/Monklongpae/Monklongpae/Views/Backoffice/Cert_market.cshtml]
+[D:/งานOrange/โปรเจค จาก Git/mon/Monklongpae/Monklongpae/Views/Backoffice/Cert_market.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQmFja29mZmljZVxDZXJ0X21hcmtldC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/งานOrange/โปรเจค จาก Git/Monklongpae/Monklongpae/Views/Backoffice/Contact.cshtml]
+[D:/งานOrange/โปรเจค จาก Git/mon/Monklongpae/Monklongpae/Views/Backoffice/Contact.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQmFja29mZmljZVxDb250YWN0LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/งานOrange/โปรเจค จาก Git/Monklongpae/Monklongpae/Views/Backoffice/Index.cshtml]
+[D:/งานOrange/โปรเจค จาก Git/mon/Monklongpae/Monklongpae/Views/Backoffice/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQmFja29mZmljZVxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/งานOrange/โปรเจค จาก Git/Monklongpae/Monklongpae/Views/Backoffice/ManageVideo.cshtml]
+[D:/งานOrange/โปรเจค จาก Git/mon/Monklongpae/Monklongpae/Views/Backoffice/ManageVideo.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQmFja29mZmljZVxNYW5hZ2VWaWRlby5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/งานOrange/โปรเจค จาก Git/Monklongpae/Monklongpae/Views/Backoffice/Message.cshtml]
+[D:/งานOrange/โปรเจค จาก Git/mon/Monklongpae/Monklongpae/Views/Backoffice/Message.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQmFja29mZmljZVxNZXNzYWdlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/งานOrange/โปรเจค จาก Git/Monklongpae/Monklongpae/Views/Backoffice/Payments.cshtml]
+[D:/งานOrange/โปรเจค จาก Git/mon/Monklongpae/Monklongpae/Views/Backoffice/Payments.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQmFja29mZmljZVxQYXltZW50cy5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/งานOrange/โปรเจค จาก Git/Monklongpae/Monklongpae/Views/Backoffice/User.cshtml]
+[D:/งานOrange/โปรเจค จาก Git/mon/Monklongpae/Monklongpae/Views/Backoffice/User.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQmFja29mZmljZVxVc2VyLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/งานOrange/โปรเจค จาก Git/Monklongpae/Monklongpae/Views/Backoffice/Video_and_image.cshtml]
+[D:/งานOrange/โปรเจค จาก Git/mon/Monklongpae/Monklongpae/Views/Backoffice/Video_and_image.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQmFja29mZmljZVxWaWRlb19hbmRfaW1hZ2UuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/งานOrange/โปรเจค จาก Git/Monklongpae/Monklongpae/Views/Home/Contact.cshtml]
+[D:/งานOrange/โปรเจค จาก Git/mon/Monklongpae/Monklongpae/Views/Home/Contact.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxDb250YWN0LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/งานOrange/โปรเจค จาก Git/Monklongpae/Monklongpae/Views/Home/Index.cshtml]
+[D:/งานOrange/โปรเจค จาก Git/mon/Monklongpae/Monklongpae/Views/Home/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/งานOrange/โปรเจค จาก Git/Monklongpae/Monklongpae/Views/Home/Money_bank.cshtml]
+[D:/งานOrange/โปรเจค จาก Git/mon/Monklongpae/Monklongpae/Views/Home/Money_bank.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxNb25leV9iYW5rLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/งานOrange/โปรเจค จาก Git/Monklongpae/Monklongpae/Views/Home/Money_file.cshtml]
+[D:/งานOrange/โปรเจค จาก Git/mon/Monklongpae/Monklongpae/Views/Home/Money_file.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxNb25leV9maWxlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/งานOrange/โปรเจค จาก Git/Monklongpae/Monklongpae/Views/Home/Money_page.cshtml]
+[D:/งานOrange/โปรเจค จาก Git/mon/Monklongpae/Monklongpae/Views/Home/Money_page.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxNb25leV9wYWdlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/งานOrange/โปรเจค จาก Git/Monklongpae/Monklongpae/Views/Home/Privacy.cshtml]
+[D:/งานOrange/โปรเจค จาก Git/mon/Monklongpae/Monklongpae/Views/Home/Privacy.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxQcml2YWN5LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/งานOrange/โปรเจค จาก Git/Monklongpae/Monklongpae/Views/Home/Video_detail.cshtml]
+[D:/งานOrange/โปรเจค จาก Git/mon/Monklongpae/Monklongpae/Views/Home/Video_detail.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxWaWRlb19kZXRhaWwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/งานOrange/โปรเจค จาก Git/Monklongpae/Monklongpae/Views/Home/Video_total.cshtml]
+[D:/งานOrange/โปรเจค จาก Git/mon/Monklongpae/Monklongpae/Views/Home/Video_total.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxWaWRlb190b3RhbC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/งานOrange/โปรเจค จาก Git/Monklongpae/Monklongpae/Views/Login/Account_me.cshtml]
+[D:/งานOrange/โปรเจค จาก Git/mon/Monklongpae/Monklongpae/Views/Login/Account_me.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTG9naW5cQWNjb3VudF9tZS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/งานOrange/โปรเจค จาก Git/Monklongpae/Monklongpae/Views/Login/Login.cshtml]
+[D:/งานOrange/โปรเจค จาก Git/mon/Monklongpae/Monklongpae/Views/Login/Login.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTG9naW5cTG9naW4uY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/งานOrange/โปรเจค จาก Git/Monklongpae/Monklongpae/Views/Login/Register.cshtml]
+[D:/งานOrange/โปรเจค จาก Git/mon/Monklongpae/Monklongpae/Views/Login/Register.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTG9naW5cUmVnaXN0ZXIuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/งานOrange/โปรเจค จาก Git/Monklongpae/Monklongpae/Views/Shared/Error.cshtml]
+[D:/งานOrange/โปรเจค จาก Git/mon/Monklongpae/Monklongpae/Views/Shared/Error.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXEVycm9yLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/งานOrange/โปรเจค จาก Git/Monklongpae/Monklongpae/Views/Shared/_Layout_backoffice.cshtml]
+[D:/งานOrange/โปรเจค จาก Git/mon/Monklongpae/Monklongpae/Views/Shared/_Layout_backoffice.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9MYXlvdXRfYmFja29mZmljZS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/งานOrange/โปรเจค จาก Git/Monklongpae/Monklongpae/Views/Shared/_ValidationScriptsPartial.cshtml]
+[D:/งานOrange/โปรเจค จาก Git/mon/Monklongpae/Monklongpae/Views/Shared/_ValidationScriptsPartial.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/งานOrange/โปรเจค จาก Git/Monklongpae/Monklongpae/Views/_ViewImports.cshtml]
+[D:/งานOrange/โปรเจค จาก Git/mon/Monklongpae/Monklongpae/Views/_ViewImports.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdJbXBvcnRzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/งานOrange/โปรเจค จาก Git/Monklongpae/Monklongpae/Views/_ViewStart.cshtml]
+[D:/งานOrange/โปรเจค จาก Git/mon/Monklongpae/Monklongpae/Views/_ViewStart.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdTdGFydC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/งานOrange/โปรเจค จาก Git/Monklongpae/Monklongpae/Views/Shared/_Layout.cshtml]
+[D:/งานOrange/โปรเจค จาก Git/mon/Monklongpae/Monklongpae/Views/Shared/_Layout.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9MYXlvdXQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = b-4k4jyn5vr5

@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\งานOrange\\โปรเจค จาก Git\\Monklongpae\\Monklongpae\\Monklongpae.csproj": {}
+    "D:\\งานOrange\\โปรเจค จาก Git\\mon\\Monklongpae\\Monklongpae\\Monklongpae.csproj": {}
   },
   "projects": {
-    "D:\\งานOrange\\โปรเจค จาก Git\\Monklongpae\\Monklongpae\\Monklongpae.csproj": {
+    "D:\\งานOrange\\โปรเจค จาก Git\\mon\\Monklongpae\\Monklongpae\\Monklongpae.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\งานOrange\\โปรเจค จาก Git\\Monklongpae\\Monklongpae\\Monklongpae.csproj",
+        "projectUniqueName": "D:\\งานOrange\\โปรเจค จาก Git\\mon\\Monklongpae\\Monklongpae\\Monklongpae.csproj",
         "projectName": "Monklongpae",
-        "projectPath": "D:\\งานOrange\\โปรเจค จาก Git\\Monklongpae\\Monklongpae\\Monklongpae.csproj",
+        "projectPath": "D:\\งานOrange\\โปรเจค จาก Git\\mon\\Monklongpae\\Monklongpae\\Monklongpae.csproj",
         "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
-        "outputPath": "D:\\งานOrange\\โปรเจค จาก Git\\Monklongpae\\Monklongpae\\obj\\",
+        "outputPath": "D:\\งานOrange\\โปรเจค จาก Git\\mon\\Monklongpae\\Monklongpae\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

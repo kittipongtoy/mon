@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "5fC474ssC+4=",
+  "dgSpecHash": "oxq3kGMTqBA=",
   "success": true,
-  "projectFilePath": "D:\\งานOrange\\โปรเจค จาก Git\\Monklongpae\\Monklongpae\\Monklongpae.csproj",
+  "projectFilePath": "D:\\งานOrange\\โปรเจค จาก Git\\mon\\Monklongpae\\Monklongpae\\Monklongpae.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Admin\\.nuget\\packages\\azure.core\\1.24.0\\azure.core.1.24.0.nupkg.sha512",
     "C:\\Users\\Admin\\.nuget\\packages\\azure.identity\\1.6.0\\azure.identity.1.6.0.nupkg.sha512",
