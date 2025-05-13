@@ -101,7 +101,12 @@ $(document).ready(function() {
                     if(data == false)
                     {
                         return "รอการยืนยัน";
-                    }else{
+                    }
+                    else if(data == null)
+                    {
+                        return "หมดเวลาชำระเงิน";
+                    }
+                    else{
                         return "ยืนยันแล้ว";
                     }
                 }
@@ -109,16 +114,23 @@ $(document).ready(function() {
             { "data":"idPayment","name":"idPayment","class":"text-center align-middle","autoWidth": true,
                 "render": function(data, type, row) {
                     //console.log(row.filePayment)
-                    if (row.isactive == true) { 
-                        //return '<span class="badge bg-success">สำเร็จ</span>';
-                            return " <button type='button' class='btn btn-primary' data-bs-toggle='modal' data-bs-target='#exampleModal2' onclick=showedit(" + data + "); >สำเร็จ</button>";
-                    }
-                    else if(row.filePayment == null)
+                    if(row.isactive != null)
                     {
-                            return '<span class="badge bg-warning">รอสลิป</span>';
+                        if (row.isactive == true) { 
+                            //return '<span class="badge bg-success">สำเร็จ</span>';
+                                return " <button type='button' class='btn btn-primary' data-bs-toggle='modal' data-bs-target='#exampleModal2' onclick=showedit(" + data + "); >สำเร็จ</button>";
+                        }
+                        else if(row.filePayment == null)
+                        {
+                                return '<span class="badge bg-warning">รอสลิป</span>';
+                        }
+                        else {
+                            return " <button type='button' class='btn btn-primary' data-bs-toggle='modal' data-bs-target='#exampleModal' onclick=showedit(" + data + "); ><i class='bi bi-eye-fill'></i></button>";
+                        }
                     }
-                    else {
-                        return " <button type='button' class='btn btn-primary' data-bs-toggle='modal' data-bs-target='#exampleModal' onclick=showedit(" + data + "); ><i class='bi bi-eye-fill'></i></button>";
+                    else
+                    {
+                        return '';
                     }
                 }
             },

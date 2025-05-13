@@ -13,12 +13,25 @@
             break;
         }
     }
+
     var tel = Accessor.HttpContext.Session.GetString("Tel");
     var fri = Accessor.HttpContext.Session.GetString("Firstname");
     var sur = Accessor.HttpContext.Session.GetString("Surnname");
     var role = Accessor.HttpContext.Session.GetString("role");
     var image = Accessor.HttpContext.Session.GetString("image");
     var status = "";
+
+    var day = Accessor.HttpContext.Session.GetInt32("ExpiresDay");
+    var ExpiresDay = "";
+    if (day > 0)
+    {
+        ExpiresDay = "เหลือ " + @day + " วัน";
+    }
+    else
+    {
+        ExpiresDay = "หมดอายุแล้ว";
+    }
+
     if (role != null)
     {
         if (role.ToLower() == "user")
@@ -125,6 +138,7 @@
                                 </li>
                             }
                             <li> <span> แพ็คเกจ : @status </span> </li>
+                            <li> <span> สถานะ : @ExpiresDay </span> </li>
                             <li>
                                 <a asp-action="Logout" asp-controller="Login"> ออกจากระบบ </a>
                             </li>
@@ -136,10 +150,7 @@
         }
     </header>
 
-
-
     @RenderBody()
-
 
     <footer class="border-top footer text-muted">
         <section id="Footer">
@@ -182,12 +193,7 @@
             </div>
         </section>
     </footer>
-    @*<script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>*@@*
-    @await RenderSectionAsync("Scripts", required: false)*@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/6.0.1/signalr.js"></script>
-    @* <script src="/backoffice/controlrealtime/updatedata.js"></script> *@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/lazysizes/5.3.2/lazysizes.min.js" async></script>
 
@@ -204,7 +210,7 @@
                 document.addEventListener('contextmenu', event => event.preventDefault());
 
             }, 500);
-            //console.log("tel");
+
             var tel = (`@tel` ?? "")
             if (tel != null || tel != "") {
                 sessionStorage.setItem("tels", tel);
@@ -496,7 +502,6 @@
 
             setInterval(() => {
                 $.get("@Url.Action("Update_online", "Home")").then(x => {
-                    console.log(x)
                     if (x == "login") {
                         window.location.href = "/Home/Index";
                     }

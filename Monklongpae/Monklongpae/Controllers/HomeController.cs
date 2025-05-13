@@ -2,19 +2,21 @@
 using Microsoft.EntityFrameworkCore;
 using Monklongpae.Models;
 using NToastNotify;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Management;
 using System.Security.Cryptography;
 using System.Text;
 using static Monklongpae.Models.oparetion;
 
+#pragma warning disable CS8604 // Possible null reference argument.
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
 namespace Monklongpae.Controllers
 {
     public class HomeController : Controller
     {
         private IWebHostEnvironment _hostingEnvironment;
         public readonly MonklongpaeContext db = new MonklongpaeContext();
-        private readonly ILogger<HomeController> _logger;
         private readonly IToastNotification _toastNotification;
 
         public HomeController(IWebHostEnvironment environment, IToastNotification toastNotification)
@@ -32,6 +34,7 @@ namespace Monklongpae.Controllers
             if (tel is not null)
             {
                 var user = await db.User.FirstOrDefaultAsync(x => x.Tel == tel);
+
                 var videoIds = await db.History
                     .Where(x => x.IdUser == user.IdUser)
                     .OrderByDescending(x => x.CreateDate)
@@ -86,7 +89,7 @@ namespace Monklongpae.Controllers
 
         public async Task<IActionResult> Update_online()
         {
-            var tokens = Request.Cookies["tokensMon"];
+            var tokens = Request.Cookies["tokensMons"];
 
             if (!string.IsNullOrEmpty(tokens))
             {
@@ -96,16 +99,30 @@ namespace Monklongpae.Controllers
                     user.WorkDate = DateTime.Now;
 
                     int limit_date = 0;
-                    if (user.PacketDateLimit != null)
+                    if (user.IdRole != 3)
                     {
-                        var limit = user.PacketDateLimit.Value - DateTime.Now;
-                        limit_date = limit.Days;
+                        if (user.PacketDateLimit != null)
+                        {
+                            var limit = user.PacketDateLimit - DateTime.Now;
+                            if (limit.Value.Days > 0)
+                            {
+                                limit_date = limit.Value.Days;
+                            }
+                            else
+                            {
+                                limit_date = 0;
+                            }
+                        }
+                        else if (user.IdRole != 3)
+                        {
+                            user.IdRole = 1;
+                        }
                     }
-                    else if (user.IdRole != 3)
+                    else
                     {
-                        user.IdRole = 1;
+                        limit_date = 2;
                     }
-
+                    
                     var role = await db.Role.FirstOrDefaultAsync(x => x.IdRole == user.IdRole);
 
                     HttpContext.Session.SetString("Firstname", user.FirstName);
@@ -115,6 +132,9 @@ namespace Monklongpae.Controllers
                     HttpContext.Session.SetString("image", user.ImagePath);
                     HttpContext.Session.SetInt32("package", limit_date);
 
+                    var day = user.PacketDateLimit == null ? 0 : (user.PacketDateLimit - DateTime.Now).Value.Days;
+                    HttpContext.Session.SetInt32("ExpiresDay", day);
+
                     await db.SaveChangesAsync();
 
                     if (string.IsNullOrEmpty(HttpContext.Session.GetString("Tel")))
@@ -122,8 +142,12 @@ namespace Monklongpae.Controllers
 
                     return Json("success");
                 }
-            }
+                else
+                {
 
+                }
+            }
+ 
             var tel = HttpContext.Session.GetString("Tel");
             if (!string.IsNullOrEmpty(tel))
             {
@@ -136,11 +160,12 @@ namespace Monklongpae.Controllers
 
                     var cookieOptions = new CookieOptions
                     {
-                        Expires = DateTime.Now.AddHours(1),
+                        Expires = DateTime.Now.AddDays(1),
                         Path = "/"
                     };
 
-                    Response.Cookies.Append("tokensMon", tokenText, cookieOptions);
+                    Response.Cookies.Append("tokensMons", tokenText, cookieOptions);
+                    //Response.Cookies.Append("tokensMons", tokenText);
                     await db.SaveChangesAsync();
 
                     return Json("login");
@@ -163,12 +188,12 @@ namespace Monklongpae.Controllers
 
         public class IndexViewModel
         {
-            public PageMessage data { get; set; }
-            public List<VideoPage> data1 { get; set; }
-            public List<Video> data2 { get; set; }
-            public List<VideosandCatory> data3 { get; set; }
-            public List<Video> data4 { get; set; }
-            public string message { get; set; }
+            public PageMessage? data { get; set; }
+            public List<VideoPage>? data1 { get; set; }
+            public List<Video>? data2 { get; set; }
+            public List<VideosandCatory>? data3 { get; set; }
+            public List<Video>? data4 { get; set; }
+            public string? message { get; set; }
         }
 
         public async Task<IActionResult> Money_bank(int id)
@@ -212,7 +237,7 @@ namespace Monklongpae.Controllers
                             IdUser = xx.IdUser,
                             Isactive = false
                         });
-                        db.SaveChanges();
+                        await db.SaveChangesAsync();
                         var data = await db.Payment.FirstOrDefaultAsync(x => x.IdUser == xx.IdUser);
                         return View(data);
                     }
@@ -247,17 +272,19 @@ namespace Monklongpae.Controllers
                                 var cc1 = await db.Payment.FirstOrDefaultAsync(x => x.IdUser == xx.IdUser && x.Isactive == false);
                                 if (cc1 == null)
                                 {
-                                    db.Payment.Add(new Payment
+                                    var adddata = new Payment
                                     {
                                         Status = "รอตรวจสอบ",
                                         CreateDate = DateTime.Now,
                                         IdPacket = idpack,
                                         IdUser = xx.IdUser,
                                         Isactive = false
-                                    });
-                                    db.SaveChanges();
-                                }
+                                    };
 
+                                    db.Payment.Add(adddata);
+                                    await db.SaveChangesAsync();
+                                }
+     
                                 if (file.Length > 0)
                                 {
                                     string filePath = Path.Combine(uploads, file.FileName);
@@ -265,14 +292,18 @@ namespace Monklongpae.Controllers
                                     {
                                         file.CopyTo(filestream);
                                     }
-                                    var cc = await db.Payment.FirstOrDefaultAsync(x => x.IdUser == xx.IdUser);
+                                    var cc = await db.Payment.FirstOrDefaultAsync(x => (x.Isactive == false || x.Isactive ==null ) && x.IdUser == xx.IdUser && x.IdPacket == idpack);
+                                    if (cc != null)
+                                    {
+                                        cc.FilePayment = "/bill/" + file.FileName;
+                                        cc.Status = "รอตรวจสอบ";
+                                        cc.UpdateDate = DateTime.Now;
+                                        db.Entry(cc).State = EntityState.Modified;
+                                        await db.SaveChangesAsync();
 
-                                    cc.FilePayment = "/bill/" + file.FileName;
-                                    cc.Status = "รอตรวจสอบ";
-                                    cc.UpdateDate = DateTime.Now;
-                                    db.SaveChanges();
-                                    _toastNotification.AddSuccessToastMessage("รอแอดมินตรวจสอบ");
-                                    return Redirect("/Home/Index");
+                                        _toastNotification.AddSuccessToastMessage("รอแอดมินตรวจสอบ");
+                                        return Redirect("/Home/Index");
+                                    }
                                 }
                             }
                         }
@@ -365,7 +396,10 @@ namespace Monklongpae.Controllers
             if (id == 0)
             {
                 var ids = await db.Video.OrderBy(x => x.IdVideo).FirstOrDefaultAsync(x => x.IdNameVideo == idnamevideo);
-                id = ids.IdVideo;
+                if(ids != null)
+                { 
+                    id = ids.IdVideo;
+                }
             }
 
             var data = await db.Video.FirstOrDefaultAsync(x => x.IdVideo == id);
@@ -399,11 +433,11 @@ namespace Monklongpae.Controllers
             db.History.Add(new History
             {
                 IdVideo = id,
-                IdUser = xx.IdUser,
+                IdUser = xx?.IdUser,
                 CreateDate = DateTime.Now
             });
-            db.SaveChanges();
-            var data2 = datas.Where(x => x.idvideo > data.IdVideo).FirstOrDefault();
+            await db.SaveChangesAsync();
+            var data2 = datas.Where(x => x.idvideo > data?.IdVideo).FirstOrDefault();
             return View(new { data, datas, data2, idVideo = id });
         }
 
@@ -425,7 +459,7 @@ namespace Monklongpae.Controllers
                     if (cac != null)
                     {
                         db.Payment.Remove(cac);
-                        db.SaveChanges();
+                        await db.SaveChangesAsync();
                     }
                 }
             }
@@ -478,12 +512,14 @@ namespace Monklongpae.Controllers
                         {
 
                             catory = xc.Name,
-                            videos = sds
+                            videos = sds,
+                            //timeVideo = 
                         });
                     }
                 }
                 else if (countvideo == true)
                 {
+
                     var xca = await db.NameVideo.Where(x => x.IdCatory == xc.IdCatory && x.Name.Contains(search)).ToListAsync();
                     if (xca != null && xca.Count() > 0)
                     {
@@ -512,6 +548,31 @@ namespace Monklongpae.Controllers
                 }
             }
             return Json(data3);
+        }
+
+
+        [HttpGet]
+        public async Task<IActionResult> CheckPackages()
+        {
+            var tokens = Request.Cookies["tokensMons"];
+            var limit_date = 0;
+            if (!string.IsNullOrEmpty(tokens))
+            {
+                var getuser = await db.User.FirstOrDefaultAsync(x => x.Token == tokens);
+                if (getuser != null)
+                {
+                    var daysLeft = getuser.PacketDateLimit!.Value.Date - DateTime.Now.Date;
+                    if (daysLeft.Days > 0)
+                    {
+                        limit_date = daysLeft.Days;
+                    }
+                    else
+                    {
+                        limit_date = 0;
+                    }
+                }
+            }
+            return Json(limit_date);
         }
     }
 }

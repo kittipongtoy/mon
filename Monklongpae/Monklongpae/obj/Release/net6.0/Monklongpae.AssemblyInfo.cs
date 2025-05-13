@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Monklongpae")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+160a35dca5ffc48a75d639fecbbdd5d2d197e20b")]
 [assembly: System.Reflection.AssemblyProductAttribute("Monklongpae")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Monklongpae")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

@@ -1,14 +1,14 @@
-﻿using Azure.Core;
+﻿using System.Runtime.InteropServices;
+using System.Security.Cryptography;
+using System.Text;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Monklongpae.Models;
-using Newtonsoft.Json.Linq;
 using NToastNotify;
-using System.Runtime.InteropServices;
-using System.Security.Cryptography;
-using System.Text;
 using static Monklongpae.Models.oparetion;
 
+#pragma warning disable CS8604 // Possible null reference argument.
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
 namespace Monklongpae.Controllers
 {
     public class LoginController : Controller
@@ -63,22 +63,23 @@ namespace Monklongpae.Controllers
             if (tel != null)
             {
                 var xx = await db.User.FirstOrDefaultAsync(x => x.Tel == tel);
-                ViewBag.ids = xx.IdUser;
-                ViewBag.fir = xx.FirstName;
-                ViewBag.sur = xx.SurName;
-                ViewBag.address = xx.Address;
-                ViewBag.tel = xx.Tel;
-                ViewBag.image = xx.ImagePath;
+                ViewBag.ids = xx?.IdUser;
+                ViewBag.fir = xx?.FirstName;
+                ViewBag.sur = xx?.SurName;
+                ViewBag.address = xx?.Address;
+                ViewBag.tel = xx?.Tel;
+                ViewBag.image = xx?.ImagePath;
                 var status = "";
-                if (xx.IdRole == 1)
+                if (xx?.IdRole == 1)
                 {
                     status = "ฟรี";
                 }
-                else if (xx.IdRole == 2)
+                else if (xx?.IdRole == 2)
                 {
-                    status = "VIP";
+                    var day = xx.PacketDateLimit == null ? 0 : (xx.PacketDateLimit - DateTime.Now).Value.Days;
+                    status = "VIP" + " จำนวนวัน คงเหลือ " + day + " วัน";
                 }
-                else if (xx.IdRole == 3)
+                else if (xx?.IdRole == 3)
                 {
                     status = "แอดมิน";
                 }
@@ -89,7 +90,7 @@ namespace Monklongpae.Controllers
 
         public async Task<IActionResult> UpdateData(string tel)
         {
-            var xx = await db.User.FirstOrDefaultAsync(x => x.Tel == tel && x.Isactive == true);
+            var xx = await db.User.FirstOrDefaultAsync(x => x.Tel == tel); //&& x.Isactive == true
             if (xx != null)
             {
                 var limit_date = 0;
@@ -102,25 +103,30 @@ namespace Monklongpae.Controllers
                 user.OnlineStatus = true;
                 user.Token = tokens;
                 user.WorkDate = DateTime.Now;
-                db.SaveChanges();
+                await db.SaveChangesAsync();
                 if (user.PacketDateLimit != null)
                 {
                     var nows = DateTime.Now;
                     var limit = xx.PacketDateLimit - nows;
-                    limit_date = limit.Value.Days;
-                    limit_date = limit_date < 0 ? 0 : limit_date;
+                    limit_date = limit == null ? 0 : limit.Value.Days;
+                    limit_date = limit_date <= 0 ? 0 : limit_date;
                 }
-                var role =await db.Role.FirstOrDefaultAsync(x => x.IdRole == xx.IdRole);
+                var role = await db.Role.FirstOrDefaultAsync(x => x.IdRole == xx.IdRole);
                 HttpContext.Session.SetString("Firstname", xx.FirstName);
                 HttpContext.Session.SetString("Surnname", xx.SurName);
                 HttpContext.Session.SetString("Tel", xx.Tel);
-                HttpContext.Session.SetString("role", role.Name);
+                HttpContext.Session.SetString("role", (role!.Name));
                 HttpContext.Session.SetString("image", xx.ImagePath);
                 HttpContext.Session.SetInt32("package", limit_date);
+
+                var day = user.PacketDateLimit == null ? 0 : (user.PacketDateLimit - DateTime.Now).Value.Days;
+                HttpContext.Session.SetInt32("ExpiresDay", day);
+
                 var cookieOptions = new CookieOptions();
-                cookieOptions.Expires = DateTime.Now.AddHours(1);
+                cookieOptions.Expires = DateTime.Now.AddDays(1);
                 cookieOptions.Path = "/";
-                Response.Cookies.Append("tokensMon", tokens, cookieOptions);
+                Response.Cookies.Append("tokensMons", tokens, cookieOptions);
+                //Response.Cookies.Append("tokensMons", tokens);
                 _toastNotification.AddSuccessToastMessage("สามารถรับชมวิดีโอได้ รอ 3 วิ หรือกดรีเฟรช");
                 return Ok("success.");
             }
@@ -131,36 +137,40 @@ namespace Monklongpae.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(User data)
         {
-            var user = await db.User.FirstOrDefaultAsync(x => x.Tel == data.Tel && x.Isactive == true);
+            var user = await db.User.FirstOrDefaultAsync(x => x.Tel == data.Tel); //&& x.Isactive == true
 
             if (user != null)
             {
                 var now = DateTime.Now;
 
-                // ถ้ามี Token และใช้งานภายใน 15 นาทีล่าสุด → ถือว่า login ซ้ำ
-                if (user.IsOnline.GetValueOrDefault() && !string.IsNullOrEmpty(user.Token) &&
-                user.WorkDate.HasValue &&
-                (now - user.WorkDate.Value).TotalMinutes < 15)
-                {
-                    _toastNotification.AddErrorToastMessage("บัญชีนี้กำลังใช้งานบนเครื่องอื่น");
-                    return Redirect("/Login/Login");
-                }
+                //// ถ้ามี Token และใช้งานภายใน 15 นาทีล่าสุด → ถือว่า login ซ้ำ
+                //if (user.IsOnline.GetValueOrDefault() && !string.IsNullOrEmpty(user.Token) &&
+                //user.WorkDate.HasValue &&
+                //(now - user.WorkDate.Value).TotalMinutes < 15)
+                //{
+                //    _toastNotification.AddErrorToastMessage("บัญชีนี้กำลังใช้งานบนเครื่องอื่น");
+                //    return Redirect("/Login/Login");
+                //}
 
                 // ปรับปรุงสถานะ
                 user.Token = generate_token(user.Tel + now.ToString());
                 user.IsOnline = true;
                 user.WorkDate = now;
-                db.SaveChanges();
+                await db.SaveChangesAsync();
 
                 // คำนวณวันเหลือ
                 int limit_date = 0;
-                if (user.PacketDateLimit.HasValue)
+                var role = await db.Role.FirstOrDefaultAsync(x => x.IdRole == user.IdRole);
+                if (role.IdRole == 3)
+                {
+                    limit_date = 2;
+                }
+
+                if (user.PacketDateLimit.HasValue && role.IdRole != 3)
                 {
                     var daysLeft = (user.PacketDateLimit.Value - DateTime.Now).Days;
                     limit_date = daysLeft < 0 ? 0 : daysLeft;
                 }
-
-                var role = await db.Role.FirstOrDefaultAsync(x => x.IdRole == user.IdRole);
 
                 // เก็บลง session และ cookie
                 HttpContext.Session.SetString("Firstname", user.FirstName ?? "");
@@ -170,13 +180,16 @@ namespace Monklongpae.Controllers
                 HttpContext.Session.SetString("image", user.ImagePath ?? "");
                 HttpContext.Session.SetInt32("package", limit_date);
 
+                var day = user.PacketDateLimit == null ? 0 : (user.PacketDateLimit - DateTime.Now).Value.Days;
+                HttpContext.Session.SetInt32("ExpiresDay", day);
+
                 var cookieOptions = new CookieOptions
                 {
-                    Expires = DateTime.Now.AddHours(1),
+                    Expires = DateTime.Now.AddDays(1),
                     Path = "/"
                 };
-                Response.Cookies.Append("tokensMon", user.Token, cookieOptions);
-
+                Response.Cookies.Append("tokensMons", user.Token, cookieOptions);
+                //Response.Cookies.Append("tokensMons", user.Token);
                 _toastNotification.AddSuccessToastMessage("ล็อกอินสำเร็จ");
                 return Redirect("/Home/Index");
             }
@@ -203,9 +216,10 @@ namespace Monklongpae.Controllers
                 data.IsOnline = true;
 
                 db.User.Add(data);
-                db.SaveChanges();
+                await db.SaveChangesAsync();
 
                 var role = await db.Role.FirstOrDefaultAsync(x => x.IdRole == data.IdRole);
+
                 HttpContext.Session.SetString("Firstname", data.FirstName);
                 HttpContext.Session.SetString("Surnname", data.SurName);
                 HttpContext.Session.SetString("Tel", data.Tel);
@@ -213,149 +227,21 @@ namespace Monklongpae.Controllers
                 HttpContext.Session.SetString("image", data.ImagePath);
                 HttpContext.Session.SetInt32("package", 0);
 
+                var day = user.PacketDateLimit == null ? 0 : (user.PacketDateLimit - DateTime.Now).Value.Days;
+                HttpContext.Session.SetInt32("ExpiresDay", day);
+
                 var cookieOptions = new CookieOptions
                 {
-                    Expires = DateTime.Now.AddHours(1),
+                    Expires = DateTime.Now.AddDays(1),
                     Path = "/"
                 };
-                Response.Cookies.Append("tokensMon", tokens, cookieOptions);
+
+                Response.Cookies.Append("tokensMons", tokens, cookieOptions);
+                //Response.Cookies.Append("tokensMons", tokens);
 
                 _toastNotification.AddSuccessToastMessage("สมัครสมาชิกสำเร็จ");
                 return Redirect("/Home/Index");
             }
-
-
-
-
-            ////data.MacAddress = GetIPAddress();
-            //var xx = await db.User.FirstOrDefaultAsync(x => x.Tel == data.Tel && x.Isactive == true);
-            //if (xx != null)
-            //{
-            //    if (xx.MacAddress == null || xx.MacAddress == "")
-            //    {
-            //        xx.MacAddress = data.MacAddress;
-            //        db.SaveChanges();
-            //    }
-            //    if (xx.MacAddress != data.MacAddress)
-            //    {
-            //        _toastNotification.AddErrorToastMessage("ไม่ใช่เครื่องที่สมัคร");
-            //        return Redirect("/Login/Login");
-            //    }
-            //    if (xx.IdRole == 3)
-            //    {
-            //        var limit_date = 0;
-
-            //        if (xx.PacketDateLimit != null)
-            //        {
-            //            var nows = DateTime.Now;
-            //            var limit = xx.PacketDateLimit - nows;
-            //            limit_date = limit.Value.Days;
-            //        }
-            //        var user = await db.User.FindAsync(xx.IdUser);
-            //        var tokens = generate_token(xx.Tel + DateTime.Now.ToString());
-            //        user.OnlineStatus = true;
-            //        user.Token = tokens;
-            //        db.SaveChanges();
-
-            //        var role = await db.Role.FirstOrDefaultAsync(x => x.IdRole == xx.IdRole);
-            //        HttpContext.Session.SetString("Firstname", xx.FirstName);
-            //        HttpContext.Session.SetString("Surnname", xx.SurName);
-            //        HttpContext.Session.SetString("Tel", xx.Tel);
-            //        HttpContext.Session.SetString("role", role.Name);
-            //        HttpContext.Session.SetString("image", xx.ImagePath);
-            //        HttpContext.Session.SetInt32("package", limit_date);
-            //        var cookieOptions = new CookieOptions();
-            //        cookieOptions.Expires = DateTime.Now.AddHours(1);
-            //        cookieOptions.Path = "/";
-            //        Response.Cookies.Append("tokensMon", tokens, cookieOptions);
-            //        _toastNotification.AddSuccessToastMessage("ล็อกอินสำเร็จ");
-
-            //        return Redirect("/Home/Index");
-            //    }
-            //    if (data.IdRole != 3)
-            //    {
-            //        var limit_date = 0;
-            //        var user = await db.User.FindAsync(xx.IdUser);
-            //        if (user.PacketDateLimit < DateTime.Now)
-            //        {
-            //            user.IdRole = 1;
-            //        }
-            //        var tokens = generate_token(xx.Tel + DateTime.Now.ToString());
-            //        user.OnlineStatus = true;
-            //        user.Token = tokens;
-            //        user.WorkDate = DateTime.Now;
-            //        db.Entry(user).State = EntityState.Modified;
-            //        db.SaveChanges();
-
-            //        if (user.PacketDateLimit != null)
-            //        {
-            //            var nows = DateTime.Now;
-            //            var limit = xx.PacketDateLimit - nows;
-            //            limit_date = limit.Value.Days;
-            //            limit_date = limit_date < 0 ? 0 : limit_date;
-            //        }
-            //        var role = await db.Role.FirstOrDefaultAsync(x => x.IdRole == xx.IdRole);
-            //        HttpContext.Session.SetString("Firstname", xx.FirstName);
-            //        HttpContext.Session.SetString("Surnname", xx.SurName);
-            //        HttpContext.Session.SetString("Tel", xx.Tel);
-            //        HttpContext.Session.SetString("role", role.Name);
-            //        HttpContext.Session.SetString("image", xx.ImagePath);
-            //        HttpContext.Session.SetInt32("package", limit_date);
-            //        var cookieOptions = new CookieOptions();
-            //        cookieOptions.Expires = DateTime.Now.AddHours(1);
-            //        cookieOptions.Path = "/";
-            //        Response.Cookies.Append("tokensMon", tokens, cookieOptions);
-            //        _toastNotification.AddSuccessToastMessage("ล็อกอินสำเร็จ");
-
-            //        return Redirect("/Home/Index");
-            //    }
-            //    else
-            //    {
-
-            //    }
-            //}
-            //else
-            //{
-            //    var dad5 = await db.User.FirstOrDefaultAsync(x => x.Tel == data.Tel);
-            //    if (dad5 == null)
-            //    {
-            //        data.FirstName = "";
-            //        data.SurName = "";
-            //        data.IdRole = 1;
-            //        data.Isactive = true;
-            //        data.CreateDate = DateTime.Now;
-            //        data.ImagePath = "/img/logo_web.jpg";
-            //        data.OnlineStatus = false;
-            //        data.WorkDate = DateTime.Now;
-            //        data.OnlineStatus = true;
-            //        var tokens = generate_token(data.Tel + DateTime.Now.ToString());
-            //        data.Token = tokens;
-            //        db.User.Add(data);
-            //        db.SaveChanges();
-
-            //        var role = await db.Role.FirstOrDefaultAsync(x => x.IdRole == data.IdRole);
-            //        HttpContext.Session.SetString("Firstname", data.FirstName);
-            //        HttpContext.Session.SetString("Surnname", data.SurName);
-            //        HttpContext.Session.SetString("Tel", data.Tel);
-            //        HttpContext.Session.SetString("role", role.Name);
-            //        HttpContext.Session.SetString("image", data.ImagePath);
-            //        HttpContext.Session.SetInt32("package", 0);
-            //        var cookieOptions = new CookieOptions();
-            //        cookieOptions.Expires = DateTime.Now.AddHours(1);
-            //        cookieOptions.Path = "/";
-            //        Response.Cookies.Append("tokensMon", tokens, cookieOptions);
-            //        _toastNotification.AddSuccessToastMessage("สมัครสมาชิกสำเร็จ");
-
-            //        return Redirect("/Home/Index");
-            //    }
-            //    else
-            //    {
-            //        _toastNotification.AddErrorToastMessage("ไม่ใช่เครื่องที่สมัคร");
-            //        return View();
-            //    }
-            //}
-            //_toastNotification.AddErrorToastMessage("ไม่ใช่เครื่องที่สมัคร");
-            //return View();
         }
 
         [HttpPost]
@@ -374,11 +260,12 @@ namespace Monklongpae.Controllers
                 data.WorkDate = DateTime.Now;
                 db.User.Add(data);
 
-                db.SaveChanges();
+                await db.SaveChangesAsync();
                 var role = await db.Role.FirstOrDefaultAsync(x => x.IdRole == data.IdRole);
                 HttpContext.Session.SetString("Firstname", data.FirstName);
                 HttpContext.Session.SetString("Surnname", data.SurName);
                 HttpContext.Session.SetString("Tel", data.Tel);
+
                 HttpContext.Session.SetString("role", role.Name);
                 HttpContext.Session.SetString("image", xx.ImagePath);
 
@@ -414,7 +301,7 @@ namespace Monklongpae.Controllers
                 {
                     xx.Password = data.Password;
                 }
-                db.SaveChanges();
+                await db.SaveChangesAsync();
 
                 HttpContext.Session.SetString("Firstname", data.FirstName);
                 HttpContext.Session.SetString("Surnname", data.SurName);
@@ -426,17 +313,6 @@ namespace Monklongpae.Controllers
 
         public async Task<IActionResult> Logout()
         {
-            //var tel = HttpContext.Session.GetString("Tel");
-            //var user = await db.User.FirstOrDefaultAsync(x => x.Tel == tel);
-            //user.OnlineStatus = false;
-            //db.SaveChanges();
-            //HttpContext.Session.Clear();
-            //var cookieOptions = new CookieOptions();
-            //cookieOptions.Expires = DateTime.Now.AddHours(1);
-            //cookieOptions.Path = "/Home/Index";
-            //Response.Cookies.Append("tokensMon", "");
-            //return Redirect("/Home/Index");
-
             var tel = HttpContext.Session.GetString("Tel");
             if (!string.IsNullOrEmpty(tel))
             {
@@ -446,12 +322,19 @@ namespace Monklongpae.Controllers
                     user.IsOnline = false;
                     user.Token = null;
                     user.WorkDate = null;
-                    db.SaveChanges();
+                    await db.SaveChangesAsync();
                 }
             }
 
+            // เคลียร์ session
             HttpContext.Session.Clear();
-            Response.Cookies.Delete("tokensMon");
+
+            // เคลียร์ cookie ทั้งหมดของผู้ใช้ที่กำลังกด logout
+            foreach (var cookie in Request.Cookies.Keys)
+            {
+                Response.Cookies.Delete(cookie);
+            }
+
             return Redirect("/Login/Login");
         }
 
@@ -460,7 +343,7 @@ namespace Monklongpae.Controllers
         {
             var xx = await db.User.FindAsync(ids);
             xx.Isactive = false;
-            db.SaveChanges();
+            await db.SaveChangesAsync();
             HttpContext.Session.Clear();
             return Redirect("/Home/Index");
         }
@@ -468,22 +351,6 @@ namespace Monklongpae.Controllers
         public string GetIPAddress()
         {
             var remoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress.MapToIPv6().ToString();
-            //return remoteIpAddress;
-            //GetClientMAC("::ffff:101.51.148.104");
-            //Microsoft.AspNetCore.Http.HttpContext context;
-            //string ipAddress = context.Request.ServerVariables["HTTP_X_FORWARDED_FOR"];
-
-            //if (!string.IsNullOrEmpty(ipAddress))
-            //{
-            //    string[] addresses = ipAddress.Split(',');
-            //    if (addresses.Length != 0)
-            //    {
-            //        return addresses[0];
-            //    }
-            //}
-
-            //return "";
-
             return GetClientMAC(remoteIpAddress); ;
         }
 

@@ -101,16 +101,46 @@ using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<MonklongpaeContext>();
 
-    var users = db.User.Where(u => u.IsOnline == true || u.Token != null || u.WorkDate != null).ToList();
+    var users = await db.User.Where(u => u.IsOnline == true || u.Token != null || u.WorkDate != null)
+        .Select(x=> new User
+        { 
+            Address = x.Address,
+            SurName = x.SurName,
+            OnlineStatus = x.OnlineStatus,
+            CreateDate = x.CreateDate,
+            FirstName = x.FirstName,
+            IdRole = x.IdRole,
+            IdUser = x.IdUser,
+            ImagePath = x.ImagePath,
+            Isactive = x.Isactive,
+            MacAddress = x.MacAddress,
+            PacketDateLimit = x.PacketDateLimit,
+            Password = x.Password,
+            Tel = x.Tel,
+            UpdateDate = x.UpdateDate,
 
-    foreach (var user in users)
+            IsOnline = null,
+            Token = null,
+            WorkDate = null
+        }).ToListAsync();
+    db.User.UpdateRange(users);
+
+    var payment = await db.Payment.Where(x => x.Isactive == false && x.CreateDate != null && x.CreateDate.Value.AddMinutes(30) <= DateTime.Now)
+    .Select(x => new Payment
     {
-        user.IsOnline = false;
-        user.Token = null;
-        user.WorkDate = null;
-    }
+        CreateDate = x.CreateDate,
+        Status = "หมดเวลา การขำระเงิน",
+        FilePayment = x.FilePayment,
+        IdPacket = x.IdPacket,
+        IdUser    = x.IdUser,
+        Isactive = null,
+        UpdateDate = x.UpdateDate,
+        IdPayment = x.IdPayment,
+    }).ToListAsync();
 
-    db.SaveChanges();
+    db.Payment.UpdateRange(payment);
+
+    await db.SaveChangesAsync();
 }
 
 app.Run();

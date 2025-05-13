@@ -255,6 +255,7 @@ wwwroot\img\testimonial-1.jpg
 wwwroot\img\testimonial-2.jpg
 wwwroot\img\trim.375E1939-4196-4FC7-B310-654AB0755842.MOV
 wwwroot\img\trim.46172813-AEB8-4AC5-B12D-41384EA60352.MOV
+wwwroot\img\unnamed.jpg
 wwwroot\img\user.jpg
 wwwroot\img\user.png
 wwwroot\img\video-output-82F87119-9089-439F-AF92-5B0D8391658A.mp4

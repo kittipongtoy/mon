@@ -24,13 +24,9 @@
                     <p> เข้าสู่ระบบ </p>
                 </div>
                 <form method="post" enctype="multipart/form-data" asp-action="Login" aasp-controller="Login">
-
                     <div class="form-group mt-5">
-                        <input type="text" name="Tel" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="เบอร์โทรศัพท์" required maxlength="10" minlength="10">
+                        <input type="text" name="Tel" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="เบอร์โทรศัพท์" required> @* maxlength="10" minlength="10" *@
                     </div>
-                    @*<div class="form-group mt-5">
-                    <input type="password" name="Password" class="form-control" id="exampleInputPassword1" placeholder="รหัสผ่าน" required minlength="8">
-                    </div>*@
                     <input type="hidden" name="macAddress" value="@Model.mac" />
                     <div class="Button_SizeBox">
                         <button class="button">เข้าสู่ระบบ</button>

@@ -1,13 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Monklongpae.Models;
+using Monklongpae.SingleR;
+using Newtonsoft.Json;
 using Xabe.FFmpeg;
 using static Monklongpae.Models.oparetion;
-using Microsoft.AspNetCore.Http.Extensions;
-using Microsoft.AspNetCore.Http;
-using Newtonsoft.Json;
-using Monklongpae.SingleR;
-using Microsoft.EntityFrameworkCore;
 
+#pragma warning disable CS0108 // Member hides inherited member; missing new keyword
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
 namespace Monklongpae.Controllers
 {
     public class BackofficeController : Controller
@@ -64,6 +64,7 @@ namespace Monklongpae.Controllers
             return View(new { count1, count2, count3, table });
         }
 
+
         public IActionResult User()
         {
 
@@ -73,7 +74,6 @@ namespace Monklongpae.Controllers
         [HttpPost]
         public async Task<IActionResult> User(User data)
         {
-
             if (data != null)
             {
                 var xx = await db.User.FirstOrDefaultAsync(x => x.Tel == data.Tel);
@@ -88,7 +88,7 @@ namespace Monklongpae.Controllers
                     data.PacketDateLimit = DateTime.Now;
                     data.Isactive = true;
                     db.User.Add(data);
-                    db.SaveChanges();
+                    await db.SaveChangesAsync();
                 }
             }
             return View();
@@ -108,7 +108,7 @@ namespace Monklongpae.Controllers
         [HttpPost]
         public async Task<IActionResult> Cert_market(int IdPayment)
         {
-            var cm = await db.Payment.FindAsync(IdPayment);
+            var cm = await db.Payment.FirstOrDefaultAsync(x => x.IdPayment == IdPayment && x.Isactive != null);
             if (cm is not null)
             {
                 var xx = await db.User.FirstOrDefaultAsync(x => x.IdUser == cm.IdUser);
@@ -118,7 +118,7 @@ namespace Monklongpae.Controllers
                 cm.Isactive = true;
                 cm.Status = "ส่งสำเร็จ";
                 cm.UpdateDate = DateTime.Now;
-                db.SaveChanges();
+               await db.SaveChangesAsync();
             }
             return Ok("Success");
         }
@@ -128,6 +128,7 @@ namespace Monklongpae.Controllers
             var data = await db.Catory.ToListAsync();
             return View(data);
         }
+
         public async Task<IActionResult> Contact()
         {
             var contact = await db.Contact.FirstOrDefaultAsync(x => x.IdContact == 1);
@@ -143,7 +144,7 @@ namespace Monklongpae.Controllers
                 contact.Tel = data.Tel;
                 contact.Address = data.Address;
                 contact.Map = data.Map;
-                db.SaveChanges();
+                await db.SaveChangesAsync();
             }
             return View(contact);
         }
@@ -152,8 +153,9 @@ namespace Monklongpae.Controllers
         {
             return View();
         }
+
         [HttpPost]
-        public IActionResult Video_and_image(VideoPage data)
+        public async Task<IActionResult> Video_and_image(VideoPage data)
         {
             if (data != null)
             {
@@ -163,14 +165,14 @@ namespace Monklongpae.Controllers
                     {
                         Path = data.Path
                     });
-                    db.SaveChanges();
+                   await db.SaveChangesAsync();
                 }
             }
             return View();
         }
 
         [HttpPost]
-        public IActionResult upload_Video(IFormFile file)
+        public async Task<IActionResult> upload_Video(IFormFile file)
         {
             var url = HttpContext.Request.Host;
             if (file != null)
@@ -188,7 +190,7 @@ namespace Monklongpae.Controllers
                     {
                         Path = "/video/" + file.FileName
                     });
-                    db.SaveChanges();
+                    await db.SaveChangesAsync();
                 }
             }
             return Redirect("/Backoffice/Video_and_image");
@@ -204,6 +206,7 @@ namespace Monklongpae.Controllers
             }
             return View();
         }
+
         [HttpPost]
         public async Task<IActionResult> Payments(Account data)
         {
@@ -213,7 +216,7 @@ namespace Monklongpae.Controllers
                 account.Account1 = data.Account1;
                 account.NameAccout = data.NameAccout;
                 account.AccountStatus = data.AccountStatus;
-                db.SaveChanges();
+                await db.SaveChangesAsync();
                 return View(account);
             }
             return View();
@@ -230,7 +233,7 @@ namespace Monklongpae.Controllers
                 pp.Name = data.Name;
                 pp.Day = data.Day;
                 pp.Description = data.Description;
-                db.SaveChanges();
+                await db.SaveChangesAsync();
             }
             return Redirect("/Backoffice/Payments");
         }
@@ -268,7 +271,7 @@ namespace Monklongpae.Controllers
                     dbs.MessagePage4Th = data.MessagePage4Th;
                     dbs.MessagePage4En = data.MessagePage4En;
                 }
-                db.SaveChanges();
+                await  db.SaveChangesAsync();
             }
             return View(dbs);
         }
@@ -278,8 +281,6 @@ namespace Monklongpae.Controllers
             var data = await db.Catory.ToListAsync();
             return View(data);
         }
-
-
 
         [HttpPost]
         public async Task<IActionResult> AddCatoryAndVideo(Catory data)
@@ -296,21 +297,28 @@ namespace Monklongpae.Controllers
                         UpdateDate = DateTime.Now
                     });
                 }
-                db.SaveChanges();
+                await db.SaveChangesAsync();
             }
-            var data1 = db.Catory.ToList();
+            var data1 = await db.Catory.ToListAsync();
             return View(data1);
         }
 
         [HttpPost]
-        public async Task<IActionResult> DeleteCate(int ids)
+        public async Task<IActionResult> DeleteCate(int? ids)
         {
             if (ids != null)
             {
                 var cate = await db.Catory.FindAsync(ids);
-                db.Catory.Remove(cate);
-                db.SaveChanges();
-                return Json("Success");
+                if (cate != null)
+                {
+                    db.Catory.Remove(cate);
+                    await db.SaveChangesAsync();
+                    return Json("Success");
+                }
+                else
+                {
+                    return Json("Error");
+                }
             }
             return Json("Error");
         }
@@ -338,7 +346,7 @@ namespace Monklongpae.Controllers
                 Console.WriteLine($"เกิดข้อผิดพลาดในการลบไฟล์: {ex.Message}");
             }
             db.Market.Remove(finds);
-            db.SaveChanges();
+            await db.SaveChangesAsync();
             return Ok("Success");
         }
 
@@ -422,7 +430,6 @@ namespace Monklongpae.Controllers
                         }
                         datac.TimeVideo = durationtime;
                         datac.PathVideo = obj1[0].primaryPlaybackUrl.hls[0].url;
-                        //_connectionManager.AddConnection(filePath, filePath);
 
                         try
                         {
@@ -449,7 +456,7 @@ namespace Monklongpae.Controllers
                     datac.Description = data.description;
 
                     datac.LimitVideoUser = (data.timefree * 60);
-                    db.SaveChanges();
+                    await db.SaveChangesAsync();
 
                 }
                 else
@@ -542,7 +549,7 @@ namespace Monklongpae.Controllers
                                 CreateDate = DateTime.Now,
                                 Views = 0
                             });
-                            db.SaveChanges();
+                            await db.SaveChangesAsync();
                             //_connectionManager.AddConnection(filePath, filePath);
                             try
                             {
@@ -560,17 +567,8 @@ namespace Monklongpae.Controllers
             }
             catch (Exception ex)
             {
-                throw ex.InnerException;
+                throw new Exception(ex.Message);
             }
-        }
-
-        public async Task<IActionResult> add_product(oparetion.product data)
-        {
-            if (data != null)
-            {
-
-            }
-            return Redirect("/Backoffice/ManageVideo");
         }
 
         public async Task<IActionResult> update_cate(string namecate, int cates)
@@ -619,7 +617,7 @@ namespace Monklongpae.Controllers
                             finds.PathDisplay = "/img/" + data.file1.FileName;
                         }
                         finds.Name = data.name;
-                        db.SaveChanges();
+                        await db.SaveChangesAsync();
                     }
 
                 }
@@ -627,7 +625,7 @@ namespace Monklongpae.Controllers
             }
             catch (Exception ex)
             {
-                throw ex.InnerException;
+                throw new Exception(ex.Message);
             }
         }
 
@@ -659,7 +657,7 @@ namespace Monklongpae.Controllers
                         });
                     }
                 }
-                db.SaveChanges();
+                await db.SaveChangesAsync();
             }
             return Redirect("/Backoffice/ManageVideo");
         }
@@ -688,14 +686,14 @@ namespace Monklongpae.Controllers
                             PathDisplay = "/img/" + data.file1.FileName,
                             CreateDate = DateTime.Now,
                         });
-                        db.SaveChanges();
+                        await db.SaveChangesAsync();
                     }
                 }
                 return Redirect("/Backoffice/AddCatoryAndVideo");
             }
             catch (Exception ex)
             {
-                throw ex.InnerException;
+                throw new Exception(ex.Message);
             }
         }
 
@@ -706,7 +704,7 @@ namespace Monklongpae.Controllers
             if (w is not null)
             {
                 db.Video.Remove(w);
-                db.SaveChanges();
+                await db.SaveChangesAsync();
                 return Json("ลบวีดีโอเรียบร้อย");
             }
             return Json("ไม่พบวีดีโอ");
@@ -721,7 +719,7 @@ namespace Monklongpae.Controllers
                 var vi = await db.Video.Where(x => x.IdNameVideo == w.IdNameVideo).ToListAsync();
                 db.Video.RemoveRange(vi);
                 db.NameVideo.Remove(w);
-                db.SaveChanges();
+                await db.SaveChangesAsync();
                 return Json("ลบเรียบร้อย");
             }
             return Json("ไม่พบวีดีโอ");
@@ -734,7 +732,7 @@ namespace Monklongpae.Controllers
             if (w is not null)
             {
                 db.VideoPage.Remove(w);
-                db.SaveChanges();
+                await db.SaveChangesAsync();
                 return Json("ลบข้อมูลเรียบร้อย");
             }
             return Json("ไม่พบข้อมูล");
@@ -746,7 +744,7 @@ namespace Monklongpae.Controllers
             if (w is not null)
             {
                 db.User.Remove(w);
-                db.SaveChanges();
+                await db.SaveChangesAsync();
                 return Json("ลบข้อมูลเรียบร้อย");
             }
             return Json("ไม่พบข้อมูล");
@@ -758,7 +756,7 @@ namespace Monklongpae.Controllers
             if (w is not null)
             {
                 db.Payment.Remove(w);
-                db.SaveChanges();
+                await db.SaveChangesAsync();
                 return Json("ลบข้อมูลเรียบร้อย");
             }
             return Json("ไม่พบข้อมูล");
@@ -791,7 +789,7 @@ namespace Monklongpae.Controllers
             }
             catch (Exception ex)
             {
-                throw;
+                return BadRequest(ex);
             }
         }
 
@@ -822,7 +820,7 @@ namespace Monklongpae.Controllers
             }
             catch (Exception ex)
             {
-                throw;
+                 throw new Exception(ex.Message);
             }
         }
 
@@ -860,7 +858,7 @@ namespace Monklongpae.Controllers
             }
             catch (Exception ex)
             {
-                throw;
+                throw new Exception(ex.Message);
             }
         }
 
@@ -942,7 +940,7 @@ namespace Monklongpae.Controllers
             }
             catch (Exception ex)
             {
-                throw;
+                 throw new Exception(ex.Message);
             }
         }
 
@@ -950,7 +948,7 @@ namespace Monklongpae.Controllers
         {
             var userd = await db.User.FindAsync(ids);
             userd.MacAddress = null;
-            db.SaveChanges();
+            await db.SaveChangesAsync();
             return Json("Success");
         }
 
@@ -968,12 +966,16 @@ namespace Monklongpae.Controllers
                 int pageSize = length != null ? Convert.ToInt32(length) : 0;
                 int skip = start != null ? Convert.ToInt32(start) : 0;
                 int recordsTotal = 0;
-                var customerData = await db.Payment.OrderByDescending(x => x.CreateDate).ToListAsync();
+                var customerData = await db.Payment
+                                        .OrderBy(x => x.Isactive == null)            // null ท้ายสุด
+                                        .OrderByDescending(x => x.Isactive == false)           // true ก่อน false
+                                        .ToListAsync();
                 List<Payments> data1 = new List<Payments>();
                 var line = 1;
+                var user = await db.User.ToListAsync();
                 foreach (var xc in customerData)
                 {
-                    var xx = await db.User.FirstOrDefaultAsync(x => x.IdUser == xc.IdUser);
+                    var xx = user.FirstOrDefault(x => x.IdUser == xc.IdUser);
                     if (xx != null)
                     {
                         data1.Add(new Payments
@@ -1000,7 +1002,7 @@ namespace Monklongpae.Controllers
             }
             catch (Exception ex)
             {
-                throw;
+                throw new Exception(ex.Message);
             }
         }
     }
