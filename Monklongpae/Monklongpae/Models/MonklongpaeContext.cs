@@ -148,6 +148,10 @@ namespace Monklongpae.Models
 
                 entity.Property(e => e.IdVideo).HasColumnName("id_video");
 
+                entity.Property(e => e.Name)
+                    .HasMaxLength(255)
+                    .HasColumnName("name");
+
                 entity.Property(e => e.PartImage)
                     .HasColumnType("text")
                     .HasColumnName("part_image");

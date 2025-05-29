@@ -6,23 +6,6 @@
 
 <div class="container-fluid pt-4 px-4">
     <div class="row g-4">
-
-        @*  <div class="col-sm-12 col-xl-12">
-        <div class="bg-secondary rounded h-100 p-4">
-        <h6 class="mb-4">เพิ่มหมวดหมู่</h6>
-        <form method="post" enctype="multipart/form-data" asp-action="AddCatoryAndVideo" asp-controller="Backoffice">
-        <div class="mb-3">
-        <label for="exampleInputEmail1" class="form-label">ชื่อหมวดหมู่</label>
-        <input type="text" class="form-control" name="Name" placeholder="หมวดหมู่" id="exampleInputEmail1" value="">
-
-        </div>
-
-        <button type="submit" class="btn btn-primary">ตกลง</button>
-        </form>
-
-        </div>
-
-        </div> *@
         <div class="col-sm-12 col-xl-12">
             <div class="bg-secondary rounded h-100 p-4">
                 <h6 class="mb-4">เลือกหมวดหมู่</h6>
@@ -34,7 +17,6 @@
                     }
                 </select>
                 <div class="bg-secondary rounded h-100 p-4">
-
                     <br />
                     <br />
                     <br />
@@ -49,17 +31,15 @@
                                     <th scope="col" class="text-center">จัดการ</th>
                                 </tr>
                             </thead>
-
                         </table>
                     </div>
                 </div>
             </div>
-
         </div>
-
     </div>
 </div>
-<!-- Modal -->
+
+<!-- Modal video -->
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl">
         <div class="modal-content bg-secondary">
@@ -82,14 +62,11 @@
                                     <th class="text-center">จัดการ</th>
                                 </tr>
                             </thead>
-
                         </table>
                     </div>
                 </div>
-
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ยกเลิก</button>
-
                 </div>
             </form>
         </div>
@@ -112,7 +89,7 @@
             <div class="modal-header">
                 <h5 class="modal-title text-primary" id="exampleModalLabel">จัดการสินค้า</h5>
                 <button type="button" class="btn-close text-primary" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
+
             <form method="post" enctype="multipart/form-data" asp-action="add_market" asp-controller="Backoffice">
                 <div class="modal-body">
                     <div>
@@ -135,7 +112,47 @@
         </div>
     </div>
 </div>
+    <div class="modal fade" id="exampleModal1" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content bg-secondary">
+                <div class="modal-header">
+                    <h5 class="modal-title text-primary" id="exampleModalLabel">เลือกตอน</h5>
+                    <button type="button" class="btn-close text-primary" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
 
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="exampleModal2" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content bg-secondary">
+                <div class="modal-header">
+                    <h5 class="modal-title text-primary" id="exampleModalLabel">จัดการสินค้า</h5>
+                    <button type="button" class="btn-close text-primary" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form method="post" enctype="multipart/form-data" asp-action="add_market" asp-controller="Backoffice">
+                    <div class="modal-body">
+                        <div>
+                            <button class="btn btn-warning" type="button" onclick="addmarket()">+</button>
+                        </div>
+                        <ul class="list-group mt-3" id="list-market" style="max-height: 60vh;overflow: auto;">
+                        </ul>
+                        <input type="hidden" name="IdVideo" id="IdVideo" />
+                        <br />
+                        <br />
+                        <button type="submit" onclick="" class="btn btn-primary">บันทึก</button>
+
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ยกเลิก</button>
+
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 
 <link href="/css/loading.css" rel="stylesheet">
 <div class="ring" hidden>
@@ -230,7 +247,13 @@
                 { "data": "createDate", "name": "createDate", "class": "text-center align-middle", "autoWidth": true },
                 {
                     "data": "idNameVideo", "name": "idNameVideo", "class": "text-center align-middle", "autoWidth": true,
-                    "render": function (data, type, row) { return " <a href='javascript:void(0)' class='btn btn-info' data-bs-toggle='modal' data-bs-target='#exampleModal' onclick=ViewCustomer(" + data + "); >จัดการ</a> <a href='#' class='btn btn-danger' onclick=DeleteCustomer1(" + data + "); >Delete</a>"; }
+                    "render": function (data, type, row) 
+                    { 
+                        var i = "";
+                        i += "<a href='javascript:void(0)' class='btn btn-info' data-bs-toggle='modal' data-bs-target='#exampleModal' onclick=ViewCustomer(" + data + "); >จัดการ</a>" +
+                             "<a href='#' class='btn btn-danger' onclick=DeleteCustomer1(" + data + "); >Delete</a>";
+                        return i; 
+                    }
                 },
             ]
         });
@@ -270,7 +293,12 @@
                 { "data": "createDate", "name": "createDate", "class": "text-center align-middle", "autoWidth": true },
                 {
                     "data": "idVideo", "name": "idVideo", "class": "text-center align-middle", "autoWidth": true,
-                    "render": function (data, type, row) { return "<a href='#' class='btn btn-warning' data-bs-toggle='modal' data-bs-target='#exampleModal2' onclick=EditCustomer1(" + data + "); >Edit</a> <a href='#' class='btn btn-danger' onclick=DeleteCustomer(" + data + "); >Delete</a>"; }
+                    "render": function (data, type, row) { 
+                        var i = "";
+                        i += "<a href='#' class='btn btn-warning' data-bs-toggle='modal' data-bs-target='#exampleModal2' onclick=EditCustomer1(" + data + "); >Edit</a>" +
+                             "<a href='#' class='btn btn-danger' onclick=DeleteCustomer(" + data + "); >Delete</a>";                  
+                        return i; 
+                    }
                 },
             ]
         });
@@ -398,14 +426,10 @@
                 $("#list-market").prepend(html);
             })
             $("#exampleModal2 input[name=IdVideo]").val(id);
-            // $("#exampleModal2 input[name=name]").val(x.name);
-            // $("#exampleModal2 input[name=description]").val(x.description);
-            // $("#exampleModal2 input[name=timefree]").val(parseInt(x.limitVideoUser) / 60);
             $("#exampleModal").modal("toggle");
-
         });
-
     }
+
     function delterows(id) {
         Swal.fire({
             title: 'คุณแน่ใจ?',
@@ -461,18 +485,15 @@
                             html += '</li>';
                             $("#list-market").prepend(html);
                         })
-                        // $("#exampleModal2 input[name=name]").val(x.name);
-                        // $("#exampleModal2 input[name=description]").val(x.description);
-                        // $("#exampleModal2 input[name=timefree]").val(parseInt(x.limitVideoUser) / 60);
                         $("#exampleModal").modal("toggle");
-
                     });
                 });
             }
         })
     }
-    function DeleteCustomer1(id) {
 
+    function DeleteCustomer1(id) 
+    {
         Swal.fire({
             title: 'คุณแน่ใจ?',
             text: "ที่จะเรื่องนี้",
@@ -502,7 +523,5 @@
                 });
             }
         })
-
     }
-
 </script>

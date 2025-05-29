@@ -14,5 +14,6 @@ namespace Monklongpae.Models
         public DateTime? CreateAt { get; set; }
         public string PartImage { get; set; }
         public double? Showtime { get; set; }
+        public string Name { get; set; }
     }
 }

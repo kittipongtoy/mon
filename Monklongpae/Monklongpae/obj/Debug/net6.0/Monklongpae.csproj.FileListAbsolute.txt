@@ -824,12 +824,6 @@ D:\งานOrange\โปรเจค จาก Git\mon\Monklongpae\Monklongpae\
 D:\งานOrange\โปรเจค จาก Git\mon\Monklongpae\Monklongpae\obj\Debug\net6.0\staticwebassets.build.json
 D:\งานOrange\โปรเจค จาก Git\mon\Monklongpae\Monklongpae\obj\Debug\net6.0\staticwebassets.development.json
 D:\งานOrange\โปรเจค จาก Git\mon\Monklongpae\Monklongpae\obj\Debug\net6.0\staticwebassets.build.endpoints.json
-D:\งานOrange\โปรเจค จาก Git\mon\Monklongpae\Monklongpae\obj\Debug\net6.0\staticwebassets\msbuild.Monklongpae.Microsoft.AspNetCore.StaticWebAssets.props
-D:\งานOrange\โปรเจค จาก Git\mon\Monklongpae\Monklongpae\obj\Debug\net6.0\staticwebassets\msbuild.Monklongpae.Microsoft.AspNetCore.StaticWebAssetEndpoints.props
-D:\งานOrange\โปรเจค จาก Git\mon\Monklongpae\Monklongpae\obj\Debug\net6.0\staticwebassets\msbuild.build.Monklongpae.props
-D:\งานOrange\โปรเจค จาก Git\mon\Monklongpae\Monklongpae\obj\Debug\net6.0\staticwebassets\msbuild.buildMultiTargeting.Monklongpae.props
-D:\งานOrange\โปรเจค จาก Git\mon\Monklongpae\Monklongpae\obj\Debug\net6.0\staticwebassets\msbuild.buildTransitive.Monklongpae.props
-D:\งานOrange\โปรเจค จาก Git\mon\Monklongpae\Monklongpae\obj\Debug\net6.0\staticwebassets.pack.json
 D:\งานOrange\โปรเจค จาก Git\mon\Monklongpae\Monklongpae\obj\Debug\net6.0\staticwebassets.upToDateCheck.txt
 D:\งานOrange\โปรเจค จาก Git\mon\Monklongpae\Monklongpae\obj\Debug\net6.0\Monklong.190330A5.Up2Date
 D:\งานOrange\โปรเจค จาก Git\mon\Monklongpae\Monklongpae\obj\Debug\net6.0\Monklongpae.dll
@@ -837,3 +831,4 @@ D:\งานOrange\โปรเจค จาก Git\mon\Monklongpae\Monklongpae\
 D:\งานOrange\โปรเจค จาก Git\mon\Monklongpae\Monklongpae\obj\Debug\net6.0\Monklongpae.pdb
 D:\งานOrange\โปรเจค จาก Git\mon\Monklongpae\Monklongpae\obj\Debug\net6.0\Monklongpae.genruntimeconfig.cache
 D:\งานOrange\โปรเจค จาก Git\mon\Monklongpae\Monklongpae\obj\Debug\net6.0\ref\Monklongpae.dll
+D:\งานOrange\โปรเจค จาก Git\mon\Monklongpae\Monklongpae\obj\Debug\net6.0\staticwebassets.build.json.cache

@@ -23,28 +23,37 @@
 
     var day = Accessor.HttpContext.Session.GetInt32("ExpiresDay");
     var ExpiresDay = "";
-    if (day > 0)
-    {
-        ExpiresDay = "เหลือ " + @day + " วัน";
-    }
-    else
-    {
-        ExpiresDay = "หมดอายุแล้ว";
-    }
 
     if (role != null)
     {
         if (role.ToLower() == "user")
         {
             status = "ฟรี";
+            if (day > 0)
+            {
+                ExpiresDay = "เหลือ " + @day + " วัน";
+            }
+            else
+            {
+                ExpiresDay = "หมดอายุแล้ว";
+            }
         }
         else if (role.ToLower() == "vip")
         {
             status = "VIP";
+            if (day > 0)
+            {
+                ExpiresDay = "เหลือ " + @day + " วัน";
+            }
+            else
+            {
+                ExpiresDay = "หมดอายุแล้ว";
+            }
         }
         else
         {
             status = "แอดมิน";
+            ExpiresDay = "ไม่จำกัด";
         }
     }
 }

@@ -37,7 +37,7 @@ namespace Monklongpae.Controllers
 
                 var videoIds = await db.History
                     .Where(x => x.IdUser == user.IdUser)
-                    .OrderByDescending(x => x.CreateDate)
+                    .OrderBy(x => x.CreateDate)
                     .Take(5)
                     .Select(x => x.IdVideo)
                     .Distinct()
@@ -45,7 +45,7 @@ namespace Monklongpae.Controllers
 
                 data4 = await db.Video
                     .Where(x => videoIds.Contains(x.IdVideo))
-                    .OrderByDescending(x => x.CreateDate)
+                    .OrderBy(x => x.CreateDate)
                     .ToListAsync();
             }
 
@@ -56,7 +56,7 @@ namespace Monklongpae.Controllers
             {
                 var videos = await db.NameVideo
                     .Where(x => x.IdCatory == xc.IdCatory)
-                    .OrderByDescending(x => x.CreateDate)
+                    .OrderBy(x => x.CreateDate)
                     .ToListAsync();
 
                 if (videos.Any())
@@ -69,8 +69,8 @@ namespace Monklongpae.Controllers
                 }
             }
 
-            var data2 = await db.Video.OrderByDescending(x => x.CreateDate).Take(5).ToListAsync();
-            var data1 = await db.VideoPage.OrderByDescending(x => x.CreateDate).ToListAsync();
+            var data2 = await db.Video.OrderBy(x => x.CreateDate).Take(5).ToListAsync();
+            var data1 = await db.VideoPage.OrderBy(x => x.CreateDate).ToListAsync();
             var data = await db.PageMessage.FirstOrDefaultAsync(x => x.IdPage == 1);
             var message = "";
 
@@ -91,88 +91,88 @@ namespace Monklongpae.Controllers
         {
             var tokens = Request.Cookies["tokensMons"];
 
-            if (!string.IsNullOrEmpty(tokens))
-            {
+            //if (!string.IsNullOrEmpty(tokens))
+            //{
                 var user = await db.User.FirstOrDefaultAsync(x => x.Token == tokens);
-                if (user != null)
-                {
-                    user.WorkDate = DateTime.Now;
+            //    if (user != null)
+            //    {
+            //        user.WorkDate = DateTime.Now;
 
-                    int limit_date = 0;
-                    if (user.IdRole != 3)
-                    {
-                        if (user.PacketDateLimit != null)
-                        {
-                            var limit = user.PacketDateLimit - DateTime.Now;
-                            if (limit.Value.Days > 0)
-                            {
-                                limit_date = limit.Value.Days;
-                            }
-                            else
-                            {
-                                limit_date = 0;
-                            }
-                        }
-                        else if (user.IdRole != 3)
-                        {
-                            user.IdRole = 1;
-                        }
-                    }
-                    else
-                    {
-                        limit_date = 2;
-                    }
+            //        int limit_date = 0;
+            //        if (user.IdRole != 3)
+            //        {
+            //            if (user.PacketDateLimit != null)
+            //            {
+            //                var limit = user.PacketDateLimit - DateTime.Now;
+            //                if (limit.Value.Days > 0)
+            //                {
+            //                    limit_date = limit.Value.Days;
+            //                }
+            //                else
+            //                {
+            //                    limit_date = 0;
+            //                }
+            //            }
+            //            else if (user.IdRole != 3)
+            //            {
+            //                user.IdRole = 1;
+            //            }
+            //        }
+            //        else
+            //        {
+            //            limit_date = 2;
+            //        }
                     
-                    var role = await db.Role.FirstOrDefaultAsync(x => x.IdRole == user.IdRole);
+            //        var role = await db.Role.FirstOrDefaultAsync(x => x.IdRole == user.IdRole);
 
-                    HttpContext.Session.SetString("Firstname", user.FirstName);
-                    HttpContext.Session.SetString("Surnname", user.SurName);
-                    HttpContext.Session.SetString("Tel", user.Tel);
-                    HttpContext.Session.SetString("role", role?.Name ?? "user");
-                    HttpContext.Session.SetString("image", user.ImagePath);
-                    HttpContext.Session.SetInt32("package", limit_date);
+            //        HttpContext.Session.SetString("Firstname", user.FirstName);
+            //        HttpContext.Session.SetString("Surnname", user.SurName);
+            //        HttpContext.Session.SetString("Tel", user.Tel);
+            //        HttpContext.Session.SetString("role", role?.Name ?? "user");
+            //        HttpContext.Session.SetString("image", user.ImagePath);
+            //        HttpContext.Session.SetInt32("package", limit_date);
 
-                    var day = user.PacketDateLimit == null ? 0 : (user.PacketDateLimit - DateTime.Now).Value.Days;
-                    HttpContext.Session.SetInt32("ExpiresDay", day);
+            //        var day = user.PacketDateLimit == null ? 0 : (user.PacketDateLimit - DateTime.Now).Value.Days;
+            //        HttpContext.Session.SetInt32("ExpiresDay", day);
 
-                    await db.SaveChangesAsync();
+            //        await db.SaveChangesAsync();
 
-                    if (string.IsNullOrEmpty(HttpContext.Session.GetString("Tel")))
-                        return Json("login");
+            //        if (string.IsNullOrEmpty(HttpContext.Session.GetString("Tel")))
+            //            return Json("login");
 
                     return Json("success");
-                }
-                else
-                {
+            //    }
+            //    else
+            //    {
 
-                }
-            }
+            //    }
+            //}
  
-            var tel = HttpContext.Session.GetString("Tel");
-            if (!string.IsNullOrEmpty(tel))
-            {
-                var user = await db.User.FirstOrDefaultAsync(x => x.Tel == tel);
-                if (user != null)
-                {
-                    string tokenText = user.Tel + DateTime.Now.ToString();
-                    user.Token = generate_token(tokenText);
-                    user.WorkDate = DateTime.Now;
+            //var tel = HttpContext.Session.GetString("Tel");
+            //if (!string.IsNullOrEmpty(tel))
+            //{
+            //    var user = await db.User.FirstOrDefaultAsync(x => x.Tel == tel);
+            //    if (user != null)
+            //    {
+            //        string tokenText = user.Tel + DateTime.Now.ToString();
+            //        user.Token = generate_token(tokenText);
+            //        user.WorkDate = DateTime.Now;
 
-                    var cookieOptions = new CookieOptions
-                    {
-                        Expires = DateTime.Now.AddDays(1),
-                        Path = "/"
-                    };
+            //        var cookieOptions = new CookieOptions
+            //        {
+            //            Expires = DateTime.Now.AddDays(1),
+            //            Path = "/"
+            //        };
 
-                    Response.Cookies.Append("tokensMons", tokenText, cookieOptions);
-                    //Response.Cookies.Append("tokensMons", tokenText);
-                    await db.SaveChangesAsync();
+            //        Response.Cookies.Append("tokensMons", tokenText, cookieOptions);
+            //        //Response.Cookies.Append("tokensMons", tokenText);
+            //        await db.SaveChangesAsync();
 
-                    return Json("login");
-                }
-            }
+            //        return Json("login");
+            //    }
+            //}
 
-            return Json("unauthorized");
+            //return Json("unauthorized");
         }
 
         private string generate_token(string value)
@@ -444,6 +444,8 @@ namespace Monklongpae.Controllers
         public async Task<IActionResult> showmarket(int ids, double min)
         {
             var data = await db.Market.FirstOrDefaultAsync(x => x.IdVideo == ids && min >= x.Duration && min <= (x.Duration + x.Showtime));
+            //var data = await db.Market.FirstOrDefaultAsync(x => min >= x.Duration && min <= (x.Duration + x.Showtime));
+
             return Ok(data);
         }
 
@@ -551,8 +553,8 @@ namespace Monklongpae.Controllers
         }
 
 
-        [HttpGet]
-        public async Task<IActionResult> CheckPackages()
+        [HttpPost]
+        public async Task<IActionResult> CheckPackages(int? ids)
         {
             var tokens = Request.Cookies["tokensMons"];
             var limit_date = 0;
@@ -561,18 +563,32 @@ namespace Monklongpae.Controllers
                 var getuser = await db.User.FirstOrDefaultAsync(x => x.Token == tokens);
                 if (getuser != null)
                 {
-                    var daysLeft = getuser.PacketDateLimit!.Value.Date - DateTime.Now.Date;
-                    if (daysLeft.Days > 0)
+                    if (getuser.IdRole == 3)
                     {
-                        limit_date = daysLeft.Days;
+                        limit_date = 1;
                     }
                     else
-                    {
-                        limit_date = 0;
+                    { 
+                        var daysLeft = getuser.PacketDateLimit!.Value.Date - DateTime.Now.Date;
+                        if (daysLeft.Days > 0)
+                        {
+                            limit_date = daysLeft.Days;
+                        }
+                        else
+                        {
+                            limit_date = 0;
+                        }
                     }
                 }
+
+                var video = await db.Video.FirstOrDefaultAsync(x=>x.IdVideo == ids);
+
+                return Json(new { limit_date = limit_date, db = getuser, video = video });
             }
-            return Json(limit_date);
+            else
+            {
+                return Json("data null");
+            }
         }
     }
 }

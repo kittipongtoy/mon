@@ -64,7 +64,6 @@ namespace Monklongpae.Controllers
             return View(new { count1, count2, count3, table });
         }
 
-
         public IActionResult User()
         {
 
@@ -121,6 +120,96 @@ namespace Monklongpae.Controllers
                await db.SaveChangesAsync();
             }
             return Ok("Success");
+        }
+
+        public async Task<IActionResult> add_market(marketdetail data)
+        {
+            if (data != null)
+            {
+                string uploads1 = Path.Combine(_hostingEnvironment.WebRootPath, "img");
+                foreach (var tt in data.marketalls)
+                {
+                    if (tt.images.Length > 0)
+                    {
+                        string filePath1 = Path.Combine(uploads1, tt.images.FileName);
+                        using (Stream filestream1 = new FileStream(filePath1, FileMode.Create))
+                        {
+                            tt.images.CopyTo(filestream1);
+                        }
+                        var timessub1 = tt.Showtime.ToString().Split(".");
+                        var timessub2 = tt.Duration.ToString().Split(".");
+
+                        db.Market.Add(new Market
+                        {
+                            Showtime = (Convert.ToDouble(timessub1[0]) * 60) + (Convert.ToDouble("0." + timessub1[1]) * 100),
+                            Duration = (Convert.ToDouble(timessub2[0]) * 60) + (Convert.ToDouble("0." + timessub2[1]) * 100),
+                            IdVideo = data.IdVideo,
+                            CreateAt = DateTime.Now,
+                            Url = tt.url,
+                            PartImage = "/img/" + tt.images.FileName
+                        });
+                    }
+                }
+                await db.SaveChangesAsync();
+            }
+            return Redirect("/Backoffice/ManageVideo");
+        }
+
+        public async Task<IActionResult> delete_market(int ids)
+        {
+            var finds = await db.Market.FindAsync(ids);
+            string uploads = Path.Combine(_hostingEnvironment.WebRootPath, "video");
+            string uploads1 = Path.Combine(_hostingEnvironment.WebRootPath, "img");
+            string filePath = Path.Combine(_hostingEnvironment.WebRootPath, finds.PartImage);
+            var sub1 = finds.PartImage.Split("/");
+            filePath = Path.Combine(uploads1, sub1[2]);
+            try
+            {
+                System.IO.File.Delete(filePath); // ลบไฟล์หลังจากอัพโหลดเสร็จ
+                Console.WriteLine("ไฟล์ถูกลบเรียบร้อยแล้ว");
+            }
+            catch (IOException ex)
+            {
+                Console.WriteLine($"เกิดข้อผิดพลาดในการลบไฟล์: {ex.Message}");
+            }
+            db.Market.Remove(finds);
+            await db.SaveChangesAsync();
+            return Ok("Success");
+        }
+
+        public IActionResult Manageproduct()
+        {
+            return View();
+        }
+
+        public async Task<IActionResult> Table_Manageproduct()
+        {
+            try
+            {
+                var draw = Request.Form["draw"].FirstOrDefault();
+                var start = Request.Form["start"].FirstOrDefault();
+                var length = Request.Form["length"].FirstOrDefault();
+                var sortColumn = Request.Form["columns[" + Request.Form["order[0][column]"].FirstOrDefault() + "][name]"].FirstOrDefault();
+                var sortColumnDirection = Request.Form["order[0][dir]"].FirstOrDefault();
+                var searchValue = Request.Form["search[value]"].FirstOrDefault();
+                int pageSize = length != null ? Convert.ToInt32(length) : 0;
+                int skip = start != null ? Convert.ToInt32(start) : 0;
+                int recordsTotal = 0;
+                var customerData = await db.Market.OrderByDescending(x => x.CreateAt).ToListAsync();
+
+                if (!string.IsNullOrEmpty(searchValue))
+                {
+                    customerData = customerData.Where(x => x.Name.Contains(searchValue) || x.Name.Contains(searchValue)).ToList();
+                }
+                recordsTotal = customerData.Count();
+                var data = customerData.Skip(skip).Take(pageSize).ToList();
+                var jsonData = new { draw = draw, recordsFiltered = recordsTotal, recordsTotal = recordsTotal, data = data };
+                return Ok(jsonData);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
         }
 
         public async Task<IActionResult> ManageVideo()
@@ -326,28 +415,6 @@ namespace Monklongpae.Controllers
         public async Task<IActionResult> getDatavideo(int ids)
         {
             return Json(new { data = await db.Video.FirstOrDefaultAsync(x => x.IdVideo == ids), market = await db.Market.Where(x => x.IdVideo == ids).ToListAsync() });
-        }
-
-        public async Task<IActionResult> delete_market(int ids)
-        {
-            var finds = await db.Market.FindAsync(ids);
-            string uploads = Path.Combine(_hostingEnvironment.WebRootPath, "video");
-            string uploads1 = Path.Combine(_hostingEnvironment.WebRootPath, "img");
-            string filePath = Path.Combine(_hostingEnvironment.WebRootPath, finds.PartImage);
-            var sub1 = finds.PartImage.Split("/");
-            filePath = Path.Combine(uploads1, sub1[2]);
-            try
-            {
-                System.IO.File.Delete(filePath); // ลบไฟล์หลังจากอัพโหลดเสร็จ
-                Console.WriteLine("ไฟล์ถูกลบเรียบร้อยแล้ว");
-            }
-            catch (IOException ex)
-            {
-                Console.WriteLine($"เกิดข้อผิดพลาดในการลบไฟล์: {ex.Message}");
-            }
-            db.Market.Remove(finds);
-            await db.SaveChangesAsync();
-            return Ok("Success");
         }
 
         [DisableRequestSizeLimit]
@@ -627,39 +694,6 @@ namespace Monklongpae.Controllers
             {
                 throw new Exception(ex.Message);
             }
-        }
-
-        public async Task<IActionResult> add_market(marketdetail data)
-        {
-            if (data != null)
-            {
-                string uploads1 = Path.Combine(_hostingEnvironment.WebRootPath, "img");
-                foreach (var tt in data.marketalls)
-                {
-                    if (tt.images.Length > 0)
-                    {
-                        string filePath1 = Path.Combine(uploads1, tt.images.FileName);
-                        using (Stream filestream1 = new FileStream(filePath1, FileMode.Create))
-                        {
-                            tt.images.CopyTo(filestream1);
-                        }
-                        var timessub1 = tt.Showtime.ToString().Split(".");
-                        var timessub2 = tt.Duration.ToString().Split(".");
-
-                        db.Market.Add(new Market
-                        {
-                            Showtime = (Convert.ToDouble(timessub1[0]) * 60) + (Convert.ToDouble("0." + timessub1[1]) * 100),
-                            Duration = (Convert.ToDouble(timessub2[0]) * 60) + (Convert.ToDouble("0." + timessub2[1]) * 100),
-                            IdVideo = data.IdVideo,
-                            CreateAt = DateTime.Now,
-                            Url = tt.url,
-                            PartImage = "/img/" + tt.images.FileName
-                        });
-                    }
-                }
-                await db.SaveChangesAsync();
-            }
-            return Redirect("/Backoffice/ManageVideo");
         }
 
         public async Task<IActionResult> upload_file_media1(upload_filevedio1 data)

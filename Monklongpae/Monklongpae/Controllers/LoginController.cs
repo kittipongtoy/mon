@@ -137,7 +137,7 @@ namespace Monklongpae.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(User data)
         {
-            var user = await db.User.FirstOrDefaultAsync(x => x.Tel == data.Tel); //&& x.Isactive == true
+            var user = await db.User.FirstOrDefaultAsync(x => x.Tel == data.Tel && (x.MacAddress == data.MacAddress || x.MacAddress == null)); //&& x.Isactive == true
 
             if (user != null)
             {
@@ -200,7 +200,7 @@ namespace Monklongpae.Controllers
                 if (existing != null)
                 {
                     _toastNotification.AddErrorToastMessage("ไม่ใช่เครื่องที่สมัคร");
-                    return View();
+                    return RedirectToAction("Login","Login");
                 }
 
                 var tokens = generate_token(data.Tel + DateTime.Now.ToString());
@@ -213,6 +213,7 @@ namespace Monklongpae.Controllers
                 data.OnlineStatus = true;
                 data.WorkDate = DateTime.Now;
                 data.Token = tokens;
+                data.MacAddress = data.MacAddress;
                 data.IsOnline = true;
 
                 db.User.Add(data);
@@ -227,16 +228,19 @@ namespace Monklongpae.Controllers
                 HttpContext.Session.SetString("image", data.ImagePath);
                 HttpContext.Session.SetInt32("package", 0);
 
-                var day = user.PacketDateLimit == null ? 0 : (user.PacketDateLimit - DateTime.Now).Value.Days;
-                HttpContext.Session.SetInt32("ExpiresDay", day);
+                if (user != null)
+                { 
+                    var day = user.PacketDateLimit == null ? 0 : (user.PacketDateLimit - DateTime.Now).Value.Days;
+                    HttpContext.Session.SetInt32("ExpiresDay", day);
 
-                var cookieOptions = new CookieOptions
-                {
-                    Expires = DateTime.Now.AddDays(1),
-                    Path = "/"
-                };
+                    var cookieOptions = new CookieOptions
+                    {
+                        Expires = DateTime.Now.AddDays(1),
+                        Path = "/"
+                    };
 
-                Response.Cookies.Append("tokensMons", tokens, cookieOptions);
+                    Response.Cookies.Append("tokensMons", tokens, cookieOptions);
+                }
                 //Response.Cookies.Append("tokensMons", tokens);
 
                 _toastNotification.AddSuccessToastMessage("สมัครสมาชิกสำเร็จ");
