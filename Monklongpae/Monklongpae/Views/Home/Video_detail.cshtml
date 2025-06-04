@@ -439,8 +439,7 @@
 	var msgpopup = false;
 
 	$(() => {
-
-
+		// ตรวจสอบว่ามี packages และ packages <= 0
 		// if (packages != null && packages <= 0) {
 
 		// 	setInterval(() => {
@@ -480,7 +479,7 @@
 		// 			msgpopup = true;
 		// 		}
 
-		// 	}, 5000);
+		// 	}, 500);
 		// } else {
 		// 	// ถ้า packages มากกว่า 0
 		// 	setInterval(() => {
@@ -493,7 +492,7 @@
 		// 		}
 		// 	}, 5000);
 		// }
-		//sss
+
 		//------------------------------------------------------------------------ backup
 
 		//ตรวจสอบว่ามี packages และ packages <= 0
@@ -517,7 +516,7 @@
 				if(x.limit_date <= 0)
 				{
 					const video = document.getElementById('videos');
-					//currentMarket(1072, video.currentTime);
+					currentMarket(1072, video.currentTime);
 					if (video.currentTime <= x.video.limitVideoUser)
 					{
 						$("#videos").get(0).pause();
@@ -536,12 +535,25 @@
 
 							// ✅ แสดง popup เตือน
 							Swal.fire({
-								 title: "จำกัดการเข้าถึง",
-								  text: "คุณถึงขีดจำกัดการดูวีดีโอ กรุณาอัปเกรดแพ็กเกจของคุณ",
-								  icon: "warning"
+									title: "จำกัดการเข้าถึง",
+									text: "คุณถึงขีดจำกัดการดูวีดีโอ กรุณาอัปเกรดแพ็กเกจของคุณ",
+									icon: "warning"
 							});
 						}
-					 }
+					}
+					else
+					{
+						if (!msgshow) {
+							msgshow = true;
+							$("#overlay").attr("hidden", false);
+							// ✅ แสดง popup เตือน
+							Swal.fire({
+									title: "จำกัดการเข้าถึง",
+									text: "คุณถึงขีดจำกัดการดูวีดีโอ กรุณาอัปเกรดแพ็กเกจของคุณ",
+									icon: "warning"
+							});
+						}
+					}
 
 					if (video.currentTime === video.duration && !msgpopup) {
 						$("#myBtn").click(function (e) {

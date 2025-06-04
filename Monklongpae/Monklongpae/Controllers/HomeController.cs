@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Monklongpae.Models;
 using NToastNotify;
 using System.Collections.Generic;
@@ -561,33 +562,46 @@ namespace Monklongpae.Controllers
             if (!string.IsNullOrEmpty(tokens))
             {
                 var getuser = await db.User.FirstOrDefaultAsync(x => x.Token == tokens);
-                if (getuser != null)
+                if (ids != 3294)
                 {
-                    if (getuser.IdRole == 3)
+                    if (getuser != null)
                     {
-                        limit_date = 1;
-                    }
-                    else
-                    { 
-                        var daysLeft = getuser.PacketDateLimit!.Value.Date - DateTime.Now.Date;
-                        if (daysLeft.Days > 0)
+                        if (getuser.IdRole == 3)
                         {
-                            limit_date = daysLeft.Days;
+                            limit_date = 1;
                         }
                         else
                         {
-                            limit_date = 0;
+                            var daysLeft = getuser.PacketDateLimit!.Value.Date - DateTime.Now.Date;
+                            if (daysLeft.Days > 0)
+                            {
+                                limit_date = daysLeft.Days;
+                            }
+                            else
+                            {
+                                limit_date = 0;
+                            }
                         }
                     }
                 }
-
-                var video = await db.Video.FirstOrDefaultAsync(x=>x.IdVideo == ids);
+                else
+                {
+                    limit_date = 1;
+                }
+                var video = await db.Video.FirstOrDefaultAsync(x => x.IdVideo == ids);
 
                 return Json(new { limit_date = limit_date, db = getuser, video = video });
             }
             else
             {
-                return Json("data null");
+                limit_date = 0;
+                if (ids == 3294)
+                {
+                    limit_date = 1;
+                }
+                var video = await db.Video.FirstOrDefaultAsync(x => x.IdVideo == ids);
+                return Json(new { limit_date = limit_date, db = "", video = video });
+                //return Json("data null");
             }
         }
     }
